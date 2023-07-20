@@ -5444,7 +5444,7 @@ public class UA {
         return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36";
     }
 
-    public static String getSystemWebviewUserAgent() {
+    public static String getSystemWebviewUserAgent() {//获取系统UA
         String userAgent = System.getProperty("http.agent");
         if (userAgent == null) {
             userAgent = "Mozilla/5.0 (Linux; Android 11; Pixel 2 Build/RPB3.200720.005) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36";
