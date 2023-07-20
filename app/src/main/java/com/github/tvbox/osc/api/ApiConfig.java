@@ -61,7 +61,7 @@ public class ApiConfig {
     private List<IJKCode> ijkCodes;
     private String spider = null;
     public String wallpaper = "";
-
+    public String adblockUrl = "";
     private SourceBean emptyHome = new SourceBean();
 
     private JarLoader jarLoader = new JarLoader();
@@ -162,6 +162,7 @@ public class ApiConfig {
         }
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
+                .tag("load")   // 请求的 tag, 主要用于取消对应的请求
                 .headers("User-Agent", userAgent)
                 .headers("Accept", requestAccept)
                 .execute(new AbsCallback<String>() {
@@ -308,6 +309,8 @@ public class ApiConfig {
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
         // 远端站点源
+        adblockUrl = DefaultConfig.safeJsonString(infoJson, "adblock", "");
+        //去广告接口
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
             JsonObject obj = (JsonObject) opt;
