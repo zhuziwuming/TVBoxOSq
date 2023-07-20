@@ -502,11 +502,44 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
+    private void adblock(String adblockUrl,String url){//增加接口去广告
+		OkGo. < String > get(adblockUrl + url)
+            .tag("adblock")
+            .execute(new StringCallback() {
+                public void onSuccess(Response < String > response) {
+                    String json = response.body();
+                    String jurl = "";
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        if (jsonObject.has("url")) {
+                            jurl = jsonObject.optString("url");
+                        } else {
+                            // url属性不存在
+                            jurl = "";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (jurl != null && !jurl.isEmpty()) {
+                        playUrl(jurl, null);
+                        Toast.makeText(mContext, "净化成功!观影愉快", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });		
+	}
+    
     void playUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
-        if(autoRetryCount>0 && url.contains(".m3u8")){
-            url="http://home.jundie.top:666/unBom.php?m3u8="+url;//尝试去bom头再次播放
-        }
+        if(autoRetryCount > 1){
+            errorWithRetry("播放地址错误", false);
+        }else{
+			String adblockUrl = ApiConfig.get().adblockUrl;
+	        if (adblockUrl != null) { //先判断是否有去广告接口
+                if (url.contains(".lz") || url.contains(".ff")) { //寻找播放地址，有非凡和量子的走去广告解析	    
+                    setTip("正在净化视频", true, false);
+		            adblock(adblockUrl,url);
+                }
+            }
         String finalUrl = url;
         if (mActivity == null) return;
         requireActivity().runOnUiThread(new Runnable() {
