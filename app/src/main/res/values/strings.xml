@@ -1,4 +1,5 @@
 <resources>
     <!--  app名称   -->
     <string name="app_name">TVBox</string>
+    <string name="exit_live">再按一次返回键退出直播</string>
 </resources>
