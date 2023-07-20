@@ -522,7 +522,17 @@ public class HomeActivity extends BaseActivity {
         int keyCode = event.getKeyCode();
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_MENU) {
-                showSiteSwitch();
+                if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != 0){//菜单键被长按
+			        Toast.makeText(mContext, "菜单键被长按", Toast.LENGTH_SHORT).show();
+			        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("useCache", true);
+                    intent.putExtras(bundle);
+                    HomeActivity.this.startActivity(intent);
+		        }else{	
+                        showSiteSwitch();
+		        }
             }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
 
