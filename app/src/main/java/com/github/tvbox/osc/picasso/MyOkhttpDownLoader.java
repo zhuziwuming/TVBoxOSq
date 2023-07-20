@@ -16,7 +16,7 @@
 package com.github.tvbox.osc.picasso;
 
 import android.text.TextUtils;
-
+import com.github.tvbox.osc.util.UA;//引入UA
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
@@ -76,6 +76,10 @@ public final class MyOkhttpDownLoader implements Downloader {
         if (url.contains("@Referer=")) referer= url.split("@Referer=")[1].split("@")[0];
 
         url = url.split("@")[0];
+        if(url.contains("douban")){
+			String ua = UA.getSystemWebviewUserAgent();
+			refer= "https://movie.douban.com/";
+		}
         Request.Builder mRequestBuilder = new Request.Builder().url(url);
         if(!TextUtils.isEmpty(header)) {
             JsonObject jsonInfo = new Gson().fromJson(header, JsonObject.class);
