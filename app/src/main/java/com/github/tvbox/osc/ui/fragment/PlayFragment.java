@@ -540,8 +540,8 @@ public class PlayFragment extends BaseLazyFragment {
 		            adblock(adblockUrl,url);
                 }
             }
-        String finalUrl = url;
-        if (mActivity == null) return;
+            String finalUrl = url;
+            if (mActivity == null) return;
         requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -579,6 +579,7 @@ public class PlayFragment extends BaseLazyFragment {
                 }
             }
         });
+	}	
     }
 
     private void initSubtitleView() {
