@@ -797,6 +797,7 @@ public class PlayFragment extends BaseLazyFragment {
         stopLoadWebView(true);
         stopParse();
         Thunder.stop(true);
+	Jianpian.finish();//停止p2p下载    
     }
 
     private VodInfo mVodInfo;
