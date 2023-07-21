@@ -734,6 +734,7 @@ public class PlayActivity extends BaseActivity {
         stopLoadWebView(true);
         stopParse();
         Thunder.stop(false);
+        Jianpian.finish();//停止p2p下载
     }
 
     private VodInfo mVodInfo;
