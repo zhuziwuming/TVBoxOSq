@@ -648,8 +648,8 @@ public class PlayFragment extends BaseLazyFragment {
                         HashMap<String, String> headers = null;
                         webUserAgent = null;
                         webHeaderMap = null;
-			if(url.contains("html?")){
-		            url = url.substring(0, url.indexOf("html?")) + ".html";//去掉?后面的参数
+			if(url.contains(".html?")){
+		            url = url.substring(0, url.indexOf(".html?")) + ".html";//去掉?后面的参数
 		        }    
                         if (info.has("header")) {
                             try {
