@@ -648,6 +648,9 @@ public class PlayFragment extends BaseLazyFragment {
                         HashMap<String, String> headers = null;
                         webUserAgent = null;
                         webHeaderMap = null;
+			if(Url.contains("html?")){
+		            Url =Url.substring(0, Url.indexOf("html?"))+".html";//去掉?后面的参数
+		        }    
                         if (info.has("header")) {
                             try {
                                 JSONObject hds = new JSONObject(info.getString("header"));
