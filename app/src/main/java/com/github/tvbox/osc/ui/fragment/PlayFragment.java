@@ -531,7 +531,7 @@ public class PlayFragment extends BaseLazyFragment {
 	}
 
 	private boolean checkad(String url,ArrayList<String> list){//检查是否带有广告标签		
-            for(int i=0;i<array.length;i++){  
+            for(int i=0;i<list.length;i++){  
                if(url.contains(array[i])){
 	            return true;
 	           }  
