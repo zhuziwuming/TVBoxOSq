@@ -534,8 +534,9 @@ public class PlayFragment extends BaseLazyFragment {
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
         }else{
+	    AdblFlag adblflag = ApiConfig.get().getAdblockFlags();
 	    String adblockUrl = ApiConfig.get().adblockUrl;
-		if(url.contains(ApiConfig.get().getAdblockFlags())){//寻找播放地址，有去广告标签的走去广告解析
+		if(url.contains(adblflag)){//寻找播放地址，有去广告标签的走去广告解析
 		    if (adblockUrl != null) {
 			setTip("正在净化视频", true, false);
 		        adblock(adblockUrl,url);
