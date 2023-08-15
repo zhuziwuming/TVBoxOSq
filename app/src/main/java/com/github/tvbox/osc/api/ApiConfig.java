@@ -347,6 +347,8 @@ public class ApiConfig {
         }
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
+        // 需要使用接口去广告的flag
+        vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "adblflags");
         // 解析地址
         parseBeanList.clear();
         if(infoJson.has("parses")){
