@@ -528,6 +528,19 @@ public class PlayFragment extends BaseLazyFragment {
                 }
             });		
 	}
+
+	private boolean checkad(String url,List<String> blockFlags){//检查是否带有广告标签
+            List<String> list=new ArrayList<String>();		
+            list=ApiConfig.get().getAdblockFlags();
+            int size=list.size();  
+            String[] array = (String[])list.toArray(new String[size]);  
+            for(int i=0;i<array.length;i++){  
+               if(url.contains(array[i])){
+	            return true;
+	        }  
+            }
+            return false;		
+        }
     
     void playUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
@@ -535,12 +548,14 @@ public class PlayFragment extends BaseLazyFragment {
             errorWithRetry("播放地址错误", false);
         }else{
 	    String adblockUrl = ApiConfig.get().adblockUrl;
-		if(url.contains(ApiConfig.get().getAdblockFlags())){//寻找播放地址，有去广告标签的走去广告解析
+            List<String> adblflags=new ArrayList<String>();		
+            adblflags=ApiConfig.get().getAdblockFlags();
+            if(checkad(url,adblflags) == true){//检查播放地址是否去广告标签
 		    if (adblockUrl != null) {
 			setTip("正在净化视频", true, false);
 		        adblock(adblockUrl,url);
 		    }	
-		}
+	    }
             String finalUrl = url;
             if (mActivity == null) return;
         requireActivity().runOnUiThread(new Runnable() {
