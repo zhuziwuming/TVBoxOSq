@@ -99,6 +99,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;//用于取广告标签数组
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -529,9 +530,7 @@ public class PlayFragment extends BaseLazyFragment {
             });		
 	}
 
-	private boolean checkad(String url,List<String> blockFlags){//检查是否带有广告标签
-            List<String> list=new ArrayList<String>();		
-            list=ApiConfig.get().getAdblockFlags();
+	private boolean checkad(String url,List<String> list){//检查是否带有广告标签		
             int size=list.size();  
             String[] array = (String[])list.toArray(new String[size]);  
             for(int i=0;i<array.length;i++){  
