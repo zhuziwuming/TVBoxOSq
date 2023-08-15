@@ -663,6 +663,10 @@ public class ApiConfig {
     public List<IJKCode> getIjkCodes() {
         return ijkCodes;
     }
+    
+    public List<String> getAdblockFlags() {//净化广告
+        return AdblockFlags;
+    }
 
     public IJKCode getCurrentIJKCode() {
         String codeName = Hawk.get(HawkConfig.IJK_CODEC, "");
