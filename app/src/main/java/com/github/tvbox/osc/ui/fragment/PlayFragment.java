@@ -538,7 +538,6 @@ public class PlayFragment extends BaseLazyFragment {
 	            return true;
 	           }  
             }
-            return false;
             return false;		
         }
     
