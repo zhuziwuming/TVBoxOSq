@@ -534,13 +534,14 @@ public class PlayFragment extends BaseLazyFragment {
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
         }else{
-			String adblockUrl = ApiConfig.get().adblockUrl;
-	        if (adblockUrl != null) { //先判断是否有去广告接口
-                if (url.contains(".lz") || url.contains(".ff")) { //寻找播放地址，有非凡和量子的走去广告解析	    
-                    setTip("正在净化视频", true, false);
-		            adblock(adblockUrl,url);
-                }
-            }
+	    String adblflag = ApiConfig.get().getAdblockFlags();//返回 lz ff
+	    String adblockUrl = ApiConfig.get().adblockUrl;
+		if(url.contains(adblflag)){//寻找播放地址，有去广告标签的走去广告解析
+		    if (adblockUrl != null) {
+			setTip("正在净化视频", true, false);
+		        adblock(adblockUrl,url);
+		    }	
+		}
             String finalUrl = url;
             if (mActivity == null) return;
         requireActivity().runOnUiThread(new Runnable() {
