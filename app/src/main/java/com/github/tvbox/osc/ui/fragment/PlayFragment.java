@@ -540,6 +540,14 @@ public class PlayFragment extends BaseLazyFragment {
             }
             return false;		
         }
+	private boolean checkad1(String url, ArrayList<String> list) {
+    for (String tag : list) {
+        if (url.contains(tag)) {
+            return true;
+        }
+    }
+    return false;
+}
     
     void playUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
@@ -548,7 +556,7 @@ public class PlayFragment extends BaseLazyFragment {
         }else{
 	    String adblockUrl = ApiConfig.get().adblockUrl;
 		ArrayList<String> adblflags = new ArrayList<String>(ApiConfig.get().getAdblockFlags());
-            if(checkad(url,adblflags) == true){//检查播放地址是否去广告标签
+            if(checkad1(url,adblflags) == true){//检查播放地址是否去广告标签
 		    if (adblockUrl != null) {
 			setTip("正在净化视频", true, false);
 		        adblock(adblockUrl,url);
