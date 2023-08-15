@@ -665,7 +665,7 @@ public class ApiConfig {
     }
     
     public List<String> getAdblockFlags() {//净化广告
-        return AdblockFlags;
+        return adblockFlags;
     }
 
     public IJKCode getCurrentIJKCode() {
