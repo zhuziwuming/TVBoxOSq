@@ -58,7 +58,7 @@ public class ApiConfig {
     private List<LiveChannelGroup> liveChannelGroupList;
     private List<ParseBean> parseBeanList;
     private List<String> vipParseFlags;
-    private ArrayList<String> adblockFlags;//用于返回去广告标签数组
+    private List<String> adblockFlags;//用于返回去广告标签数组
     private List<IJKCode> ijkCodes;
     private String spider = null;
     public String wallpaper = "";
@@ -349,7 +349,7 @@ public class ApiConfig {
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
         // 需要使用接口去广告的flag
-        vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "blocklags");
+        adblockFlags = DefaultConfig.safeJsonStringList(infoJson, "blocklfags");
         // 解析地址
         parseBeanList.clear();
         if(infoJson.has("parses")){
