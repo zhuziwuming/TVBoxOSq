@@ -529,25 +529,15 @@ public class PlayFragment extends BaseLazyFragment {
                 }
             });		
 	}
-
-	private boolean checkad(String url,ArrayList<String> list){//检查是否带有广告标签
-		int size=list.size();  
-	        String[] array = (String[])list.toArray(new String[size]);
-            for(int i=0;i<array.length;i++){  
-               if(url.contains(array[i])){
-	            return true;
-	           }  
+	
+	private boolean checkad1(String url, ArrayList<String> list) {//检查是否带有广告标签
+            for (String tag : list) {
+                if (url.contains(tag)) {
+                    return true;
+                }
             }
-            return false;		
+            return false;
         }
-	private boolean checkad1(String url, ArrayList<String> list) {
-    for (String tag : list) {
-        if (url.contains(tag)) {
-            return true;
-        }
-    }
-    return false;
-}
     
     void playUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
