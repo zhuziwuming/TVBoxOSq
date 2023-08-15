@@ -1036,8 +1036,6 @@ public class PlayFragment extends BaseLazyFragment {
                     e.printStackTrace();
                 }
             }
-		webUserAgent ="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36";
-		webHeaderMap.put("User-Agent",webUserAgent);
             loadWebView(pb.getUrl() + webUrl);
 
         } else if (pb.getType() == 1) { // json 解析
