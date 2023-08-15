@@ -530,14 +530,13 @@ public class PlayFragment extends BaseLazyFragment {
             });		
 	}
 
-	private boolean checkad(String url,List<String> list){//检查是否带有广告标签		
-            int size=list.size();  
-            String[] array = (String[])list.toArray(new String[size]);  
+	private boolean checkad(String url,ArrayList<String> list){//检查是否带有广告标签		
             for(int i=0;i<array.length;i++){  
                if(url.contains(array[i])){
 	            return true;
-	        }  
+	           }  
             }
+            return false;
             return false;		
         }
     
@@ -547,7 +546,8 @@ public class PlayFragment extends BaseLazyFragment {
             errorWithRetry("播放地址错误", false);
         }else{
 	    String adblockUrl = ApiConfig.get().adblockUrl;
-            List<String> adblflags=ApiConfig.get().getAdblockFlags();
+		ArrayList<String> adblflags = new ArrayList<>();
+                adblflags = ApiConfig.get().getAdblockFlags();
             if(checkad(url,adblflags) == true){//检查播放地址是否去广告标签
 		    if (adblockUrl != null) {
 			setTip("正在净化视频", true, false);
