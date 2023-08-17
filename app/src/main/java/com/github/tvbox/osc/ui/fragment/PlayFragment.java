@@ -99,7 +99,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.ArrayList;//用于取广告标签数组
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -530,7 +529,7 @@ public class PlayFragment extends BaseLazyFragment {
             });		
 	}
 	
-	private boolean checkad1(String url, ArrayList<String> list) {//检查是否带有广告标签
+	private boolean checkAdFlags(String url, List<String> list) {//检查是否带有广告标签
             for (String tag : list) {
                 if (url.contains(tag)) {
                     return true;
@@ -545,8 +544,8 @@ public class PlayFragment extends BaseLazyFragment {
             errorWithRetry("播放地址错误", false);
         }else{
 	    String adblockUrl = ApiConfig.get().adblockUrl;
-		ArrayList<String> adblflags = new ArrayList<String>(ApiConfig.get().getAdblockFlags());
-            if(checkad1(url,adblflags) == true){//检查播放地址是否去广告标签
+	    List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
+            if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
 		    if (adblockUrl != null) {
 			setTip("正在净化视频", true, false);
 		        adblock(adblockUrl,url);
