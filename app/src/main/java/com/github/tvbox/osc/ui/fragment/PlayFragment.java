@@ -1533,11 +1533,8 @@ public class PlayFragment extends BaseLazyFragment {
         }
 
         WebResourceResponse checkIsVideo(String url, HashMap<String, String> headers) {
-            if (url.endsWith("/favicon.ico")) {
-                if (url.startsWith("http://127.0.0.1")) {
-                    return new WebResourceResponse("image/x-icon", "UTF-8", null);
-                }
-                return null;
+            if (url.toLowerCase().endsWith(".ico")) {
+                return new WebResourceResponse("image/x-icon", "UTF-8", null);
             }
 
             boolean isFilter = VideoParseRuler.isFilter(webUrl, url);
