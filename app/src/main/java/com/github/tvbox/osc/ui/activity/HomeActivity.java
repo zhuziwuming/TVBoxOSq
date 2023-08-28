@@ -517,28 +517,33 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (topHide < 0)
-            return false;
-        int keyCode = event.getKeyCode();
+    if (topHide < 0)
+        return false;
+    
+    int keyCode = event.getKeyCode();
+    if (keyCode == KeyEvent.KEYCODE_MENU) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_MENU) {
-                if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != 0){//菜单键被长按
-			        Toast.makeText(mContext, "菜单键被长按", Toast.LENGTH_SHORT).show();
-			        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("useCache", true);
-                    intent.putExtras(bundle);
-                    HomeActivity.this.startActivity(intent);
-		        }else{	
-                        showSiteSwitch();
-		        }
+            if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != 0) { // 菜单键被长按
+                Toast.makeText(mContext, "菜单键被长按", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("useCache", true);
+                intent.putExtras(bundle);
+                HomeActivity.this.startActivity(intent);
+            } else {
+                // 菜单键被短按
+                showSiteSwitch();
             }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
-
+            // 菜单键被释放
+            // 在此添加对应的处理逻辑
         }
-        return super.dispatchKeyEvent(event);
     }
+    
+    return super.dispatchKeyEvent(event);
+}
+
 
     byte topHide = 0;
 
