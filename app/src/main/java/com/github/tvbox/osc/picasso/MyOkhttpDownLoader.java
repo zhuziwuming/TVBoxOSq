@@ -76,10 +76,7 @@ public final class MyOkhttpDownLoader implements Downloader {
         if (url.contains("@Referer=")) referer= url.split("@Referer=")[1].split("@")[0];
 
         url = url.split("@")[0];
-        if(url.contains("douban")){
-		ua = UA.random();
-		referer = "https://movie.douban.com/";
-		}
+        
         Request.Builder mRequestBuilder = new Request.Builder().url(url);
         if(!TextUtils.isEmpty(header)) {
             JsonObject jsonInfo = new Gson().fromJson(header, JsonObject.class);
@@ -88,6 +85,10 @@ public final class MyOkhttpDownLoader implements Downloader {
                 mRequestBuilder.addHeader(key, val);
             }
         }else {
+		if(url.contains("douban")){
+		    ua = UA.random();
+		    referer = "https://movie.douban.com/";
+		}
             if(!TextUtils.isEmpty(cookie))mRequestBuilder.addHeader("Cookie", cookie);
             if(!TextUtils.isEmpty(ua))mRequestBuilder.addHeader("User-Agent", ua);
             if(!TextUtils.isEmpty(referer))mRequestBuilder.addHeader("Referer", referer);
