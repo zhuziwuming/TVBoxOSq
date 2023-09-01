@@ -77,7 +77,7 @@ public final class MyOkhttpDownLoader implements Downloader {
 
         url = url.split("@")[0];
         if(url.contains("douban")){
-		ua = UA.getSystemWebviewUserAgent();
+		ua = UA.random();
 		referer = "https://movie.douban.com/";
 		}
         Request.Builder mRequestBuilder = new Request.Builder().url(url);
