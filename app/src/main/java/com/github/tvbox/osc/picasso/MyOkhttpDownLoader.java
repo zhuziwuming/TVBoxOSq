@@ -63,7 +63,7 @@ public final class MyOkhttpDownLoader implements Downloader {
     @Override
     public Response load(@NonNull Request request) throws IOException {
         String url = request.url().toString();
-        url= URLDecoder.decode(url);
+        //url= URLDecoder.decode(url);
         String header = null;
         String cookie = null;
         String ua = null;
