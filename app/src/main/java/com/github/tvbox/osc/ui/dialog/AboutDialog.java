@@ -8,6 +8,7 @@ import com.github.tvbox.osc.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import android.widget.TextView;
 import android.content.pm.PackageInfo;  
 import android.content.pm.PackageManager; 
 
