@@ -26,6 +26,6 @@ public class AboutDialog extends BaseDialog {
 		// 获取TextView对象  
         TextView txtView = findViewById(R.id.abouttxt); // 这里需要替换为你的TextView的ID
         // 设置TextView的文本，添加版本号到原有文本的后面  
-        txtView.setText(txtView.getText() + "\n版本: V" + versionName);
+        txtView.setText(txtView.getText() + "\n当前版本: V" + versionName);
     }	  		
 }
