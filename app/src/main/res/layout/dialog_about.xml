@@ -17,7 +17,7 @@
         android:shadowDx="10.0"
         android:shadowDy="10.0"
         android:shadowRadius="3.0"
-        android:text="@String/about"
+        android:text="@string/about_text"
         android:textColor="#1D00D1"
         android:textSize="@dimen/ts_24" />
     
