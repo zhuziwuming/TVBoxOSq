@@ -8,6 +8,7 @@
     android:padding="@dimen/vs_30">
 
     <TextView
+        android:id="@+id/abouttxt"
         android:layout_width="@dimen/vs_600"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="@dimen/ts_50"
