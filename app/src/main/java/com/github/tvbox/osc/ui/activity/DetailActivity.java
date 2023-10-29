@@ -453,23 +453,20 @@ public class DetailActivity extends BaseActivity {
     private List<Runnable> pauseRunnable = null;
 
     private void jumpToPlay() {
-        String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
-        //Toast.makeText(DetailActivity.this, "测试播放地址" + url, Toast.LENGTH_SHORT).show();
-            if(url.contains("aliyundrive.com")){  
-                Intent newIntent = new Intent(mContext, PushActivity.class);
-                Toast.makeText(DetailActivity.this, "测试传递地址" + url, Toast.LENGTH_SHORT).show();
-                newIntent.putExtra("id", url);  
-                newIntent.putExtra("sourceKey", "push_agent");  
-                newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);  
-                startActivity(newIntent);	 
-        }else if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             preFlag = vodInfo.playFlag;
             //更新播放地址
             setTextShow(tvPlayUrl, "播放地址：", vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url);
             Bundle bundle = new Bundle();
             //保存历史
             insertVod(sourceKey, vodInfo);
-            bundle.putString("sourceKey", sourceKey);
+            String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
+            if(url.equals("aliyundrive.com")){
+               bundle.putString("sourceKey", sourceKey);  
+            }else{
+                bundle.putString("sourceKey", sourceKey);
+            }   
+            
 //            bundle.putSerializable("VodInfo", vodInfo);
             App.getInstance().setVodInfo(vodInfo);
             if (showPreview) {
