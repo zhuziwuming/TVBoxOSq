@@ -456,7 +456,8 @@ public class DetailActivity extends BaseActivity {
         String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
         //Toast.makeText(DetailActivity.this, "测试播放地址" + url, Toast.LENGTH_SHORT).show();
             if(url.contains("aliyundrive.com")){  
-                Intent newIntent = new Intent(mContext, PushActivity.class);  
+                Intent newIntent = new Intent(mContext, PushActivity.class);
+                Toast.makeText(DetailActivity.this, "测试传递地址" + url, Toast.LENGTH_SHORT).show();
                 newIntent.putExtra("id", url);  
                 newIntent.putExtra("sourceKey", "push_agent");  
                 newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);  
