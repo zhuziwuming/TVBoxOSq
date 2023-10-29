@@ -454,6 +454,7 @@ public class DetailActivity extends BaseActivity {
 
     private void jumpToPlay() {
         String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
+        Toast.makeText(DetailActivity.this, "测试播放地址" + url, Toast.LENGTH_SHORT).show();
             if(url.equals("aliyundrive.com")){  
                 Intent newIntent = new Intent(mContext, PushActivity.class);  
                 newIntent.putExtra("id", url);  
