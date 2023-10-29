@@ -460,13 +460,7 @@ public class DetailActivity extends BaseActivity {
             Bundle bundle = new Bundle();
             //保存历史
             insertVod(sourceKey, vodInfo);
-            String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
-            if(url.equals("aliyundrive.com")){
-				sourceKey = "push_agent";
-			}
-                bundle.putString("sourceKey", sourceKey);
-               
-            
+            bundle.putString("sourceKey", sourceKey);  
 //            bundle.putSerializable("VodInfo", vodInfo);
             App.getInstance().setVodInfo(vodInfo);
             if (showPreview) {
