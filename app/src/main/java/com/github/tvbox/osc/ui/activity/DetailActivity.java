@@ -459,7 +459,7 @@ public class DetailActivity extends BaseActivity {
                 newIntent.putExtra("id", url);  
                 newIntent.putExtra("sourceKey", "push_agent");  
                 newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);  
-                jumpActivity(PushActivity.class, newIntent); 	 
+                startActivity(newIntent);	 
         }else if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             preFlag = vodInfo.playFlag;
             //更新播放地址
