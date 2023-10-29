@@ -462,10 +462,10 @@ public class DetailActivity extends BaseActivity {
             insertVod(sourceKey, vodInfo);
             String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
             if(url.equals("aliyundrive.com")){
-               bundle.putString("sourceKey", sourceKey);  
-            }else{
+				sourceKey = "push_agent";
+			}
                 bundle.putString("sourceKey", sourceKey);
-            }   
+               
             
 //            bundle.putSerializable("VodInfo", vodInfo);
             App.getInstance().setVodInfo(vodInfo);
