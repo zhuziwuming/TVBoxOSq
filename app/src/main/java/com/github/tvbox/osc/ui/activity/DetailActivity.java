@@ -453,7 +453,14 @@ public class DetailActivity extends BaseActivity {
     private List<Runnable> pauseRunnable = null;
 
     private void jumpToPlay() {
-        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+        String url = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
+            if(url.equals("aliyundrive.com")){  
+                Intent newIntent = new Intent(mContext, PushActivity.class);  
+                newIntent.putExtra("id", url);  
+                newIntent.putExtra("sourceKey", "push_agent");  
+                newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+                jumpActivity(PushActivity.class, newIntent); 	 
+        }else if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             preFlag = vodInfo.playFlag;
             //更新播放地址
             setTextShow(tvPlayUrl, "播放地址：", vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url);
