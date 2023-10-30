@@ -198,6 +198,13 @@ public class GridFragment extends BaseLazyFragment {
                 Movie.Video video = gridAdapter.getData().get(position);
                 if (video != null) {
                     Bundle bundle = new Bundle();
+                    
+                    if (video.id.contains("aliyundrive.com")) {
+                        video.sourceKey = "push_agent";
+                    }
+
+
+                    
                     bundle.putString("id", video.id);
                     bundle.putString("sourceKey", video.sourceKey);
                     bundle.putString("title", video.name);
