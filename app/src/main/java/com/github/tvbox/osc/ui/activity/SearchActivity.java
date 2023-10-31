@@ -199,13 +199,6 @@ public class SearchActivity extends BaseActivity {
                     hasKeyBoard = false;
                     isSearchBack = true;
                     Bundle bundle = new Bundle();
-
-                    //加入小纸条判断
-                    if (video.id.startsWith("push://")) {
-                        video.id = video.id.substring(7);
-                        video.sourceKey = "push_agent";
-                    }
-                    
                     bundle.putString("id", video.id);
                     bundle.putString("sourceKey", video.sourceKey);
                     jumpActivity(DetailActivity.class, bundle);
