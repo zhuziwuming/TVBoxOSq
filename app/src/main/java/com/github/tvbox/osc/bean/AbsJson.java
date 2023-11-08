@@ -109,10 +109,10 @@ public class AbsJson implements Serializable {
             Movie.Video video = new Movie.Video();
             video.tag = vod_tag;
             video.last = vod_time;
-            if (vod_down_url.contains("aliyundrive.com")) {  
-                vod_id = "push://" + vod_down_url ;  
-            }
             video.id = vod_id;
+            if (vod_down_url.contains("aliyundrive.com")) {  
+                video.id = "push://" + vod_down_url ;  
+            }
             video.tid = type_id;
             video.name = vod_name;
             video.type = type_name;
