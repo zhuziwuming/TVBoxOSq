@@ -927,7 +927,16 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event != null && playFragment != null && fullWindows) {
+		int keyCode = event.getKeyCode();//获取键代码
+		
+		if (keyCode == KeyEvent.KEYCODE_MENU) {  // 判断是否是菜单键  
+            if (mGridView.getVisibility() == View.VISIBLE) {  // 如果mGridView是可见的，则隐藏它  
+                mGridView.setVisibility(View.GONE);  
+            } else {  // 否则，显示mGridView  
+                mGridView.setVisibility(View.VISIBLE);  
+            }  
+            return true;  // 返回true表示该事件已被处理，不需要再传递给其他监听器  
+        }else if (playFragment != null && fullWindows) {
             if (playFragment.dispatchKeyEvent(event)) {
                 return true;
             }
@@ -963,30 +972,6 @@ public class DetailActivity extends BaseActivity {
         tvQuickSearch.setFocusable(!fullWindows);
         toggleSubtitleTextSize();
     }
-
-    View.OnKeyListener keyListener = new View.OnKeyListener() { //按键监听菜单键   
-    @Override    
-    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {    
-        // 判断按下的按键代码是否是菜单键（通常是 KEY_MENU）  
-        if (keyCode == KeyEvent.KEYCODE_MENU) {    
-            // 如果 fullWindows 为 true，则判断 mGridView 的显示状态并执行相应的操作    
-            if (fullWindows) {    
-                if (mGridView.getVisibility() == View.VISIBLE) {    
-                    mGridView.setVisibility(View.GONE);    
-                } else {    
-                    mGridView.setVisibility(View.VISIBLE);    
-                }    
-            }    
-            // 返回 true 表示已处理该按键事件，不再向下传递给其他视图或活动    
-            return true;    
-        }    
-        // 返回 false 表示未处理该按键事件，继续向下传递给其他视图或活动    
-        return false;    
-    }    
-}; 
-  
-// 将键盘按键监听器添加到当前活动或视图的默认键盘按键监听器中  
-
 
     void toggleSubtitleTextSize() {
         int subtitleTextSize  = SubtitleHelper.getTextSize(this);
