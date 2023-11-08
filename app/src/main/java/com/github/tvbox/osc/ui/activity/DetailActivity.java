@@ -986,8 +986,7 @@ public class DetailActivity extends BaseActivity {
 }; 
   
 // 将键盘按键监听器添加到当前活动或视图的默认键盘按键监听器中  
-View decorView = getWindow().getDecorView();  
-decorView.setOnKeyListener(keyListener);
+
 
     void toggleSubtitleTextSize() {
         int subtitleTextSize  = SubtitleHelper.getTextSize(this);
