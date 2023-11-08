@@ -929,7 +929,7 @@ public class DetailActivity extends BaseActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
 		int keyCode = event.getKeyCode();//获取键代码
 		
-		if (keyCode == KeyEvent.KEYCODE_MENU) {  // 判断是否是菜单键  
+	if (keyCode == KeyEvent.KEYCODE_MENU  && fullWindows ) {  // 判断是否是菜单键  
             if (mGridView.getVisibility() == View.VISIBLE) {  // 如果mGridView是可见的，则隐藏它  
                 mGridView.setVisibility(View.GONE);  
             } else {  // 否则，显示mGridView  
