@@ -964,6 +964,31 @@ public class DetailActivity extends BaseActivity {
         toggleSubtitleTextSize();
     }
 
+    View.OnKeyListener keyListener = new View.OnKeyListener() { //按键监听菜单键   
+    @Override    
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {    
+        // 判断按下的按键代码是否是菜单键（通常是 KEY_MENU）  
+        if (keyCode == KeyEvent.KEYCODE_MENU) {    
+            // 如果 fullWindows 为 true，则判断 mGridView 的显示状态并执行相应的操作    
+            if (fullWindows) {    
+                if (mGridView.getVisibility() == View.VISIBLE) {    
+                    mGridView.setVisibility(View.GONE);    
+                } else {    
+                    mGridView.setVisibility(View.VISIBLE);    
+                }    
+            }    
+            // 返回 true 表示已处理该按键事件，不再向下传递给其他视图或活动    
+            return true;    
+        }    
+        // 返回 false 表示未处理该按键事件，继续向下传递给其他视图或活动    
+        return false;    
+    }    
+}; 
+  
+// 将键盘按键监听器添加到当前活动或视图的默认键盘按键监听器中  
+View decorView = getWindow().getDecorView();  
+decorView.setOnKeyListener(keyListener);
+
     void toggleSubtitleTextSize() {
         int subtitleTextSize  = SubtitleHelper.getTextSize(this);
         if (!fullWindows) {
