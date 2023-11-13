@@ -421,7 +421,7 @@ public class FastSearchActivity extends BaseActivity {
                 @Override
                 public void run() {
                     try {
-                        sourceViewModel.getQuickSearch(key, searchTitle);
+                        sourceViewModel.getSearch(key, searchTitle);
                     } catch (Exception e) {
 
                     }
