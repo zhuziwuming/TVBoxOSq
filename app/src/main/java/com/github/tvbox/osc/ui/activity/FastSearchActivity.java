@@ -347,7 +347,7 @@ public class FastSearchActivity extends BaseActivity {
             }
         }
         if (mSearchTitle != null) {
-            mSearchTitle.setText(String.format("搜索(%d/%d)", 23, spNames.size()));
+            mSearchTitle.setText(String.format("搜索(%d/%d)", resultVods.size(), spNames.size()));
         }
     }
 
