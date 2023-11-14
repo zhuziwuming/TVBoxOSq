@@ -212,16 +212,7 @@ public class SearchActivity extends BaseActivity {
                 hasKeyBoard = true;
                 String wd = etSearch.getText().toString().trim();
                 if (!TextUtils.isEmpty(wd)) {
-                    
-                    if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-						Intent newIntent;
-						newIntent = new Intent(mContext, FastSearchActivity.class);
-						newIntent.putExtra("title", wd);
-						startActivity(newIntent);
-                        
-                    }else {
-                        search(wd);
-                    }
+                   search(wd);
                 } else {
                     Toast.makeText(mContext, "输入内容不能为空", Toast.LENGTH_SHORT).show();
                 }
