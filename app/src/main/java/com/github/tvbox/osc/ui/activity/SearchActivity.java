@@ -426,16 +426,15 @@ public class SearchActivity extends BaseActivity {
         showLoading();
         etSearch.setText(title);
         this.searchTitle = title;
-		
+        mGridView.setVisibility(View.INVISIBLE);
+        searchAdapter.setNewData(new ArrayList<>());
+        searchResult();
 		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-            Bundle bundle = new Bundle();
-            bundle.putString("title", title);
-            jumpActivity(FastSearchActivity.class, bundle);
-        }else{
-            mGridView.setVisibility(View.INVISIBLE);
-            searchAdapter.setNewData(new ArrayList<>());
-            searchResult();
-		}
+            Intent newIntent = new Intent(mContext, FastSearchActivity.class);
+            newIntent.putExtra("title", etSearch.getText().toString());
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(newIntent);
+        }
     }
 
     private ExecutorService searchExecutorService = null;
