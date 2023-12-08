@@ -246,7 +246,7 @@ public class FastSearchActivity extends BaseActivity {
         searchWordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                String str = searchWordAdapter.getData().get(position);
+                String str = searchWordAdapter.getData().get(position).trim();
                 search(str);
             }
         });

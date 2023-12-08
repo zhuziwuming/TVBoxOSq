@@ -431,7 +431,7 @@ public class SearchActivity extends BaseActivity {
         searchResult();
 		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
             Intent newIntent = new Intent(mContext, FastSearchActivity.class);
-            newIntent.putExtra("title", etSearch.getText().toString());
+            newIntent.putExtra("title", etSearch.getText().toString().trim());
             newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(newIntent);
         }
