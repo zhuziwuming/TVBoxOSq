@@ -429,7 +429,7 @@ public class SearchActivity extends BaseActivity {
 		
 		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
             Bundle bundle = new Bundle();
-            bundle.putString("title", wd);
+            bundle.putString("title", title);
             jumpActivity(FastSearchActivity.class, bundle);
         }else{
             mGridView.setVisibility(View.INVISIBLE);
