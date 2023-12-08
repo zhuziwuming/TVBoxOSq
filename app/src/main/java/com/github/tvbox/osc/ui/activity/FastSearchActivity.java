@@ -394,9 +394,9 @@ public class FastSearchActivity extends BaseActivity {
         searchExecutorService = Executors.newFixedThreadPool(5);
         List<SourceBean> searchRequestList = new ArrayList<>();
         searchRequestList.addAll(ApiConfig.get().getSourceBeanList());
-        SourceBean home = ApiConfig.get().getHomeSourceBean();
-        searchRequestList.remove(home);
-        searchRequestList.add(0, home);
+        //SourceBean home = ApiConfig.get().getHomeSourceBean();
+        //searchRequestList.remove(home);
+        //searchRequestList.add(0, home);
 
 
         ArrayList<String> siteKey = new ArrayList<>();
