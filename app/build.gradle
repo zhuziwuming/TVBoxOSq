@@ -8,8 +8,8 @@ android {
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion 19
+        targetSdkVersion 29
         versionCode 1
         versionName '2.0.'.concat(buildTime())//3.0.20230907_2146.apk
         multiDexEnabled true
