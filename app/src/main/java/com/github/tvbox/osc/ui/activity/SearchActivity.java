@@ -426,9 +426,16 @@ public class SearchActivity extends BaseActivity {
         showLoading();
         etSearch.setText(title);
         this.searchTitle = title;
-        mGridView.setVisibility(View.INVISIBLE);
-        searchAdapter.setNewData(new ArrayList<>());
-        searchResult();
+		
+		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
+            Bundle bundle = new Bundle();
+            bundle.putString("title", wd);
+            jumpActivity(FastSearchActivity.class, bundle);
+        }else{
+            mGridView.setVisibility(View.INVISIBLE);
+            searchAdapter.setNewData(new ArrayList<>());
+            searchResult();
+		}
     }
 
     private ExecutorService searchExecutorService = null;
