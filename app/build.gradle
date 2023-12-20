@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName '2.0.'.concat(buildTime())//3.0.20230907_2146.apk
