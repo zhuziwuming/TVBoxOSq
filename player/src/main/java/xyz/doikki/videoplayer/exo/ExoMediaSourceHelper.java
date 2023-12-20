@@ -6,17 +6,16 @@ import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
+import com.google.android.exoplayer2.database.ExoDatabaseProvider;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.rtsp.RtspMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
@@ -25,15 +24,19 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.Map;
+
+import okhttp3.OkHttpClient;
 
 public final class ExoMediaSourceHelper {
 
-    private static volatile ExoMediaSourceHelper sInstance;
+    private static ExoMediaSourceHelper sInstance;
 
     private final String mUserAgent;
     private final Context mAppContext;
-    private HttpDataSource.Factory mHttpDataSourceFactory;
+    private OkHttpDataSource.Factory mHttpDataSourceFactory;
+    private OkHttpClient mOkClient = null;
     private Cache mCache;
 
     private ExoMediaSourceHelper(Context context) {
@@ -52,6 +55,10 @@ public final class ExoMediaSourceHelper {
         return sInstance;
     }
 
+    public void setOkClient(OkHttpClient client) {
+        mOkClient = client;
+    }
+
     public MediaSource getMediaSource(String uri) {
         return getMediaSource(uri, null, false);
     }
@@ -67,7 +74,7 @@ public final class ExoMediaSourceHelper {
     public MediaSource getMediaSource(String uri, Map<String, String> headers, boolean isCache) {
         Uri contentUri = Uri.parse(uri);
         if ("rtmp".equals(contentUri.getScheme())) {
-            return new ProgressiveMediaSource.Factory(new RtmpDataSource.Factory())
+            return new ProgressiveMediaSource.Factory(new RtmpDataSourceFactory(null))
                     .createMediaSource(MediaItem.fromUri(contentUri));
         } else if ("rtsp".equals(contentUri.getScheme())) {
             return new RtspMediaSource.Factory().createMediaSource(MediaItem.fromUri(contentUri));
@@ -83,12 +90,12 @@ public final class ExoMediaSourceHelper {
             setHeaders(headers);
         }
         switch (contentType) {
-            case C.CONTENT_TYPE_DASH:
+            case C.TYPE_DASH:
                 return new DashMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
-            case C.CONTENT_TYPE_HLS:
+            case C.TYPE_HLS:
                 return new HlsMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
             default:
-            case C.CONTENT_TYPE_OTHER:
+            case C.TYPE_OTHER:
                 return new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
         }
     }
@@ -96,11 +103,11 @@ public final class ExoMediaSourceHelper {
     private int inferContentType(String fileName) {
         fileName = fileName.toLowerCase();
         if (fileName.contains(".mpd")) {
-            return C.CONTENT_TYPE_DASH;
+            return C.TYPE_DASH;
         } else if (fileName.contains(".m3u8")) {
-            return C.CONTENT_TYPE_HLS;
+            return C.TYPE_HLS;
         } else {
-            return C.CONTENT_TYPE_OTHER;
+            return C.TYPE_OTHER;
         }
     }
 
@@ -118,7 +125,7 @@ public final class ExoMediaSourceHelper {
         return new SimpleCache(
                 new File(mAppContext.getExternalCacheDir(), "exo-video-cache"),//缓存目录
                 new LeastRecentlyUsedCacheEvictor(512 * 1024 * 1024),//缓存大小，默认512M，使用LRU算法实现
-                new StandaloneDatabaseProvider(mAppContext));
+                new ExoDatabaseProvider(mAppContext));
     }
 
     /**
@@ -127,7 +134,7 @@ public final class ExoMediaSourceHelper {
      * @return A new DataSource factory.
      */
     private DataSource.Factory getDataSourceFactory() {
-        return new DefaultDataSource.Factory(mAppContext, getHttpDataSourceFactory());
+        return new DefaultDataSourceFactory(mAppContext, getHttpDataSourceFactory());
     }
 
     /**
@@ -137,9 +144,9 @@ public final class ExoMediaSourceHelper {
      */
     private DataSource.Factory getHttpDataSourceFactory() {
         if (mHttpDataSourceFactory == null) {
-            mHttpDataSourceFactory = new DefaultHttpDataSource.Factory()
-                    .setUserAgent(mUserAgent)
-                    .setAllowCrossProtocolRedirects(true);
+            mHttpDataSourceFactory = new OkHttpDataSource.Factory(mOkClient)
+                    .setUserAgent(mUserAgent)/*
+                    .setAllowCrossProtocolRedirects(true)*/;
         }
         return mHttpDataSourceFactory;
     }
@@ -153,11 +160,18 @@ public final class ExoMediaSourceHelper {
                     try {
                         Field userAgentField = mHttpDataSourceFactory.getClass().getDeclaredField("userAgent");
                         userAgentField.setAccessible(true);
-                        userAgentField.set(mHttpDataSourceFactory, value);
+                        userAgentField.set(mHttpDataSourceFactory, value.trim());
                     } catch (Exception e) {
                         //ignore
                     }
                 }
+            }
+            Iterator<String> iter = headers.keySet().iterator();
+            while (iter.hasNext()) {
+                String k = iter.next();
+                String v = headers.get(k);
+                if (v != null)
+                    headers.put(k, v.trim());
             }
             mHttpDataSourceFactory.setDefaultRequestProperties(headers);
         }
