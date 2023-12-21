@@ -44,7 +44,7 @@
 
         <LinearLayout
             android:id="@+id/llWord"
-            android:layout_width="@dimen/vs_300"
+            android:layout_width="@dimen/vs_200"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingLeft="20mm"
