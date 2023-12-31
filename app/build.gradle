@@ -24,6 +24,17 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
+	
+	signingConfigs {
+        config {
+            keyAlias 'zhuzige'
+            keyPassword '123456'
+            storeFile file('zhuzige.jks')
+            storePassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
 
     buildTypes {
         debug {
@@ -42,17 +53,6 @@ android {
             ndk {
                 abiFilters 'armeabi-v7a'
             }
-        }
-    }
-	
-	signingConfigs {
-        config {
-            keyAlias 'zhuzige'
-            keyPassword '123456'
-            storeFile file('zhuzige.jks')
-            storePassword '123456'
-            v1SigningEnabled true
-            v2SigningEnabled true
         }
     }
 
