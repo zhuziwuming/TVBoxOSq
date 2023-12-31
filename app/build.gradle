@@ -43,6 +43,17 @@ android {
             }
         }
     }
+	
+	signingConfigs {
+        config {
+            keyAlias 'zhuzige'
+            keyPassword '123456'
+            storeFile file('zhuzige.jks')
+            storePassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
