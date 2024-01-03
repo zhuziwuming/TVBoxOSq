@@ -244,6 +244,7 @@ public class SourceViewModel extends ViewModel {
                         json(listResult, sp.categoryContent(sortData.id, page + "", true, sortData.filterSelect), homeSourceBean.getKey());
                     } catch (Throwable th) {
                         th.printStackTrace();
+						json(listResult, "", homeSourceBean.getKey());
                     }
                 }
             });
@@ -433,6 +434,7 @@ public class SourceViewModel extends ViewModel {
                         json(detailResult, sp.detailContent(ids), sourceBean.getKey());
                     } catch (Throwable th) {
                         th.printStackTrace();
+						json(detailResult, "", sourceBean.getKey());
                     }
                 }
             });
