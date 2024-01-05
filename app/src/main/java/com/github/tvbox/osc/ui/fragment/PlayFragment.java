@@ -575,7 +575,7 @@ public class PlayFragment extends BaseLazyFragment {
 		        adblock(adblockUrl,url);
 		    }	
 	    }
-            String finalUrl = url;
+            final String finalUrl = url;
             if (mActivity == null) return;
         requireActivity().runOnUiThread(new Runnable() {
             @Override
