@@ -108,4 +108,11 @@ public class App extends MultiDexApplication {
     public Activity getCurrentActivity() {
         return AppManager.getInstance().currentActivity();
     }
+	
+	public void setDashData(String data) {
+        dashData = data;
+    }
+    public String getDashData() {
+        return dashData;
+    }
 }
