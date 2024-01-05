@@ -587,11 +587,11 @@ public class PlayActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                         hideTip();
-                        if (url.startsWith("data:application/dash+xml;base64,")) {
+                        if (finalUrl.startsWith("data:application/dash+xml;base64,")) {
                             PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
-                            App.getInstance().setDashData(url.split("base64,")[1]);
-                            url = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
-                        } else if (url.contains(".mpd") || url.contains("type=mpd")) {
+                            App.getInstance().setDashData(finalUrl.split("base64,")[1]);
+                            finalUrl = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
+                        } else if (finalUrl.contains(".mpd") || finalUrl.contains("type=mpd")) {
                             PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
                         } else {
                             PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
