@@ -336,13 +336,17 @@ public class PlayActivity extends BaseActivity {
 
     void selectMyAudioTrack() {
         AbstractPlayer mediaPlayer = mVideoView.getMediaPlayer();
-        if (!(mediaPlayer instanceof IjkMediaPlayer)) {
-            return;
-        }
+        // if (!(mediaPlayer instanceof IjkMediaPlayer)) {
+            // return;
+        // }
         TrackInfo trackInfo = null;
         if (mediaPlayer instanceof IjkMediaPlayer) {
-            trackInfo = ((IjkMediaPlayer)mediaPlayer).getTrackInfo();
+            trackInfo = ((IjkMediaPlayer) mediaPlayer).getTrackInfo();
         }
+        if (mediaPlayer instanceof EXOmPlayer) {
+            trackInfo = ((EXOmPlayer) mediaPlayer).getTrackInfo();
+        }
+		
         if (trackInfo == null) {
             Toast.makeText(mContext, "没有音轨", Toast.LENGTH_SHORT).show();
             return;
@@ -356,12 +360,15 @@ public class PlayActivity extends BaseActivity {
             public void click(TrackInfoBean value, int pos) {
                 try {
                     for (TrackInfoBean audio : bean) {
-                        audio.selected = audio.index == value.index;
+                        audio.selected = audio.trackId == value.trackId;
                     }
                     mediaPlayer.pause();
                     long progress = mediaPlayer.getCurrentPosition();//保存当前进度，ijk 切换轨道 会有快进几秒
                     if (mediaPlayer instanceof IjkMediaPlayer) {
-                        ((IjkMediaPlayer)mediaPlayer).setTrack(value.index);
+                        ((IjkMediaPlayer) mediaPlayer).setTrack(value.trackId);
+                    }
+                    if (mediaPlayer instanceof EXOmPlayer) {
+                        ((EXOmPlayer) mediaPlayer).selectExoTrack(value);
                     }
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -381,17 +388,17 @@ public class PlayActivity extends BaseActivity {
                 String name = val.name.replace("AUDIO,", "");
                 name = name.replace("N/A,", "");
                 name = name.replace(" ", "");
-                return val.index + " : " + val.language + " : " + name;
+                return val.trackId + " : " + val.language + " : " + name;
             }
         }, new DiffUtil.ItemCallback<TrackInfoBean>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
-                return oldItem.index == newItem.index;
+                return oldItem.trackId == newItem.trackId;
             }
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
-                return oldItem.index == newItem.index;
+                return oldItem.trackId == newItem.trackId;
             }
         }, bean, trackInfo.getAudioSelected(false));
         dialog.show();
@@ -399,10 +406,13 @@ public class PlayActivity extends BaseActivity {
 
     void selectMyInternalSubtitle() {
         AbstractPlayer mediaPlayer = mVideoView.getMediaPlayer();
-        if (!(mediaPlayer instanceof IjkMediaPlayer)) {
-            return;
-        }
+        // if (!(mediaPlayer instanceof IjkMediaPlayer)) {
+            // return;
+        // }
         TrackInfo trackInfo = null;
+        if (mediaPlayer instanceof EXOmPlayer) {
+            trackInfo = ((EXOmPlayer)mediaPlayer).getTrackInfo();
+        }
         if (mediaPlayer instanceof IjkMediaPlayer) {
             trackInfo = ((IjkMediaPlayer)mediaPlayer).getTrackInfo();
         }
@@ -419,15 +429,22 @@ public class PlayActivity extends BaseActivity {
             public void click(TrackInfoBean value, int pos) {
                 try {
                     for (TrackInfoBean subtitle : bean) {
-                        subtitle.selected = subtitle.index == value.index;
+                        subtitle.selected = subtitle.trackId == value.trackId;
                     }
                     mediaPlayer.pause();
                     long progress = mediaPlayer.getCurrentPosition();//保存当前进度，ijk 切换轨道 会有快进几秒
                     if (mediaPlayer instanceof IjkMediaPlayer) {
-                        mController.mSubtitleView.destroy();
-                        mController.mSubtitleView.clearSubtitleCache();
-                        mController.mSubtitleView.isInternal = true;
-                        ((IjkMediaPlayer)mediaPlayer).setTrack(value.index);
+                        ((IjkMediaPlayer)mediaPlayer).setTrack(value.trackId);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mediaPlayer.seekTo(progress);
+                                mediaPlayer.start();
+                            }
+                        }, 800);
+                    }
+                    if (mediaPlayer instanceof EXOmPlayer) {
+                        ((EXOmPlayer)mediaPlayer).selectExoTrack(value);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -445,17 +462,17 @@ public class PlayActivity extends BaseActivity {
 
             @Override
             public String getDisplay(TrackInfoBean val) {
-                return val.index + " : " + val.language;
+                return val.name + (TextUtils.isEmpty(val.language)? "": " " + val.language);
             }
         }, new DiffUtil.ItemCallback<TrackInfoBean>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
-                return oldItem.index == newItem.index;
+                return oldItem.trackId == newItem.trackId;
             }
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
-                return oldItem.index == newItem.index;
+                return oldItem.trackId == newItem.trackId;
             }
         }, bean, trackInfo.getSubtitleSelected(false));
         dialog.show();
@@ -611,18 +628,31 @@ public class PlayActivity extends BaseActivity {
             if (playSubtitle != null && playSubtitle .length() > 0) {
                 mController.mSubtitleView.setSubtitlePath(playSubtitle);
             } else {
-                if (mController.mSubtitleView.hasInternal) {
+                if (mController.mSubtitleView.hasInternal) {//有则使用内置字幕
                     mController.mSubtitleView.isInternal = true;
-                    if (trackInfo != null) {
+                    if (trackInfo != null && !trackInfo.getSubtitle().isEmpty()) {
                         List<TrackInfoBean> subtitleTrackList = trackInfo.getSubtitle();
                         int selectedIndex = trackInfo.getSubtitleSelected(true);
+                        boolean hasCh =false;
                         for(TrackInfoBean subtitleTrackInfoBean : subtitleTrackList) {
                             String lowerLang = subtitleTrackInfoBean.language.toLowerCase();
-                            if (lowerLang.startsWith("zh") || lowerLang.startsWith("ch")) {
-                                if (selectedIndex != subtitleTrackInfoBean.index) {
-                                    ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(subtitleTrackInfoBean.index);
+                            if (lowerLang.contains("zh") || lowerLang.contains("ch")) {
+                                hasCh=true;
+                                if (selectedIndex != subtitleTrackInfoBean.trackId) {
+                                    if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer){
+                                        ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(subtitleTrackInfoBean.trackId);
+                                    }else if (mVideoView.getMediaPlayer() instanceof EXOmPlayer){
+                                        ((EXOmPlayer)(mVideoView.getMediaPlayer())).selectExoTrack(subtitleTrackInfoBean);
+                                    }
                                     break;
                                 }
+                            }
+                        }
+                        if(!hasCh){
+                            if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer){
+                                ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(subtitleTrackList.get(0).trackId);
+                            }else if (mVideoView.getMediaPlayer() instanceof EXOmPlayer){
+                                ((EXOmPlayer)(mVideoView.getMediaPlayer())).selectExoTrack(subtitleTrackList.get(0));
                             }
                         }
                     }

@@ -861,7 +861,7 @@ public class PlayFragment extends BaseLazyFragment {
     public void onDestroyView() {
         super.onDestroyView();
 		//手动注销
-        sourceViewModel.playResult.removeObserver(mObserverPlayResult);
+        //sourceViewModel.playResult.removeObserver(mObserverPlayResult);
 
         EventBus.getDefault().unregister(this);
         if (mVideoView != null) {
