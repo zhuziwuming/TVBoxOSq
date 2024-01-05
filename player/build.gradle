@@ -35,11 +35,18 @@ android {
 
 dependencies {
     implementation "androidx.annotation:annotation:1.3.0"
-    api "com.google.android.exoplayer:exoplayer-core:2.14.2"
-    api "com.google.android.exoplayer:exoplayer-dash:2.14.2"
-    api "com.google.android.exoplayer:exoplayer-hls:2.14.2"
-    api "com.google.android.exoplayer:exoplayer-rtsp:2.14.2"
-    api "com.google.android.exoplayer:extension-rtmp:2.14.2"
-    api "com.google.android.exoplayer:extension-okhttp:2.14.2"
+	implementation 'com.squareup.okhttp3:okhttp:3.12.11'
+    api "com.google.android.exoplayer:exoplayer-core:playerFactory = new PlayerFactory<EXOmPlayer>() {
+                @Override
+                public EXOmPlayer createPlayer(Context context) {
+                    return new EXOmPlayer(context);
+                }
+            };"
+	api "com.google.android.exoplayer:exoplayer-core::2.16.0"		
+    api "com.google.android.exoplayer:exoplayer-dash:2.16.0"
+    api "com.google.android.exoplayer:exoplayer-hls:2.16.0"
+    api "com.google.android.exoplayer:exoplayer-rtsp:2.16.0"
+    api "com.google.android.exoplayer:extension-rtmp:2.16.0"
+    //api "com.google.android.exoplayer:extension-okhttp:2.16.0"
     api 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.5'
 }
