@@ -980,7 +980,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
 
             @Override
-            public void list(Map<Integer, String> urlMap) {
+            public void list(String playList) {
             }
 
             @Override
