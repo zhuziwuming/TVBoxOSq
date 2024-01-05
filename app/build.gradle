@@ -113,13 +113,9 @@ dependencies {
     // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.owen:tv-recyclerview:3.0.0'
 
-<<<<<<< HEAD
+
     implementation 'com.github.getActivity:XXPermissions:18.5'
-    implementation 'org.jsoup:jsoup:1.14.1'
-=======
-    implementation 'com.github.getActivity:XXPermissions:13.6'
     implementation 'org.jsoup:jsoup:1.16.2'
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
     implementation 'com.github.hedzr:android-file-chooser:v1.2.0-final'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
