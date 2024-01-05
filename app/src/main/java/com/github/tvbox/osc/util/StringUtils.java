@@ -148,13 +148,10 @@ public class StringUtils {
         return listToString(list, "&&");
     }
 
-<<<<<<< HEAD
-=======
     public static boolean isBlank(String text) {
         return trim(text).length() == 0;
     }
 
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
     public static String trimBlanks(String str) {
         if (str == null || str.length() == 0) {
             return str;
@@ -171,8 +168,6 @@ public class StringUtils {
         return ((st > 0) || (len < str.length())) ? str.substring(st, len) : str;
     }
 
-<<<<<<< HEAD
-=======
     public static String trim(String string) {
         if (string == null || string.length() == 0 || " ".equals(string)) return "";
         int start = 0, len = string.length();
@@ -221,5 +216,4 @@ public class StringUtils {
         }
         return result;
     }
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
 }

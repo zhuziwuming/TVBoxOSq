@@ -460,14 +460,9 @@ public class DetailActivity extends BaseActivity {
             setTextShow(tvPlayUrl, "播放地址：", vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url);
             Bundle bundle = new Bundle();
             //保存历史
-<<<<<<< HEAD
-            insertVod(sourceKey, vodInfo);
-            bundle.putString("sourceKey", sourceKey);  
-=======
             insertVod(firstsourceKey, vodInfo);
         //   insertVod(sourceKey, vodInfo);
             bundle.putString("sourceKey", sourceKey);
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
 //            bundle.putSerializable("VodInfo", vodInfo);
             App.getInstance().setVodInfo(vodInfo);
             if (showPreview) {
@@ -729,11 +724,6 @@ public class DetailActivity extends BaseActivity {
 
     private void loadDetail(String vid, String key) {
         if (vid != null) {
-            //加入小纸条判断
-           if (vid.startsWith("push://")) {
-                 vid = vid.substring(7);
-                 key = "push_agent";
-            }
             vodId = vid;
             sourceKey = key;
             firstsourceKey = key;

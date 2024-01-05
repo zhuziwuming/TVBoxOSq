@@ -254,23 +254,10 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     }
                 }
             }
-            //String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
-            String doubanUrl = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
+            String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
             OkGo.<String>get(doubanUrl)
                     .headers("User-Agent", UA.randomOne())
                     .execute(new AbsCallback<String>() {
-<<<<<<< HEAD
-                @Override
-                public void onSuccess(Response<String> response) {
-                    String netJson = response.body();
-					String newJson = tojson(netJson);
-                    Hawk.put("home_hot_day", today);
-                    Hawk.put("home_hot", newJson);
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.setNewData(loadHots(newJson));
-=======
                         @Override
                         public void onSuccess(Response<String> response) {
                             String netJson = response.body();
@@ -287,34 +274,11 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                         @Override
                         public String convertResponse(okhttp3.Response response) throws Throwable {
                             return response.body().string();
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
                         }
                     });
         } catch (Throwable th) {
             th.printStackTrace();
         }
-    }
-	
-	private String tojson(String jsonStr){
-        JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);  
-        JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
-        JsonObject newObj = new JsonObject(); // 新建总对象  
-        JsonArray newArray = new JsonArray(); // 新建数组  
-          
-        for (JsonElement ele : array) {  
-            JsonObject movieObj = (JsonObject) ele; // 获取当前电影对象  
-            JsonObject newObj2 = new JsonObject(); // 为每部电影新建一个对象  
-            String title = movieObj.get("nm").getAsString();  
-            String cover = movieObj.get("img").getAsString();  
-            String rate = movieObj.get("sc").getAsString();  
-            newObj2.addProperty("title", title);  
-            newObj2.addProperty("cover", cover);  
-            newObj2.addProperty("rate", rate);  
-            newArray.add(newObj2); // 将当前电影对象添加到数组中  
-        }  
-        newObj.addProperty("code", 200);  
-        newObj.add("data", newArray);
-        return newObj.toString();
     }
 
     private ArrayList<Movie.Video> loadHots(String json) {
@@ -328,11 +292,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 vod.name = obj.get("title").getAsString();
                 vod.note = obj.get("rate").getAsString();
                 if(!vod.note.isEmpty())vod.note+=" 分";
-<<<<<<< HEAD
-                vod.pic = obj.get("cover").getAsString();
-=======
                 vod.pic = obj.get("cover").getAsString()+"@User-Agent="+ UA.randomOne()+"@Referer=https://www.douban.com/";
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
                 result.add(vod);
             }
         } catch (Throwable th) {

@@ -211,12 +211,6 @@ public class GridFragment extends BaseLazyFragment {
                         focusedView = view;
                         changeView(video.id,video.tag.equals("folder"));
                     }
-<<<<<<< HEAD
-                    //else if(homeSourceBean.isQuickSearch() && Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) && enableFastSearch()){
-                       // jumpActivity(FastSearchActivity.class, bundle);
-                    //}
-=======
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
                     else{
                         if(video.id == null || video.id.isEmpty() || video.id.startsWith("msearch:")){
                             if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) && enableFastSearch()){

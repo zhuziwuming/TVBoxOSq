@@ -1,17 +1,14 @@
 apply plugin: 'com.android.application'
-def static buildTime() { 
-     return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00")) 
- }
 
 android {
     compileSdkVersion 33
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
-        minSdkVersion 19
+        minSdkVersion 18
         targetSdkVersion 26
         versionCode 1
-        versionName '2.0.'.concat(buildTime())//3.0.20230907_2146.apk
+        versionName '1.0.0'
         multiDexEnabled true
         //设置room的Schema的位置
         javaCompileOptions {
@@ -24,17 +21,6 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
-	
-	signingConfigs {
-        config {
-            keyAlias 'zhuzige'
-            keyPassword '123456'
-            storeFile file('zhuzige.jks')
-            storePassword '123456'
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-    }
 
     buildTypes {
         debug {
@@ -46,7 +32,6 @@ android {
             }
         }
         release {
-		    signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
 
@@ -113,8 +98,7 @@ dependencies {
     // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.owen:tv-recyclerview:3.0.0'
 
-
-    implementation 'com.github.getActivity:XXPermissions:18.5'
+    implementation 'com.github.getActivity:XXPermissions:13.6'
     implementation 'org.jsoup:jsoup:1.16.2'
     implementation 'com.github.hedzr:android-file-chooser:v1.2.0-final'
     implementation 'commons-io:commons-io:2.11.0'

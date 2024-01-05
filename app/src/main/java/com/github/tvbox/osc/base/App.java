@@ -33,11 +33,7 @@ public class App extends MultiDexApplication {
 
     private static P2PClass p;
     public static String burl;
-<<<<<<< HEAD
-	private static String dashData;
-=======
     private static String dashData;
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
 
     @Override
     public void onCreate() {
@@ -68,10 +64,9 @@ public class App extends MultiDexApplication {
         // Hawk
         Hawk.init(this).build();
         Hawk.put(HawkConfig.DEBUG_OPEN, false);
-        
-        putDefault(HawkConfig.HOME_REC, 0);       // Home Rec 0=豆瓣, 1=推荐, 2=历史
-        putDefault(HawkConfig.PLAY_TYPE, 1);      // Player   0=系统, 1=IJK, 2=Exo
-        putDefault(HawkConfig.IJK_CODEC, "硬解码");// IJK Render 软解码, 硬解码
+        if (!Hawk.contains(HawkConfig.PLAY_TYPE)) {
+            Hawk.put(HawkConfig.PLAY_TYPE, 1);
+        }
     }
 
     public static App getInstance() {
@@ -84,11 +79,6 @@ public class App extends MultiDexApplication {
         JsLoader.load();
     }
 
-    private void putDefault(String key, Object value) {
-        if (!Hawk.contains(key)) {
-            Hawk.put(key, value);
-        }
-    }
 
     private VodInfo vodInfo;
     public void setVodInfo(VodInfo vodinfo){
@@ -113,13 +103,8 @@ public class App extends MultiDexApplication {
     public Activity getCurrentActivity() {
         return AppManager.getInstance().currentActivity();
     }
-<<<<<<< HEAD
-	
-	public void setDashData(String data) {
-=======
 
     public void setDashData(String data) {
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
         dashData = data;
     }
     public String getDashData() {

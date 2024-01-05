@@ -7,9 +7,8 @@ import android.view.SurfaceHolder;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
@@ -17,15 +16,12 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.analytics.AnalyticsCollector;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Clock;
 import com.google.android.exoplayer2.util.EventLogger;
-import com.google.android.exoplayer2.util.NonNullApi;
 import com.google.android.exoplayer2.video.VideoSize;
 
 import java.util.Map;
@@ -37,7 +33,7 @@ import xyz.doikki.videoplayer.util.PlayerUtils;
 public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     protected Context mAppContext;
-    protected ExoPlayer mMediaPlayer;
+    protected SimpleExoPlayer mInternalPlayer;
     protected MediaSource mMediaSource;
     protected ExoMediaSourceHelper mMediaSourceHelper;
 
@@ -48,8 +44,7 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
     private LoadControl mLoadControl;
     private RenderersFactory mRenderersFactory;
     private TrackSelector mTrackSelector;
-    protected ExoTrackNameProvider trackNameProvider;
-    protected TrackSelectionArray mTrackSelections;
+
     public ExoMediaPlayer(Context context) {
         mAppContext = context.getApplicationContext();
         mMediaSourceHelper = ExoMediaSourceHelper.getInstance(context);
@@ -57,7 +52,7 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     @Override
     public void initPlayer() {
-        mMediaPlayer = new SimpleExoPlayer.Builder(
+        mInternalPlayer = new SimpleExoPlayer.Builder(
                 mAppContext,
                 mRenderersFactory == null ? mRenderersFactory = new DefaultRenderersFactory(mAppContext) : mRenderersFactory,
                 mTrackSelector == null ? mTrackSelector = new DefaultTrackSelector(mAppContext) : mTrackSelector,
@@ -70,22 +65,10 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
         //播放器日志
         if (VideoViewManager.getConfig().mIsEnableLog && mTrackSelector instanceof MappingTrackSelector) {
-            mMediaPlayer.addAnalyticsListener(new EventLogger((MappingTrackSelector) mTrackSelector, "ExoPlayer"));
+            mInternalPlayer.addAnalyticsListener(new EventLogger((MappingTrackSelector) mTrackSelector, "ExoPlayer"));
         }
 
-        mMediaPlayer.addListener(this);
-    }
-
-    public DefaultTrackSelector getTrackSelector() {
-        return (DefaultTrackSelector) mTrackSelector;
-    }
-
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-        Player.Listener.super.onTracksChanged(trackGroups, trackSelections);
-        trackNameProvider = new ExoTrackNameProvider(mAppContext.getResources());
-        mTrackSelections = trackSelections;
+        mInternalPlayer.addListener(this);
     }
 
     public void setTrackSelector(TrackSelector trackSelector) {
@@ -112,57 +95,57 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     @Override
     public void start() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return;
-        mMediaPlayer.setPlayWhenReady(true);
+        mInternalPlayer.setPlayWhenReady(true);
     }
 
     @Override
     public void pause() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return;
-        mMediaPlayer.setPlayWhenReady(false);
+        mInternalPlayer.setPlayWhenReady(false);
     }
 
     @Override
     public void stop() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return;
-        mMediaPlayer.stop();
+        mInternalPlayer.stop();
     }
 
     @Override
     public void prepareAsync() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return;
         if (mMediaSource == null) return;
         if (mSpeedPlaybackParameters != null) {
-            mMediaPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
         }
         mIsPreparing = true;
-        mMediaPlayer.setMediaSource(mMediaSource);
-        mMediaPlayer.prepare();
+        mInternalPlayer.setMediaSource(mMediaSource);
+        mInternalPlayer.prepare();
     }
 
     @Override
     public void reset() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.clearMediaItems();
-            mMediaPlayer.setVideoSurface(null);
+        if (mInternalPlayer != null) {
+            mInternalPlayer.stop();
+            mInternalPlayer.clearMediaItems();
+            mInternalPlayer.setVideoSurface(null);
             mIsPreparing = false;
         }
     }
 
     @Override
     public boolean isPlaying() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return false;
-        int state = mMediaPlayer.getPlaybackState();
+        int state = mInternalPlayer.getPlaybackState();
         switch (state) {
             case Player.STATE_BUFFERING:
             case Player.STATE_READY:
-                return mMediaPlayer.getPlayWhenReady();
+                return mInternalPlayer.getPlayWhenReady();
             case Player.STATE_IDLE:
             case Player.STATE_ENDED:
             default:
@@ -172,17 +155,17 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     @Override
     public void seekTo(long time) {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return;
-        mMediaPlayer.seekTo(time);
+        mInternalPlayer.seekTo(time);
     }
 
     @Override
     public void release() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.removeListener(this);
-            mMediaPlayer.release();
-            mMediaPlayer = null;
+        if (mInternalPlayer != null) {
+            mInternalPlayer.removeListener(this);
+            mInternalPlayer.release();
+            mInternalPlayer = null;
         }
 
         mIsPreparing = false;
@@ -191,27 +174,27 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     @Override
     public long getCurrentPosition() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return 0;
-        return mMediaPlayer.getCurrentPosition();
+        return mInternalPlayer.getCurrentPosition();
     }
 
     @Override
     public long getDuration() {
-        if (mMediaPlayer == null)
+        if (mInternalPlayer == null)
             return 0;
-        return mMediaPlayer.getDuration();
+        return mInternalPlayer.getDuration();
     }
 
     @Override
     public int getBufferedPercentage() {
-        return mMediaPlayer == null ? 0 : mMediaPlayer.getBufferedPercentage();
+        return mInternalPlayer == null ? 0 : mInternalPlayer.getBufferedPercentage();
     }
 
     @Override
     public void setSurface(Surface surface) {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setVideoSurface(surface);
+        if (mInternalPlayer != null) {
+            mInternalPlayer.setVideoSurface(surface);
         }
     }
 
@@ -225,28 +208,28 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     @Override
     public void setVolume(float leftVolume, float rightVolume) {
-        if (mMediaPlayer != null)
-            mMediaPlayer.setVolume((leftVolume + rightVolume) / 2);
+        if (mInternalPlayer != null)
+            mInternalPlayer.setVolume((leftVolume + rightVolume) / 2);
     }
 
     @Override
     public void setLooping(boolean isLooping) {
-        if (mMediaPlayer != null)
-            mMediaPlayer.setRepeatMode(isLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
+        if (mInternalPlayer != null)
+            mInternalPlayer.setRepeatMode(isLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
     }
 
     @Override
     public void setOptions() {
         //准备好就开始播放
-        mMediaPlayer.setPlayWhenReady(true);
+        mInternalPlayer.setPlayWhenReady(true);
     }
 
     @Override
     public void setSpeed(float speed) {
         PlaybackParameters playbackParameters = new PlaybackParameters(speed);
         mSpeedPlaybackParameters = playbackParameters;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setPlaybackParameters(playbackParameters);
+        if (mInternalPlayer != null) {
+            mInternalPlayer.setPlaybackParameters(playbackParameters);
         }
     }
 
@@ -288,7 +271,7 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
     }
 
     @Override
-    public void onPlayerError(PlaybackException error) {
+    public void onPlayerError(ExoPlaybackException error) {
         if (mPlayerEventListener != null) {
             mPlayerEventListener.onError();
         }

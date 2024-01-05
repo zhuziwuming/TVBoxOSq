@@ -16,7 +16,7 @@
 package com.github.tvbox.osc.picasso;
 
 import android.text.TextUtils;
-import com.github.tvbox.osc.util.UA;//引入UA
+
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
@@ -65,10 +65,6 @@ public final class MyOkhttpDownLoader implements Downloader {
     @Override
     public Response load(@NonNull Request request) throws IOException {
         String url = request.url().toString();
-<<<<<<< HEAD
-        //url= URLDecoder.decode(url);
-=======
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
         String header = null;
         String cookie = null;
         String ua = null;
@@ -84,12 +80,7 @@ public final class MyOkhttpDownLoader implements Downloader {
         if (url.contains("@Referer=")) referer= url.split("@Referer=")[1].split("@")[0];
 
         url = url.split("@")[0];
-<<<<<<< HEAD
-        
-        Request.Builder mRequestBuilder = new Request.Builder().url(url);
-=======
         Request.Builder mRequestBuilder = request.newBuilder().url(url);
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
         if(!TextUtils.isEmpty(header)) {
             JsonObject jsonInfo = new Gson().fromJson(header, JsonObject.class);
             for (String key : jsonInfo.keySet()) {
@@ -97,15 +88,6 @@ public final class MyOkhttpDownLoader implements Downloader {
                 mRequestBuilder.addHeader(key.toUpperCase(), removeDuplicateSlashes(val));
             }
         }else {
-<<<<<<< HEAD
-		if(url.contains("douban")){
-		    ua = UA.random();
-		    referer = "https://movie.douban.com/";
-		}
-            if(!TextUtils.isEmpty(cookie))mRequestBuilder.addHeader("Cookie", cookie);
-            if(!TextUtils.isEmpty(ua))mRequestBuilder.addHeader("User-Agent", ua);
-            if(!TextUtils.isEmpty(referer))mRequestBuilder.addHeader("Referer", referer);
-=======
             if(!TextUtils.isEmpty(cookie)) {
                 assert cookie != null;
                 mRequestBuilder.addHeader("Cookie", cookie);
@@ -121,7 +103,6 @@ public final class MyOkhttpDownLoader implements Downloader {
                 assert referer != null;
                 mRequestBuilder.addHeader("Referer", referer);
             }
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
         }
         return client.newCall(mRequestBuilder.build()).execute();
     }

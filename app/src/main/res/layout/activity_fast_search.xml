@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/mSearchTitle"
-            android:layout_width="@dimen/vs_240"
+            android:layout_width="@dimen/vs_180"
             android:layout_height="match_parent"
             android:text="搜索(0/0)"
             android:layout_gravity="center_horizontal"
@@ -44,7 +44,7 @@
 
         <LinearLayout
             android:id="@+id/llWord"
-            android:layout_width="@dimen/vs_240"
+            android:layout_width="@dimen/vs_180"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingLeft="20mm"

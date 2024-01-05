@@ -205,7 +205,7 @@ public class SearchActivity extends BaseActivity {
                     }
                     hasKeyBoard = false;
                     isSearchBack = true;
-                    Bundle bundle = new Bundle(); 
+                    Bundle bundle = new Bundle();
                     bundle.putString("id", video.id);
                     bundle.putString("sourceKey", video.sourceKey);
                     jumpActivity(DetailActivity.class, bundle);
@@ -219,9 +219,6 @@ public class SearchActivity extends BaseActivity {
                 hasKeyBoard = true;
                 String wd = etSearch.getText().toString().trim();
                 if (!TextUtils.isEmpty(wd)) {
-<<<<<<< HEAD
-                   search(wd);
-=======
                     if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
                         Bundle bundle = new Bundle();
                         bundle.putString("title", wd);
@@ -229,7 +226,6 @@ public class SearchActivity extends BaseActivity {
                     }else {
                         search(wd);
                     }
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
                 } else {
                     Toast.makeText(mContext, "输入内容不能为空", Toast.LENGTH_SHORT).show();
                 }
@@ -458,12 +454,6 @@ public class SearchActivity extends BaseActivity {
         mGridView.setVisibility(View.INVISIBLE);
         searchAdapter.setNewData(new ArrayList<>());
         searchResult();
-		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-            Intent newIntent = new Intent(mContext, FastSearchActivity.class);
-            newIntent.putExtra("title", etSearch.getText().toString().trim());
-            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(newIntent);
-        }
     }
 
     private ExecutorService searchExecutorService = null;

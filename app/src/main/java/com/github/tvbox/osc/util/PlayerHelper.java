@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
-import com.github.tvbox.osc.player.EXOmPlayer;
 import com.github.tvbox.osc.player.IjkMediaPlayer;
 import com.github.tvbox.osc.player.render.SurfaceRenderViewFactory;
 import com.github.tvbox.osc.player.thirdparty.Kodi;
@@ -32,11 +31,7 @@ import xyz.doikki.videoplayer.render.TextureRenderViewFactory;
 
 public class PlayerHelper {
     public static void updateCfg(VideoView videoView, JSONObject playerCfg) {
-<<<<<<< HEAD
-		    updateCfg(videoView,playerCfg,-1);
-=======
         updateCfg(videoView,playerCfg,-1);
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
     }
     public static void updateCfg(VideoView videoView, JSONObject playerCfg,int forcePlayerType) {
         int playerType = Hawk.get(HawkConfig.PLAY_TYPE, 0);
@@ -51,11 +46,7 @@ public class PlayerHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
-		if(forcePlayerType>=0)playerType = forcePlayerType;
-=======
         if(forcePlayerType>=0)playerType = forcePlayerType;
->>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
         IJKCode codec = ApiConfig.get().getIJKCodec(ijkCode);
         PlayerFactory playerFactory;
         if (playerType == 1) {
@@ -80,12 +71,7 @@ public class PlayerHelper {
                 th.printStackTrace();
             }
         } else if (playerType == 2) {
-            playerFactory = new PlayerFactory<EXOmPlayer>() {
-                @Override
-                public EXOmPlayer createPlayer(Context context) {
-                    return new EXOmPlayer(context);
-                }
-            };
+            playerFactory = ExoMediaPlayerFactory.create();
         } else {
             playerFactory = AndroidMediaPlayerFactory.create();
         }
@@ -129,12 +115,7 @@ public class PlayerHelper {
                 th.printStackTrace();
             }
         } else if (playType == 2) {
-            playerFactory = new PlayerFactory<EXOmPlayer>() {
-                @Override
-                public EXOmPlayer createPlayer(Context context) {
-                    return new EXOmPlayer(context);
-                }
-            };
+            playerFactory = ExoMediaPlayerFactory.create();
         } else {
             playerFactory = AndroidMediaPlayerFactory.create();
         }
