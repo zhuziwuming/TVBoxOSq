@@ -148,6 +148,13 @@ public class StringUtils {
         return listToString(list, "&&");
     }
 
+<<<<<<< HEAD
+=======
+    public static boolean isBlank(String text) {
+        return trim(text).length() == 0;
+    }
+
+>>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
     public static String trimBlanks(String str) {
         if (str == null || str.length() == 0) {
             return str;
@@ -164,4 +171,55 @@ public class StringUtils {
         return ((st > 0) || (len < str.length())) ? str.substring(st, len) : str;
     }
 
+<<<<<<< HEAD
+=======
+    public static String trim(String string) {
+        if (string == null || string.length() == 0 || " ".equals(string)) return "";
+        int start = 0, len = string.length();
+        int end = len - 1;
+        while ((start < end) && ((string.charAt(start) <= ' ') || (string.charAt(start) == '　'))) {
+            ++start;
+        }
+        while ((start < end) && ((string.charAt(end) <= ' ') || (string.charAt(end) == '　'))) {
+            --end;
+        }
+        if (end < len) ++end;
+        return ((start > 0) || (end < len)) ? string.substring(start, end) : string;
+    }
+
+    public static boolean isJsonType(String text) {
+        boolean result = false;
+        if (isNotEmpty(text)) {
+            text = trim(text);
+            if (text.startsWith("{") && text.endsWith("}")) {
+                result = true;
+            } else if (text.startsWith("[") && text.endsWith("]")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isJsonObject(String text) {
+        boolean result = false;
+        if (isNotEmpty(text)) {
+            text = trim(text);
+            if (text.startsWith("{") && text.endsWith("}")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isJsonArray(String text) {
+        boolean result = false;
+        if (isNotEmpty(text)) {
+            text = trim(text);
+            if (text.startsWith("[") && text.endsWith("]")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+>>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
 }

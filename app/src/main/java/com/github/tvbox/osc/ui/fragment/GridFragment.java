@@ -51,6 +51,7 @@ public class GridFragment extends BaseLazyFragment {
     private boolean isLoad = false;
     private boolean isTop = true;
     private View focusedView = null;
+    private String default_sourceKey = null;
     private class GridInfo{
         public String sortID="";
         public TvRecyclerView mGridView;
@@ -83,7 +84,12 @@ public class GridFragment extends BaseLazyFragment {
         initData();
     }
 
-    private void changeView(String id){
+    private void changeView(String id,Boolean isFolder){
+        if(isFolder){
+            this.sortData.flag ="1"; // 修改sortData.flag
+        }else {
+            this.sortData.flag ="2"; // 修改sortData.flag
+        }
         initView();
         this.sortData.id =id; // 修改sortData.id为新的ID
         initViewModel();
@@ -96,7 +102,7 @@ public class GridFragment extends BaseLazyFragment {
         return (sortData == null || sortData.flag == null || sortData.flag.length() ==0 ) ?  '0' : sortData.flag.charAt(0);
     }
     // 是否允许聚合搜索 sortData.flag的第二个字符为‘1’时允许聚搜
-    public boolean enableFastSearch(){  return (sortData.flag == null || sortData.flag.length() < 2 ) ?  true : (sortData.flag.charAt(1) =='1'); }
+    public boolean enableFastSearch(){  return sortData.flag == null || sortData.flag.length() < 2 || (sortData.flag.charAt(1) == '1'); }
     // 保存当前页面
     private void saveCurrentView(){
         if(this.mGridView == null) return;
@@ -164,7 +170,7 @@ public class GridFragment extends BaseLazyFragment {
             @Override
             public void onLoadMoreRequested() {
                 gridAdapter.setEnableLoadMore(true);
-                sourceViewModel.getList(sortData, page);
+                sourceViewModel.getList(sortData, page, default_sourceKey);
             }
         }, mGridView);
         mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -201,18 +207,23 @@ public class GridFragment extends BaseLazyFragment {
                     bundle.putString("id", video.id);
                     bundle.putString("sourceKey", video.sourceKey);
                     bundle.putString("title", video.name);
-
-                    SourceBean homeSourceBean = ApiConfig.get().getHomeSourceBean();
-                    if(("12".indexOf(getUITag()) != -1) && video.tag.equals("folder")){
+                    if(("12".indexOf(getUITag()) != -1) && (video.tag.equals("folder") || video.tag.equals("cover"))){
                         focusedView = view;
-                        changeView(video.id);
+                        changeView(video.id,video.tag.equals("folder"));
                     }
+<<<<<<< HEAD
                     //else if(homeSourceBean.isQuickSearch() && Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) && enableFastSearch()){
                        // jumpActivity(FastSearchActivity.class, bundle);
                     //}
+=======
+>>>>>>> a545c27b99b6d6d9e54196b8a0adcf3b56a97ddf
                     else{
                         if(video.id == null || video.id.isEmpty() || video.id.startsWith("msearch:")){
-                            jumpActivity(SearchActivity.class, bundle);
+                            if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) && enableFastSearch()){
+                                jumpActivity(FastSearchActivity.class, bundle);
+                            }else {
+                                jumpActivity(SearchActivity.class, bundle);
+                            }
                         }else {
                             jumpActivity(DetailActivity.class, bundle);
                         }
@@ -258,10 +269,10 @@ public class GridFragment extends BaseLazyFragment {
                     page++;
                     maxPage = absXml.movie.pagecount;
 
-                    if (page > maxPage) {
+                    if (maxPage>0 && page > maxPage) {
                         gridAdapter.loadMoreEnd();
                         gridAdapter.setEnableLoadMore(false);
-                        if(page>2)Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
+                        if(page>2)Toast.makeText(getContext(), "最后一页啦", Toast.LENGTH_SHORT).show();
                     } else {
                         gridAdapter.loadMoreComplete();
                         gridAdapter.setEnableLoadMore(true);
@@ -270,7 +281,7 @@ public class GridFragment extends BaseLazyFragment {
                     if(page == 1){
                         showEmpty();
                     }else{
-                        Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "最后一页啦", Toast.LENGTH_SHORT).show();
                         gridAdapter.loadMoreEnd();
                     }
                     gridAdapter.setEnableLoadMore(false);
@@ -288,7 +299,7 @@ public class GridFragment extends BaseLazyFragment {
         isLoad = false;
         scrollTop();
         toggleFilterColor();
-        sourceViewModel.getList(sortData, page);
+        sourceViewModel.getList(sortData, page, default_sourceKey);
     }
 
     private void toggleFilterColor() {
