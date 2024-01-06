@@ -725,6 +725,9 @@ public class DetailActivity extends BaseActivity {
     private void loadDetail(String vid, String key) {
         if (vid != null) {
 			if (vid.startsWith("push://")) {
+				if (vid.contains("alipan.com")){
+					vid = vid.replace("alipan.com", "aliyundrive.com");
+				}
                  vid = vid.substring(7);
                  key = "push_agent";
             }
