@@ -58,10 +58,11 @@ public class ApiConfig {
     private List<LiveChannelGroup> liveChannelGroupList;
     private List<ParseBean> parseBeanList;
     private List<String> vipParseFlags;
+	private List<String> adblockFlags;//用于返回去广告标签数组
     private List<IJKCode> ijkCodes;
     private String spider = null;
     public String wallpaper = "";
-
+    public String adblockUrl = "";
     private SourceBean emptyHome = new SourceBean();
 
     private JarLoader jarLoader = new JarLoader();
@@ -308,6 +309,8 @@ public class ApiConfig {
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
         // 远端站点源
+		adblockUrl = DefaultConfig.safeJsonString(infoJson, "adblock", "");
+        //去广告接口
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
             JsonObject obj = (JsonObject) opt;
@@ -344,6 +347,8 @@ public class ApiConfig {
         }
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
+		// 需要使用接口去广告的flag
+        adblockFlags = DefaultConfig.safeJsonStringList(infoJson, "blocklfags");
         // 解析地址
         parseBeanList.clear();
         if(infoJson.has("parses")){
@@ -670,6 +675,10 @@ public class ApiConfig {
                 return code;
         }
         return ijkCodes.get(0);
+    }
+	
+	public List<String> getAdblockFlags() {//净化广告
+        return adblockFlags;
     }
 
     String clanToAddress(String lanLink) {
