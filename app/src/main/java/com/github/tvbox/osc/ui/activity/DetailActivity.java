@@ -732,6 +732,7 @@ public class DetailActivity extends BaseActivity {
             sourceKey = key;
             firstsourceKey = key;
             showLoading();
+			Toast.makeText(DetailActivity.this, "载入播放地址："+ vodId, Toast.LENGTH_SHORT).show();
             sourceViewModel.getDetail(sourceKey, vodId);
             boolean isVodCollect = RoomDataManger.isVodCollect(sourceKey, vodId);
             if (isVodCollect) {
