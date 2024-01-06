@@ -21,6 +21,17 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
+	
+	signingConfigs {
+        config {
+            keyAlias 'zhuzige'
+            keyPassword '123456'
+            storeFile file('zhuzige.jks')
+            storePassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
 
     buildTypes {
         debug {
@@ -32,6 +43,7 @@ android {
             }
         }
         release {
+		    signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
 
