@@ -724,6 +724,10 @@ public class DetailActivity extends BaseActivity {
 
     private void loadDetail(String vid, String key) {
         if (vid != null) {
+			if (vid.startsWith("push://")) {
+                 vid = vid.substring(7);
+                 key = "push_agent";
+            }
             vodId = vid;
             sourceKey = key;
             firstsourceKey = key;
