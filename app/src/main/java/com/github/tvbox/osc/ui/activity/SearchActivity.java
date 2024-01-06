@@ -170,13 +170,7 @@ public class SearchActivity extends BaseActivity {
         wordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", wordAdapter.getItem(position));
-                    jumpActivity(FastSearchActivity.class, bundle);
-                }else {
-                    search(wordAdapter.getItem(position));
-                }
+                search(wordAdapter.getItem(position));
             }
         });
         mGridView.setHasFixedSize(true);
@@ -219,13 +213,7 @@ public class SearchActivity extends BaseActivity {
                 hasKeyBoard = true;
                 String wd = etSearch.getText().toString().trim();
                 if (!TextUtils.isEmpty(wd)) {
-                    if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", wd);
-                        jumpActivity(FastSearchActivity.class, bundle);
-                    }else {
-                        search(wd);
-                    }
+                    search(wd);
                 } else {
                     Toast.makeText(mContext, "输入内容不能为空", Toast.LENGTH_SHORT).show();
                 }
@@ -369,13 +357,7 @@ public class SearchActivity extends BaseActivity {
         if (intent != null && intent.hasExtra("title")) {
             String title = intent.getStringExtra("title");
             showLoading();
-            if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-                Bundle bundle = new Bundle();
-                bundle.putString("title", title);
-                jumpActivity(FastSearchActivity.class, bundle);
-            }else {
-                search(title);
-            }
+            search(title);
         }
         // 加载热词
         OkGo.<String>get("https://node.video.qq.com/x/api/hot_search")
@@ -413,13 +395,7 @@ public class SearchActivity extends BaseActivity {
         if (event.type == ServerEvent.SERVER_SEARCH) {
             String title = (String) event.obj;
             showLoading();
-            if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-                Bundle bundle = new Bundle();
-                bundle.putString("title", title);
-                jumpActivity(FastSearchActivity.class, bundle);
-            }else{
-                search(title);
-            }
+            search(title);
         }
     }
 
@@ -454,6 +430,12 @@ public class SearchActivity extends BaseActivity {
         mGridView.setVisibility(View.INVISIBLE);
         searchAdapter.setNewData(new ArrayList<>());
         searchResult();
+		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
+            Intent newIntent = new Intent(mContext, FastSearchActivity.class);
+            newIntent.putExtra("title", etSearch.getText().toString().trim());
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(newIntent);
+        }
     }
 
     private ExecutorService searchExecutorService = null;
