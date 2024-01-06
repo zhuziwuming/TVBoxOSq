@@ -135,7 +135,7 @@ public class IjkMediaPlayer extends IjkPlayer {
                 TrackInfoBean t = new TrackInfoBean();
                 t.name = info.getInfoInline();
                 t.language = info.getLanguage();
-                t.trackId = index;
+                t.index = index;
                 t.selected = index == audioSelected;
                 data.addAudio(t);
             }
@@ -143,7 +143,7 @@ public class IjkMediaPlayer extends IjkPlayer {
                 TrackInfoBean t = new TrackInfoBean();
                 t.name = info.getInfoInline();
                 t.language = info.getLanguage();
-                t.trackId = index;
+                t.index = index;
                 t.selected = index == subtitleSelected;
                 data.addSubtitle(t);
             }
