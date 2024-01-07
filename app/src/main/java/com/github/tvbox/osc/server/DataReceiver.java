@@ -16,6 +16,5 @@ public interface DataReceiver {
     void onApiReceived(String url);
 
     void onPushReceived(String url);
-	
-	void onProxyReceived(String url);
+
 }
