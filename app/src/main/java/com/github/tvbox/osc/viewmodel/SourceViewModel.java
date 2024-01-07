@@ -221,7 +221,7 @@ public class SourceViewModel extends ViewModel {
         }else if (type == 4) {
         	String extend=sourceBean.getExt();
             extend=getFixUrl(extend);
-            if(URLEncoder.encode(extend).length()<1000){
+            //if(URLEncoder.encode(extend).length()<1000){
                 OkGo.<String>get(sourceBean.getApi())
                         .tag(sourceBean.getKey() + "_sort")
                         .params("filter", "true")
@@ -267,35 +267,35 @@ public class SourceViewModel extends ViewModel {
                                 sortResult.postValue(null);
                             }
                         });
-            }else {
-                try {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("filter","true");
-                    params.put("extend",extend);
-                    RemoteTVBox.post(sourceBean.getApi(), params, new okhttp3.Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, IOException e) {
-                            sortResult.postValue(null);
-                        }
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) throws IOException {
-                            assert response.body() != null;
-                            String sortJson  = response.body().string();
-                            AbsSortXml sortXml = sortJson(sortResult, sortJson);
-                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
-                                AbsXml absXml = json(null, sortJson, sourceBean.getKey());
-                                if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
-                                    sortXml.videoList = absXml.movie.videoList;
-                                    sortResult.postValue(sortXml);                                
-                                }
-                            } else {
-                                sortResult.postValue(sortXml);
-                            }                        
-                        }
-                    });
-                } catch (Exception ignored) {
-                    sortResult.postValue(null);
-                }
+            // }else {
+                // try {
+                    // Map<String, String> params = new HashMap<>();
+                    // params.put("filter","true");
+                    // params.put("extend",extend);
+                    // RemoteTVBox.post(sourceBean.getApi(), params, new okhttp3.Callback() {
+                        // @Override
+                        // public void onFailure(@NonNull Call call, IOException e) {
+                            // sortResult.postValue(null);
+                        // }
+                        // @Override
+                        // public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) throws IOException {
+                            // assert response.body() != null;
+                            // String sortJson  = response.body().string();
+                            // AbsSortXml sortXml = sortJson(sortResult, sortJson);
+                            // if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                                // AbsXml absXml = json(null, sortJson, sourceBean.getKey());
+                                // if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
+                                    // sortXml.videoList = absXml.movie.videoList;
+                                    // sortResult.postValue(sortXml);                                
+                                // }
+                            // } else {
+                                // sortResult.postValue(sortXml);
+                            // }                        
+                        // }
+                    // });
+                //} catch (Exception ignored) {
+                  //  sortResult.postValue(null);
+                //}
             }  
         } else {
             sortResult.postValue(null);
