@@ -220,7 +220,7 @@ public class SourceViewModel extends ViewModel {
                     });
         }else if (type == 4) {
         	String extend=sourceBean.getExt();
-            extend=getFixUrl(extend);
+            //extend=getFixUrl(extend);
             if(URLEncoder.encode(extend).length()<1000){
                 OkGo.<String>get(sourceBean.getApi())
                         .tag(sourceBean.getKey() + "_sort")
