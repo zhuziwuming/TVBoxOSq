@@ -220,7 +220,7 @@ public class SourceViewModel extends ViewModel {
                     });
         }else if (type == 4) {
         	String extend=sourceBean.getExt();
-            //extend=getFixUrl(extend);
+            extend=getFixUrl(extend);
             if(URLEncoder.encode(extend).length()<1000){
                 OkGo.<String>get(sourceBean.getApi())
                         .tag(sourceBean.getKey() + "_sort")
@@ -493,7 +493,23 @@ public class SourceViewModel extends ViewModel {
     }    
     
     // detailContent    
-    public void getDetail(String sourceKey, String id) {
+    public void getDetail(String sourceKey, String urlid) {
+
+        if (urlid.startsWith("push://") && ApiConfig.get().getSource("push_agent") != null) {           
+            String pushUrl = urlid.substring(7);
+            if (pushUrl.startsWith("b64:")) {
+                try {
+                    pushUrl = new String(Base64.decode(pushUrl.substring(4), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                pushUrl = URLDecoder.decode(pushUrl);
+            }
+            sourceKey = "push_agent";
+            urlid = pushUrl;
+        }
+        String id = urlid; 	
 
         SourceBean sourceBean = ApiConfig.get().getSource(sourceKey);
         int type = sourceBean.getType();
@@ -764,7 +780,7 @@ public class SourceViewModel extends ViewModel {
             }
         } else if (type == 4) {
         	String extend=sourceBean.getExt();
-            //extend=getFixUrl(extend);
+            extend=getFixUrl(extend);
             if(URLEncoder.encode(extend).length()>1000)extend="";
             OkGo.<String>get(sourceBean.getApi())
                 .params("play", url)
@@ -810,14 +826,14 @@ public class SourceViewModel extends ViewModel {
         }
     }
     
-    //private String getFixUrl(String content){
-        //if (content.startsWith("http://127.0.0.1")) {
-        //    String path = content.replaceAll("^http.+/file/", FileUtils.getRootPath()+"/");
-        //    path = path.replaceAll("localhost/", "/");
-        //    content = FileUtils.readFileToString(path,"UTF-8");
-       // }
-       // return content;
-    //}
+    private String getFixUrl(String content){
+        if (content.startsWith("http://127.0.0.1")) {
+            String path = content.replaceAll("^http.+/file/", FileUtils.getRootPath()+"/");
+            path = path.replaceAll("localhost/", "/");
+            content = FileUtils.readFileToString(path,"UTF-8");
+        }
+        return content;
+    }
 
     private MovieSort.SortFilter getSortFilter(JsonObject obj) {
         String key = obj.get("key").getAsString();
@@ -1197,7 +1213,7 @@ public class SourceViewModel extends ViewModel {
                 EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, data));
             } else if (result != null) {
                 if (result == detailResult) {
-                    //data = checkPush(data);
+                    data = checkPush(data);
                     checkThunder(data,0);
                 } else {
                     result.postValue(data);
