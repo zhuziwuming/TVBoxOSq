@@ -218,7 +218,55 @@ public class SourceViewModel extends ViewModel {
                             sortResult.postValue(null);
                         }
                     });
-        }
+        }else if (type == 4) {
+        	String extend=sourceBean.getExt();
+            extend=getFixUrl(extend);
+            if(URLEncoder.encode(extend).length()<1000){
+                OkGo.<String>get(sourceBean.getApi())
+                        .tag(sourceBean.getKey() + "_sort")
+                        .params("filter", "true")
+                        .params("extend", extend)
+                        .execute(new AbsCallback<String>() {
+                            @Override
+                            public String convertResponse(okhttp3.Response response) throws Throwable {
+                                if (response.body() != null) {
+                                    return response.body().string();
+                                } else {
+                                    throw new IllegalStateException("网络请求错误");
+                                }
+                            }
+                            @Override
+                            public void onSuccess(Response<String> response) {
+                                String sortJson  = response.body();
+                                if (sortJson != null) {
+                                    AbsSortXml sortXml = sortJson(sortResult, sortJson);
+                                    if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                                        AbsXml absXml = json(null, sortJson, sourceBean.getKey());
+                                        if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
+                                            sortXml.videoList = absXml.movie.videoList;
+                                            sortResult.postValue(sortXml);
+                                        } else {
+                                            getHomeRecList(sourceBean, null, new HomeRecCallback() {
+                                                @Override
+                                                public void done(List<Movie.Video> videos) {
+                                                    sortXml.videoList = videos;
+                                                    sortResult.postValue(sortXml);
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        sortResult.postValue(sortXml);
+                                    }
+                                } else {
+                                    sortResult.postValue(null);
+                                }
+                            }
+                            @Override
+                            public void onError(Response<String> response) {
+                                super.onError(response);
+                                sortResult.postValue(null);
+                            }
+                        });
             }else {
                 try {
                     Map<String, String> params = new HashMap<>();
@@ -255,7 +303,7 @@ public class SourceViewModel extends ViewModel {
     }
     // categoryContent
     public void getList(MovieSort.SortData sortData, int page, String sourceKey) {
-        SourceBean homeSourceBean = ApiConfig.get().getHomeSourceBean();
+        SourceBean homeSourceBean = TextUtils.isEmpty(sourceKey) ? ApiConfig.get().getHomeSourceBean(): ApiConfig.get().getSource(sourceKey);
         int type = homeSourceBean.getType();
         if (type == 3) {
             spThreadPool.execute(new Runnable() {
@@ -445,7 +493,7 @@ public class SourceViewModel extends ViewModel {
     }    
     
     // detailContent    
-    public void getDetail(String sourceKey, String id) { 	
+    public void getDetail(String sourceKey, String id) {
 
         SourceBean sourceBean = ApiConfig.get().getSource(sourceKey);
         int type = sourceBean.getType();
@@ -716,7 +764,7 @@ public class SourceViewModel extends ViewModel {
             }
         } else if (type == 4) {
         	String extend=sourceBean.getExt();
-            extend=getFixUrl(extend);
+            //extend=getFixUrl(extend);
             if(URLEncoder.encode(extend).length()>1000)extend="";
             OkGo.<String>get(sourceBean.getApi())
                 .params("play", url)
@@ -762,14 +810,14 @@ public class SourceViewModel extends ViewModel {
         }
     }
     
-    private String getFixUrl(String content){
-        if (content.startsWith("http://127.0.0.1")) {
-            String path = content.replaceAll("^http.+/file/", FileUtils.getRootPath()+"/");
-            path = path.replaceAll("localhost/", "/");
-            content = FileUtils.readFileToString(path,"UTF-8");
-        }
-        return content;
-    }
+    //private String getFixUrl(String content){
+        //if (content.startsWith("http://127.0.0.1")) {
+        //    String path = content.replaceAll("^http.+/file/", FileUtils.getRootPath()+"/");
+        //    path = path.replaceAll("localhost/", "/");
+        //    content = FileUtils.readFileToString(path,"UTF-8");
+       // }
+       // return content;
+    //}
 
     private MovieSort.SortFilter getSortFilter(JsonObject obj) {
         String key = obj.get("key").getAsString();
