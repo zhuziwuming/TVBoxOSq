@@ -580,7 +580,7 @@ public class PlayFragment extends BaseLazyFragment {
                         PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
                         mVideoView.setProgressKey(progressKey);
                         if (headers != null) {
-                            mVideoView.setUrl(finalUrl, headers);
+                            mVideoView.setUrl(finalUrl);
                         } else {
                             mVideoView.setUrl(finalUrl);
                         }

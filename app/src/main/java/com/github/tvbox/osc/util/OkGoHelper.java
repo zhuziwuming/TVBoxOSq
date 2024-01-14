@@ -26,9 +26,7 @@ import java.util.logging.Level;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import okhttp3.Response;
+
 import okhttp3.Cache;
 import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
@@ -53,19 +51,7 @@ public class OkGoHelper {
             loggingInterceptor.setColorLevel(Level.OFF);
         }
         builder.connectionSpecs(getConnectionSpec());
-        //builder.addInterceptor(new BrotliInterceptor());
-		builder.addInterceptor(new Interceptor() {  
-    @Override  
-    public Response intercept(Chain chain) throws IOException {  
-        Request request = chain.request();  
-        if (!request.header("Accept-Encoding").isPresent()) {  
-            request = request.newBuilder()  
-                    .header("Accept-Encoding", "br,gzip")  
-                    .build();  
-        }  
-        return chain.proceed(request);  
-    }  
-});
+        builder.addInterceptor(new BrotliInterceptor());
 
         builder.retryOnConnectionFailure(true);
         builder.followRedirects(true);
