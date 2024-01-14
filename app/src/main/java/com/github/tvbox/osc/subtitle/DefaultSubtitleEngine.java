@@ -115,7 +115,7 @@ public class DefaultSubtitleEngine implements SubtitleEngine {
                     String subtitleFile = subtitleFileCacheDir + subtitleLoadSuccessResult.fileName;
                     File cacheSubtitleFile = new File(subtitleFile);
                     boolean writeResult = FileUtils.writeSimple(subtitleLoadSuccessResult.content.getBytes(), cacheSubtitleFile);
-                    if (writeResult && playSubtitleCacheKey != null) {
+                    if (writeResult) {
                         CacheManager.save(MD5.string2MD5(getPlaySubtitleCacheKey()), subtitleFile);
                     }
                 } else {
