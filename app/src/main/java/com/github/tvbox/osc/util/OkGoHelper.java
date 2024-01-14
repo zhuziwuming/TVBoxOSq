@@ -26,7 +26,7 @@ import java.util.logging.Level;
 
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
-
+import java.security.cert.CertificateException;
 import okhttp3.Cache;
 import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
