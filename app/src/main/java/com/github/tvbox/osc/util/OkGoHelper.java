@@ -181,7 +181,7 @@ public class OkGoHelper {
         MyOkhttpDownLoader downloader = new MyOkhttpDownLoader(client);
         Picasso picasso = new Picasso.Builder(App.getInstance())
                 .downloader(downloader)
-				.executor(HeavyTaskUtil.getBigTaskExecutorService())
+				//.executor(HeavyTaskUtil.getBigTaskExecutorService())
                 .defaultBitmapConfig(Bitmap.Config.RGB_565)
                 .build();
         Picasso.setSingletonInstance(picasso);
