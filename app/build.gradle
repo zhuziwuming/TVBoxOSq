@@ -101,7 +101,7 @@ dependencies {
 
     implementation project(":player")
     //implementation project(":quickjs")
-	implementation 'com.whl.quickjs:quickjs:1.0.0' 
+	implementation 'com.whl.quickjs:quickjs:1.+' 
 
     implementation 'net.sourceforge.streamsupport:android-retrofuture:1.7.4'
     implementation('org.xwalk:xwalk_shared_library:23.53.589.4') {
