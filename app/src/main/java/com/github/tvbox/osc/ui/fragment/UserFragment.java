@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
@@ -58,10 +59,10 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     private LinearLayout tvHistory;
     private LinearLayout tvCollect;
     private LinearLayout tvPush;
-    private HomeHotVodAdapter homeHotVodAdapter;
+    public static HomeHotVodAdapter homeHotVodAdapter;
     private List<Movie.Video> homeSourceRec;
-    TvRecyclerView tvHotList1;
-    TvRecyclerView tvHotList2;
+    public static TvRecyclerView tvHotList1;
+    public static TvRecyclerView tvHotList2;
 
     public static UserFragment newInstance() {
         return new UserFragment();
@@ -140,16 +141,18 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 if (ApiConfig.get().getSourceBeanList().isEmpty())
                     return;
                 Movie.Video vod = ((Movie.Video) adapter.getItem(position));
-                if (vod.id != null && !vod.id.isEmpty()) {
+                
+                // takagen99: CHeck if in Delete Mode
+                if ((vod.id != null && !vod.id.isEmpty()) && (Hawk.get(HawkConfig.HOME_REC, 0) == 2) && HawkConfig.hotVodDelete) {
+                    homeHotVodAdapter.remove(position);
+                    VodInfo vodInfo = RoomDataManger.getVodInfo(vod.sourceKey, vod.id);
+                    RoomDataManger.deleteVodRecord(vod.sourceKey, vodInfo);
+                    Toast.makeText(mContext, "已删除当前记录", Toast.LENGTH_SHORT).show();
+               } else if (vod.id != null && !vod.id.isEmpty()) {
                     Bundle bundle = new Bundle();
                     bundle.putString("id", vod.id);
                     bundle.putString("sourceKey", vod.sourceKey);
-                    if(Hawk.get(HawkConfig.HOME_REC, 0)==1 && Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-                        bundle.putString("title", vod.name);
-                        jumpActivity(FastSearchActivity.class, bundle);
-                    }else {
-                        jumpActivity(DetailActivity.class, bundle);
-                    }
+                    jumpActivity(DetailActivity.class, bundle);
                 } else {
                     Intent newIntent;
                     if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
@@ -163,17 +166,24 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 }
             }
         });
-
+        
+        // takagen99 : Long press to trigger Delete Mode for VOD History on Home Page       
         homeHotVodAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                if (ApiConfig.get().getSourceBeanList().isEmpty()) return true;
+                if (ApiConfig.get().getSourceBeanList().isEmpty()) return false;
                 Movie.Video vod = ((Movie.Video) adapter.getItem(position));
-                Bundle bundle = new Bundle();
-                bundle.putString("title", vod.name);
-                jumpActivity(FastSearchActivity.class, bundle);
+                // Additional Check if : Home Rec 0=豆瓣, 1=推荐, 2=历史
+                if ((vod.id != null && !vod.id.isEmpty()) && (Hawk.get(HawkConfig.HOME_REC, 0) == 2)) {
+                    HawkConfig.hotVodDelete = !HawkConfig.hotVodDelete;
+                    homeHotVodAdapter.notifyDataSetChanged();
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", vod.name);
+                    jumpActivity(FastSearchActivity.class, bundle);                    
+                }
                 return true;
-            }
+            }    
         });
 
         tvHotList1.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -218,11 +228,15 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         if (Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
             if (homeSourceRec != null) {
                 adapter.setNewData(homeSourceRec);
+                return;
             }
-            return;
         } else if (Hawk.get(HawkConfig.HOME_REC, 0) == 2) {
             return;
         }
+        setDouBanData(adapter);
+    }
+
+    private void setDouBanData(HomeHotVodAdapter adapter) {
         try {
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
@@ -240,55 +254,31 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     }
                 }
             }
-            //String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
-            String doubanUrl = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
+            String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
             OkGo.<String>get(doubanUrl)
                     .headers("User-Agent", UA.randomOne())
                     .execute(new AbsCallback<String>() {
-                @Override
-                public void onSuccess(Response<String> response) {
-                    String netJson = response.body();
-					String newJson = tojson(netJson);
-                    Hawk.put("home_hot_day", today);
-                    Hawk.put("home_hot", newJson);
-                    mActivity.runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
-                            adapter.setNewData(loadHots(newJson));
+                        public void onSuccess(Response<String> response) {
+                            String netJson = response.body();
+                            Hawk.put("home_hot_day", today);
+                            Hawk.put("home_hot", netJson);
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.setNewData(loadHots(netJson));
+                                }
+                            });
+                        }
+
+                        @Override
+                        public String convertResponse(okhttp3.Response response) throws Throwable {
+                            return response.body().string();
                         }
                     });
-                }
-
-                @Override
-                public String convertResponse(okhttp3.Response response) throws Throwable {
-                    return response.body().string();
-                }
-            });
         } catch (Throwable th) {
             th.printStackTrace();
         }
-    }
-	
-	private String tojson(String jsonStr){
-        JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);  
-        JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
-        JsonObject newObj = new JsonObject(); // 新建总对象  
-        JsonArray newArray = new JsonArray(); // 新建数组  
-          
-        for (JsonElement ele : array) {  
-            JsonObject movieObj = (JsonObject) ele; // 获取当前电影对象  
-            JsonObject newObj2 = new JsonObject(); // 为每部电影新建一个对象  
-            String title = movieObj.get("nm").getAsString();  
-            String cover = movieObj.get("img").getAsString();  
-            String rate = movieObj.get("sc").getAsString();  
-            newObj2.addProperty("title", title);  
-            newObj2.addProperty("cover", cover);  
-            newObj2.addProperty("rate", rate);  
-            newArray.add(newObj2); // 将当前电影对象添加到数组中  
-        }  
-        newObj.addProperty("code", 200);  
-        newObj.add("data", newArray);
-        return newObj.toString();
     }
 
     private ArrayList<Movie.Video> loadHots(String json) {
@@ -302,7 +292,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 vod.name = obj.get("title").getAsString();
                 vod.note = obj.get("rate").getAsString();
                 if(!vod.note.isEmpty())vod.note+=" 分";
-                vod.pic = obj.get("cover").getAsString();
+                vod.pic = obj.get("cover").getAsString()+"@User-Agent="+ UA.randomOne()+"@Referer=https://www.douban.com/";
                 result.add(vod);
             }
         } catch (Throwable th) {
@@ -323,6 +313,10 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+    	
+    	// takagen99: Remove Delete Mode
+        HawkConfig.hotVodDelete = false;
+    
         FastClickCheckUtil.check(v);
         if (v.getId() == R.id.tvLive) {
             jumpActivity(LivePlayActivity.class);

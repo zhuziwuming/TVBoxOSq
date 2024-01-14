@@ -107,8 +107,8 @@ public class DefaultConfig {
     }
 
     private static final Pattern snifferMatch = Pattern.compile(
-            "http((?!http).){12,}?\\.(m3u8|mp4|ts|flv|avi|mkv|rm|wmv|mpg|m4a)\\?.*|" +
-            "http((?!http).){12,}\\.(m3u8|mp4|ts|flv|avi|mkv|rm|wmv|mpg|m4a)|" +
+            "http((?!http).){12,}?\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|m4a)\\?.*|" +
+            "http((?!http).){12,}\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|m4a)|" +
             "http((?!http).)*?video/tos*|" +
             "http((?!http).){20,}?/m3u8\\?pt=m3u8.*|" +
             "http((?!http).)*?default\\.ixigua\\.com/.*|" +
@@ -127,9 +127,6 @@ public class DefaultConfig {
         String path = uri.getPath();
         if (TextUtils.isEmpty(path)) {
             return false;
-        }
-        if (url.endsWith(".m3u8") || url.endsWith(".mp4") || url.endsWith(".ts")) {
-            return true;
         }
         if (snifferMatch.matcher(url).find()) return true;
         return false;

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.github.catvod.crawler.JsLoader;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.base.BaseActivity;
@@ -26,7 +27,7 @@ import com.github.tvbox.osc.ui.adapter.FastSearchAdapter;
 import com.github.tvbox.osc.ui.adapter.SearchWordAdapter;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.SearchHelper;
-import com.github.tvbox.osc.util.js.JSEngine;
+
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -158,7 +159,7 @@ public class FastSearchActivity extends BaseActivity {
                 child.setFocusable(true);
                 child.setOnFocusChangeListener(focusChangeListener);
                 TextView t = (TextView) child;
-                if (t.getText() == "全部显示") {
+                if (t.getText() == "全部") {
                     t.requestFocus();
                 }
 //                if (child.isFocusable() && null == child.getOnFocusChangeListener()) {
@@ -196,7 +197,7 @@ public class FastSearchActivity extends BaseActivity {
                         if (searchExecutorService != null) {
                             pauseRunnable = searchExecutorService.shutdownNow();
                             searchExecutorService = null;
-                            JSEngine.getInstance().stopAll();
+                            JsLoader.load();
                         }
                     } catch (Throwable th) {
                         th.printStackTrace();
@@ -223,7 +224,7 @@ public class FastSearchActivity extends BaseActivity {
                         if (searchExecutorService != null) {
                             pauseRunnable = searchExecutorService.shutdownNow();
                             searchExecutorService = null;
-                            JSEngine.getInstance().stopAll();
+                            JsLoader.load();
                         }
                     } catch (Throwable th) {
                         th.printStackTrace();
@@ -246,7 +247,7 @@ public class FastSearchActivity extends BaseActivity {
         searchWordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                String str = searchWordAdapter.getData().get(position).trim();
+                String str = searchWordAdapter.getData().get(position);
                 search(str);
             }
         });
@@ -258,7 +259,7 @@ public class FastSearchActivity extends BaseActivity {
     }
 
     private void filterResult(String spName) {
-        if (spName == "全部显示") {
+        if (spName == "全部") {
             mGridView.setVisibility(View.VISIBLE);
             mGridViewFilter.setVisibility(View.GONE);
             return;
@@ -382,7 +383,7 @@ public class FastSearchActivity extends BaseActivity {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
                 searchExecutorService = null;
-                JSEngine.getInstance().stopAll();
+                JsLoader.load();
             }
         } catch (Throwable th) {
             th.printStackTrace();
@@ -403,7 +404,7 @@ public class FastSearchActivity extends BaseActivity {
         ArrayList<String> hots = new ArrayList<>();
 
         spListAdapter.setNewData(hots);
-        spListAdapter.addData("全部显示");
+        spListAdapter.addData("全部");
         for (SourceBean bean : searchRequestList) {
             if (!bean.isSearchable()) {
                 continue;
@@ -514,7 +515,7 @@ public class FastSearchActivity extends BaseActivity {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
                 searchExecutorService = null;
-                JSEngine.getInstance().stopAll();
+                JsLoader.load();
             }
         } catch (Throwable th) {
             th.printStackTrace();
