@@ -473,7 +473,7 @@ public class FastSearchActivity extends BaseActivity {
         if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
             List<Movie.Video> data = new ArrayList<>();
             for (Movie.Video video : absXml.movie.videoList) {
-                if (!matchSearchResult(video.name, searchTitle)) continue;
+                //if (!matchSearchResult(video.name, searchTitle)) continue;
                 data.add(video);
                 if (!resultVods.containsKey(video.sourceKey)) {
                     resultVods.put(video.sourceKey, new ArrayList<Movie.Video>());
