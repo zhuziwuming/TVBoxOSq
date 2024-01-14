@@ -26,7 +26,9 @@ import java.util.logging.Level;
 
 import javax.net.ssl.SSLSocketFactory;
 
-
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.Cache;
 import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
