@@ -194,9 +194,24 @@ public class OkGoHelper {
 
     private static synchronized void setOkHttpSsl(OkHttpClient.Builder builder) {
         try {
+// 自定义一个信任所有证书的TrustManager，添加SSLSocketFactory的时候要用到
+            final X509TrustManager trustAllCert =
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
 
-            final SSLSocketFactory sslSocketFactory = new SSLSocketFactoryCompat(SSLSocketFactoryCompat.trustAllCert);
-            builder.sslSocketFactory(sslSocketFactory, SSLSocketFactoryCompat.trustAllCert);
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    };
+            final SSLSocketFactory sslSocketFactory = new SSLSocketFactoryCompat();
+            builder.sslSocketFactory(sslSocketFactory, trustAllCert);
             builder.hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier);
         } catch (Exception e) {
             throw new RuntimeException(e);
