@@ -195,7 +195,7 @@ public class OkGoHelper {
     private static synchronized void setOkHttpSsl(OkHttpClient.Builder builder) {
         try {
 
-            final SSLSocketFactory sslSocketFactory = new SSLSocketFactoryCompat();
+            final SSLSocketFactory sslSocketFactory = new SSLSocketFactoryCompat(SSLSocketFactoryCompat.trustAllCert);
             builder.sslSocketFactory(sslSocketFactory, SSLSocketFactoryCompat.trustAllCert);
             builder.hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier);
         } catch (Exception e) {
