@@ -51,7 +51,19 @@ public class OkGoHelper {
             loggingInterceptor.setColorLevel(Level.OFF);
         }
         builder.connectionSpecs(getConnectionSpec());
-        builder.addInterceptor(new BrotliInterceptor());
+        //builder.addInterceptor(new BrotliInterceptor());
+		builder.addInterceptor(new Interceptor() {  
+    @Override  
+    public Response intercept(Chain chain) throws IOException {  
+        Request request = chain.request();  
+        if (!request.header("Accept-Encoding").isPresent()) {  
+            request = request.newBuilder()  
+                    .header("Accept-Encoding", "br,gzip")  
+                    .build();  
+        }  
+        return chain.proceed(request);  
+    }  
+});
 
         builder.retryOnConnectionFailure(true);
         builder.followRedirects(true);
