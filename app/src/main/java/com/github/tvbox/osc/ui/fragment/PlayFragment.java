@@ -70,6 +70,7 @@ import com.github.tvbox.osc.util.XWalkUtils;
 import com.github.tvbox.osc.util.thunder.Jianpian;
 import com.github.tvbox.osc.util.thunder.Thunder;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
+import com.github.tvbox.osc.server.ControlManager;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.callback.StringCallback;//用于去广告返回字符串
@@ -542,55 +543,64 @@ public class PlayFragment extends BaseLazyFragment {
         LOG.i("playUrl:" + url);
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
-        }else{
-	    String adblockUrl = ApiConfig.get().adblockUrl;
-	    List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
-            if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
-		    if (adblockUrl != null) {
-			setTip("正在净化视频", true, false);
-		        adblock(adblockUrl,url);
-		    }	
-	    }
-            String finalUrl = url;
-            if (mActivity == null) return;
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                stopParse();
-                if (mVideoView != null) {
-                    mVideoView.release();
-
-                    if (finalUrl != null) {
-                        try {
-                            int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 10) {
-                                VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
-                                String playTitle = mVodInfo.name + " " + vs.name;
-                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
-                                boolean callResult = false;
-                                long progress = getSavedProgress(progressKey);
-                                callResult = PlayerHelper.runExternalPlayer(playerType, requireActivity(), finalUrl, playTitle, playSubtitle, headers, progress);
-                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
-                                return;
+            }else{
+	        String adblockUrl = ApiConfig.get().adblockUrl;
+	        List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
+                if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
+	    	    if (adblockUrl != null) {
+	    		setTip("正在净化视频", true, false);
+	    	        adblock(adblockUrl,url);
+	    	    }	
+	        }
+                String finalUrl = url;
+                if (mActivity == null) return;
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    stopParse();
+                    if (mVideoView != null) {
+                        mVideoView.release();
+	    
+                        if (finalUrl != null) {
+                            try {
+                                int playerType = mVodPlayerCfg.getInt("pl");
+                                if (playerType >= 10) {
+                                    VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                                    String playTitle = mVodInfo.name + " " + vs.name;
+                                    setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
+                                    boolean callResult = false;
+                                    long progress = getSavedProgress(progressKey);
+                                    callResult = PlayerHelper.runExternalPlayer(playerType, requireActivity(), finalUrl, playTitle, playSubtitle, headers, progress);
+                                    setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
+                                    return;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            hideTip();
+	    					if (mFinalUrl.startsWith("data:application/dash+xml;base64,")) {
+                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
+                                App.getInstance().setDashData(mFinalUrl.split("base64,")[1]);
+                                mFinalUrl = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
+                            } else if (mFinalUrl.contains(".mpd") || mFinalUrl.contains("type=mpd")) {
+                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
+                            } else {
+                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
+                            }
+                            PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
+                            mVideoView.setProgressKey(progressKey);
+                            if (headers != null) {
+                                mVideoView.setUrl(finalUrl, headers);
+                            } else {
+                                mVideoView.setUrl(finalUrl);
+                            }
+                            mVideoView.start();
+                            mController.resetSpeed();
                         }
-                        hideTip();
-                        PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
-                        mVideoView.setProgressKey(progressKey);
-                        if (headers != null) {
-                            mVideoView.setUrl(finalUrl, headers);
-                        } else {
-                            mVideoView.setUrl(finalUrl);
-                        }
-                        mVideoView.start();
-                        mController.resetSpeed();
                     }
                 }
-            }
-        });
-	}	
+            });
+	    }	
     }
 
     private void initSubtitleView() {
@@ -633,6 +643,9 @@ public class PlayFragment extends BaseLazyFragment {
                                     break;
                                 }
                             }
+                        }
+						if(!hasCh){
+                            ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(subtitleTrackList.get(0).index);
                         }
                     }
                 }
@@ -882,6 +895,7 @@ public class PlayFragment extends BaseLazyFragment {
         if(mVodInfo==null)return;
         VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
         EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_REFRESH, mVodInfo.playIndex));
+		EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_REFRESH_NOTIFY, mVodInfo.name + "&&" + vs.name));
         setTip("正在获取播放信息", true, false);
         String playTitleInfo = mVodInfo.name + " " + vs.name;
         mController.setTitle(playTitleInfo);
@@ -895,6 +909,17 @@ public class PlayFragment extends BaseLazyFragment {
         if (reset) {
             CacheManager.delete(MD5.string2MD5(progressKey), 0);
             CacheManager.delete(MD5.string2MD5(subtitleCacheKey), 0);
+        }else{
+            try{
+                int playerType = mVodPlayerCfg.getInt("pl");
+                if(playerType==1){
+                    mController.mSubtitleView.setVisibility(View.VISIBLE);
+                }else {
+                    mController.mSubtitleView.setVisibility(View.GONE);
+                }
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         if(vs.url.startsWith("tvbox-xg:") || (Thunder.isFtp(vs.url) && vs.url.contains("gbl.114s"))){//荐片地址特殊判断
@@ -1765,6 +1790,14 @@ public class PlayFragment extends BaseLazyFragment {
         public void onReceivedSslError(XWalkView view, ValueCallback<Boolean> callback, SslError error) {
             callback.onReceiveValue(true);
         }
+		
+    }
+	
+	public MyVideoView getPlayer() {
+        return mVideoView;
+    }
+    public VodController getController() {
+        return mController;
     }
 
 }
