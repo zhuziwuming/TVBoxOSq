@@ -505,6 +505,9 @@ public class SourceViewModel extends ViewModel {
                 }
             } else {
                 pushUrl = URLDecoder.decode(pushUrl);
+				if(pushUrl.contains("apipan"){
+					pushUrl = pushUrl.replace("apipan", "aliyundrive");
+				}
             }
             sourceKey = "push_agent";
             urlid = pushUrl;
@@ -780,13 +783,11 @@ public class SourceViewModel extends ViewModel {
                 playResult.postValue(null);
             }
         } else if (type == 4) {
-        	String extend=sourceBean.getExt();
-            extend=getFixUrl(extend);
-            if(URLEncoder.encode(extend).length()>1000)extend="";
+        	
             OkGo.<String>get(sourceBean.getApi())
                 .params("play", url)
                 .params("flag" ,playFlag)
-                .params("extend", extend)
+                //.params("extend", extend)
                 .tag("play")
                 .execute(new AbsCallback<String>() {
                     @Override
