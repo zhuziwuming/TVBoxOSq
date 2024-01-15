@@ -578,16 +578,15 @@ public class PlayFragment extends BaseLazyFragment {
                                 e.printStackTrace();
                             }
                             hideTip();
-	    					if (mFinalUrl.startsWith("data:application/dash+xml;base64,")) {
+	    					if (url.startsWith("data:application/dash+xml;base64,")) {
                                 PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
-                                App.getInstance().setDashData(mFinalUrl.split("base64,")[1]);
-                                mFinalUrl = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
-                            } else if (mFinalUrl.contains(".mpd") || mFinalUrl.contains("type=mpd")) {
+                                App.getInstance().setDashData(url.split("base64,")[1]);
+                                url = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
+                            } else if (url.contains(".mpd") || url.contains("type=mpd")) {
                                 PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
                             } else {
                                 PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
                             }
-                            PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
                             mVideoView.setProgressKey(progressKey);
                             if (headers != null) {
                                 mVideoView.setUrl(finalUrl, headers);
@@ -635,9 +634,11 @@ public class PlayFragment extends BaseLazyFragment {
                     if (trackInfo != null) {
                         List<TrackInfoBean> subtitleTrackList = trackInfo.getSubtitle();
                         int selectedIndex = trackInfo.getSubtitleSelected(true);
+						boolean hasCh =false;
                         for(TrackInfoBean subtitleTrackInfoBean : subtitleTrackList) {
                             String lowerLang = subtitleTrackInfoBean.language.toLowerCase();
                             if (lowerLang.startsWith("zh") || lowerLang.startsWith("ch")) {
+								hasCh=true;
                                 if (selectedIndex != subtitleTrackInfoBean.index) {
                                     ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(subtitleTrackInfoBean.index);
                                     break;
