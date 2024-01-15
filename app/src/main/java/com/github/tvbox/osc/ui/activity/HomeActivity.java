@@ -212,26 +212,20 @@ public class HomeActivity extends BaseActivity {
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dataInitOk && jarInitOk){
-                    showSiteSwitch();
-                }else {
-                    jumpActivity(SettingActivity.class);
-                }
+                dataInitOk = false;
+                jarInitOk = true;
+                showSiteSwitch();
             }
         });
         tvName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if(dataInitOk && jarInitOk){
-                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("useCache", true);
-                    intent.putExtras(bundle);
-                    HomeActivity.this.startActivity(intent);
-                }else {
-                    jumpActivity(SettingActivity.class);
-                }
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("useCache", true);
+                intent.putExtras(bundle);
+                HomeActivity.this.startActivity(intent);
                 return true;
             }
         });
@@ -429,37 +423,27 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-
-        // takagen99: Add check for VOD Delete Mode
-        if (HawkConfig.hotVodDelete) {
-            HawkConfig.hotVodDelete = false;
-            UserFragment.homeHotVodAdapter.notifyDataSetChanged();
-        } else {
-            int i;
-            if (this.fragments.size() <= 0 || this.sortFocused >= this.fragments.size() || (i = this.sortFocused) < 0) {
-                exit();
+        int i;
+        if (this.fragments.size() <= 0 || this.sortFocused >= this.fragments.size() || (i = this.sortFocused) < 0) {
+            exit();
+            return;
+        }
+        BaseLazyFragment baseLazyFragment = this.fragments.get(i);
+        if (baseLazyFragment instanceof GridFragment) {
+            View view = this.sortFocusView;
+            GridFragment grid = (GridFragment) baseLazyFragment;
+            if (grid.restoreView()) {
                 return;
-            }
-            BaseLazyFragment baseLazyFragment = this.fragments.get(i);
-            if (baseLazyFragment instanceof GridFragment) {
-                View view = this.sortFocusView;
-                GridFragment grid = (GridFragment) baseLazyFragment;
-                if (grid.restoreView()) {
-                    return;
-                }// 还原上次保存的UI内容
-                if (view != null && !view.isFocused()) {
-                    this.sortFocusView.requestFocus();
-                } else if (this.sortFocused != 0) {
-                    this.mGridView.setSelection(0);
-                } else {
-                    exit();
-                }
-            } else if (baseLazyFragment instanceof UserFragment && UserFragment.tvHotList1.canScrollVertically(-1)) {
-                UserFragment.tvHotList1.scrollToPosition(0);
+            }// 还原上次保存的UI内容
+            if (view != null && !view.isFocused()) {
+                this.sortFocusView.requestFocus();
+            } else if (this.sortFocused != 0) {
                 this.mGridView.setSelection(0);
             } else {
                 exit();
             }
+        } else {
+            exit();
         }
     }
 
@@ -473,7 +457,7 @@ public class HomeActivity extends BaseActivity {
             super.onBackPressed();
         } else {
             mExitTime = System.currentTimeMillis();
-            Toast.makeText(mContext, "再按一次返回键退出应用", Toast.LENGTH_SHORT).show();            
+            Toast.makeText(mContext, "再按一次返回键退出应用", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -533,18 +517,33 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (topHide < 0)
-            return false;
-        int keyCode = event.getKeyCode();
+    if (topHide < 0)
+        return false;
+    
+    int keyCode = event.getKeyCode();
+    if (keyCode == KeyEvent.KEYCODE_MENU) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != 0) { // 菜单键被长按
+                Toast.makeText(mContext, "菜单键被长按", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("useCache", true);
+                intent.putExtras(bundle);
+                HomeActivity.this.startActivity(intent);
+            } else {
+                // 菜单键被短按
                 showSiteSwitch();
             }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
-
+            // 菜单键被释放
+            // 在此添加对应的处理逻辑
         }
-        return super.dispatchKeyEvent(event);
     }
+    
+    return super.dispatchKeyEvent(event);
+}
+
 
     byte topHide = 0;
 

@@ -13,7 +13,4 @@ import java.io.Serializable;
 public class AbsXml implements Serializable {
     @XStreamAlias("list")
     public Movie movie;
-
-    @XStreamAlias("msg")
-    public String msg;
 }

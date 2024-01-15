@@ -1,6 +1,5 @@
 package com.github.tvbox.osc.player.controller;
 
-import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -72,15 +71,12 @@ public class VodController extends BaseController {
                         mTopRoot2.setVisibility(VISIBLE);
                         mPlayTitle.setVisibility(GONE);
                         mNextBtn.requestFocus();
-                        backBtn.setVisibility(ScreenUtils.isTv(context) ? INVISIBLE : VISIBLE);
-                        showLockView();
                         break;
                     }
                     case 1003: { // 隐藏底部菜单
                         mBottomRoot.setVisibility(GONE);
                         mTopRoot1.setVisibility(GONE);
                         mTopRoot2.setVisibility(GONE);
-                        backBtn.setVisibility(INVISIBLE);
                         break;
                     }
                     case 1004: { // 设置速度
@@ -107,7 +103,6 @@ public class VodController extends BaseController {
     LinearLayout mProgressRoot;
     TextView mProgressText;
     ImageView mProgressIcon;
-    ImageView mLockView;
     LinearLayout mBottomRoot;
     LinearLayout mTopRoot1;
     LinearLayout mTopRoot2;
@@ -135,11 +130,7 @@ public class VodController extends BaseController {
     TextView mZimuBtn;
     TextView mAudioTrackBtn;
     public TextView mLandscapePortraitBtn;
-    private View backBtn;//返回键
-    private boolean isClickBackBtn;
-   
-    LockRunnable lockRunnable = new LockRunnable();
-    private boolean isLock = false;
+
     Handler myHandle;
     Runnable myRunnable;
     int myHandleSeconds = 10000;//闲置多少毫秒秒关闭底栏  默认6秒
@@ -162,12 +153,10 @@ public class VodController extends BaseController {
             mHandler.postDelayed(this, 1000);
         }
     };
-    
-    private void showLockView() {
-        mLockView.setVisibility(ScreenUtils.isTv(getContext()) ? INVISIBLE : VISIBLE);
-        mHandler.removeCallbacks(lockRunnable);
-        mHandler.postDelayed(lockRunnable, 3000);
-    }
+
+
+
+
 
     @Override
     protected void initView() {
@@ -205,42 +194,6 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
-        backBtn = findViewById(R.id.tv_back);
-        backBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getContext() instanceof Activity) {
-                    isClickBackBtn = true;
-                    ((Activity) getContext()).onBackPressed();
-                }
-            }
-        });
-        mLockView = findViewById(R.id.tv_lock);
-        mLockView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isLock = !isLock;
-                mLockView.setImageResource(isLock ? R.drawable.icon_lock : R.drawable.icon_unlock);
-                if (isLock) {
-                    Message obtain = Message.obtain();
-                    obtain.what = 1003;//隐藏底部菜单
-                    mHandler.sendMessage(obtain);
-                }
-                showLockView();
-            }
-        });
-        View rootView = findViewById(R.id.rootView);
-        rootView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (isLock) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        showLockView();
-                    }
-                }
-                return isLock;
-            }
-        });
 
         initSubtitleInfo();
 
@@ -394,44 +347,12 @@ public class VodController extends BaseController {
                 return true;
             }
         });
-        // mPlayerBtn.setOnClickListener(new OnClickListener() {
-            // @Override
-            // public void onClick(View view) {
-                // myHandle.removeCallbacks(myRunnable);
-                // myHandle.postDelayed(myRunnable, myHandleSeconds);
-                // try {
-                    // int playerType = mPlayerConfig.getInt("pl");
-                    // ArrayList<Integer> exsitPlayerTypes = PlayerHelper.getExistPlayerTypes();
-                    // int playerTypeIdx = 0;
-                    // int playerTypeSize = exsitPlayerTypes.size();
-                    // for(int i = 0; i<playerTypeSize; i++) {
-                        // if (playerType == exsitPlayerTypes.get(i)) {
-                            // if (i == playerTypeSize - 1) {
-                                // playerTypeIdx = 0;
-                            // } else {
-                                // playerTypeIdx = i + 1;
-                            // }
-                        // }
-                    // }
-                    // playerType = exsitPlayerTypes.get(playerTypeIdx);
-                    // mPlayerConfig.put("pl", playerType);
-                    // updatePlayerCfgView();
-                    // listener.updatePlayerCfg();
-                    // listener.replay(false);
-                    // hideBottom();
-                // } catch (JSONException e) {
-                    // e.printStackTrace();
-                // }
-                // mPlayerBtn.requestFocus();
-                // mPlayerBtn.requestFocusFromTouch();
-            // }
-        // });
-		
-		mPlayerBtn.setOnClickListener(new OnClickListener() {
+        mPlayerBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 myHandle.removeCallbacks(myRunnable);
                 myHandle.postDelayed(myRunnable, myHandleSeconds);
+                FastClickCheckUtil.check(view);
                 try {
                     int playerType = mPlayerConfig.getInt("pl");
                     int defaultPos = 0;
@@ -461,6 +382,8 @@ public class VodController extends BaseController {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            mPlayerBtn.requestFocus();
+                            mPlayerBtn.requestFocusFromTouch();
                         }
 
                         @Override
@@ -764,7 +687,6 @@ public class VodController extends BaseController {
             mPlayerScaleBtn.setText(PlayerHelper.getScaleName(mPlayerConfig.getInt("sc")));
             mPlayerIJKBtn.setText(mPlayerConfig.getString("ijk"));
             mPlayerIJKBtn.setVisibility(playerType == 1 ? VISIBLE : GONE);
-            mPlayerScaleBtn.setText(PlayerHelper.getScaleName(mPlayerConfig.getInt("sc")));
             mPlayerSpeedBtn.setText("x" + mPlayerConfig.getDouble("sp"));
             mPlayerTimeStartBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("st") * 1000));
             mPlayerTimeSkipBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("et") * 1000));
@@ -1047,23 +969,9 @@ public class VodController extends BaseController {
         }
         return true;
     }
-    
-    private class LockRunnable implements Runnable {
-        @Override
-        public void run() {
-            mLockView.setVisibility(INVISIBLE);
-        }
-    }
-    
+
     @Override
     public boolean onBackPressed() {
-        if (isClickBackBtn) {
-            isClickBackBtn = false;
-            if (isBottomVisible()) {
-                hideBottom();
-            }
-            return false;
-        }
         if (super.onBackPressed()) {
             return true;
         }
@@ -1072,11 +980,5 @@ public class VodController extends BaseController {
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mHandler.removeCallbacks(myRunnable2);
     }
 }

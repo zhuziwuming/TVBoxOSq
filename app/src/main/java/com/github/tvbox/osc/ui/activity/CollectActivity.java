@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
-import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
@@ -16,9 +15,7 @@ import com.github.tvbox.osc.cache.RoomDataManger;
 import com.github.tvbox.osc.cache.VodCollect;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.ui.adapter.CollectAdapter;
-import com.github.tvbox.osc.ui.dialog.ConfirmClearDialog;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
-import com.github.tvbox.osc.util.HawkConfig;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7GridLayoutManager;
 
@@ -30,11 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollectActivity extends BaseActivity {
-    private ImageView tvDelete;
-    private ImageView tvClear;
+    private TextView tvDel;
     private TextView tvDelTip;
     private TvRecyclerView mGridView;
-    public static CollectAdapter collectAdapter;
+    private CollectAdapter collectAdapter;
     private boolean delMode = false;
 
     @Override
@@ -49,42 +45,32 @@ public class CollectActivity extends BaseActivity {
     }
 
     private void toggleDelMode() {
-    	HawkConfig.hotVodDelete = !HawkConfig.hotVodDelete;
-        collectAdapter.notifyDataSetChanged();
         delMode = !delMode;
         tvDelTip.setVisibility(delMode ? View.VISIBLE : View.GONE);
+        tvDel.setTextColor(delMode ? getResources().getColor(R.color.color_FF0057) : Color.WHITE);
     }
 
     private void initView() {
         EventBus.getDefault().register(this);
-        tvDelete = findViewById(R.id.tvDelete);
-        tvClear = findViewById(R.id.tvClear);
+        tvDel = findViewById(R.id.tvDel);
         tvDelTip = findViewById(R.id.tvDelTip);
         mGridView = findViewById(R.id.mGridView);
         mGridView.setHasFixedSize(true);
         mGridView.setLayoutManager(new V7GridLayoutManager(this.mContext, isBaseOnWidth() ? 5 : 6));
         collectAdapter = new CollectAdapter();
         mGridView.setAdapter(collectAdapter);
-        tvDelete.setOnClickListener(new View.OnClickListener() {
+        tvDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleDelMode();
-            }
-        });
-        tvClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConfirmClearDialog dialog = new ConfirmClearDialog(mContext, "Collect");
-                dialog.show();
             }
         });
         mGridView.setOnInBorderKeyEventListener(new TvRecyclerView.OnInBorderKeyEventListener() {
             @Override
             public boolean onInBorderKeyEvent(int direction, View focused) {
                 if (direction == View.FOCUS_UP) {
-                    tvDelete.setFocusable(true);
-                    tvClear.setFocusable(true);
-                    tvDelete.requestFocus();
+                    tvDel.setFocusable(true);
+                    tvDel.requestFocus();
                 }
                 return false;
             }
@@ -97,7 +83,7 @@ public class CollectActivity extends BaseActivity {
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                itemView.animate().scaleX(1.1f).scaleY(1.1f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
+                itemView.animate().scaleX(1.05f).scaleY(1.05f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
             }
 
             @Override
@@ -128,18 +114,6 @@ public class CollectActivity extends BaseActivity {
                         }
                     }
                 }
-            }
-        });
-        collectAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-//                FastClickCheckUtil.check(view);
-//                VodCollect vodInfo = collectAdapter.getData().get(position);
-//                collectAdapter.remove(position);
-//                RoomDataManger.deleteVodCollect(vodInfo.getId());
-                tvDelete.setFocusable(true);
-                toggleDelMode();
-                return true;
             }
         });
     }
