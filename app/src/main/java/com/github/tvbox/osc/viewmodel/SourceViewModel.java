@@ -505,9 +505,6 @@ public class SourceViewModel extends ViewModel {
                 }
             } else {
                 pushUrl = URLDecoder.decode(pushUrl);
-				if(pushUrl.contains("apipan")){
-					pushUrl = pushUrl.replace("apipan", "aliyundrive");
-				}
             }
             sourceKey = "push_agent";
             urlid = pushUrl;
