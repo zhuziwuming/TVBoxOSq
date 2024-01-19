@@ -579,6 +579,8 @@ public class PlayFragment extends BaseLazyFragment {
                                 e.printStackTrace();
                             }
                             hideTip();
+							mVideoView.setBackgroundResource(R.drawable.app_bg);
+							
 	    					if (url.startsWith("data:application/dash+xml;base64,")) {
                                 PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
                                 App.getInstance().setDashData(url.split("base64,")[1]);
