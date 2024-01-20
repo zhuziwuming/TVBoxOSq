@@ -81,6 +81,7 @@
     <dimen name="vs_410">410mm</dimen>
     <dimen name="vs_470">470mm</dimen>
     <dimen name="vs_480">480mm</dimen>
+    <dimen name="vs_530">530mm</dimen>
     <dimen name="vs_600">600mm</dimen>
     <dimen name="vs_610">610mm</dimen>
     <dimen name="vs_640">640mm</dimen>
