@@ -86,7 +86,7 @@ import android.text.TextPaint;
 import androidx.annotation.NonNull;
 import android.graphics.Typeface;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.github.tvbox.osc.player.controller.VodController;
 /**
  * @author pj567
  * @date :2020/12/22
@@ -626,6 +626,23 @@ public class DetailActivity extends BaseActivity {
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
                     }
+					
+					String playurl = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).url;
+
+if (!TextUtils.isEmpty(mVideo.pic)&&playurl.endsWith(".mp3")) {//播放地址是mp3,且图片地址不为空.获取图片加载到 图片播放控制类的imgview
+	Picasso.get()
+     .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
+     .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
+             .centerCrop(true)
+             .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
+             .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
+     .placeholder(R.drawable.img_loading_placeholder)
+     .error(R.drawable.img_loading_placeholder)
+     .into(VodController.playerBg);
+	VodController.playerBg.setVisibility(VISIBLE);//设置显示
+}else{
+    VodController.playerBg.setVisibility(GONE);//设置隐藏
+}	 
 
                     if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
                         mGridViewFlag.setVisibility(View.VISIBLE);

@@ -4,7 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+	
+<ImageView
+    android:id="@+id/playerbg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:focusable="false"
+	android:visibility="gone"
+    android:focusableInTouchMode="false" />
     <LinearLayout
             android:id="@+id/tv_top_l_container"
             android:layout_width="720dp"

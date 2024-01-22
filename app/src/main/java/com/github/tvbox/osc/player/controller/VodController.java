@@ -130,6 +130,7 @@ public class VodController extends BaseController {
     TextView mZimuBtn;
     TextView mAudioTrackBtn;
     public TextView mLandscapePortraitBtn;
+	public ImageView playerBg;
 
     Handler myHandle;
     Runnable myRunnable;
@@ -194,6 +195,7 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
+		playerBg = findViewById(R.id.playerbg);
 
         initSubtitleInfo();
 
