@@ -141,6 +141,7 @@
                     android:id="@+id/tvPlayUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/vs_5"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/color_CCFFFFFF"
