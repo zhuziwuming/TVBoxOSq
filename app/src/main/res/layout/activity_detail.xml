@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/vs_300"
                 android:layout_marginLeft="@dimen/vs_50"
+                android:layout_marginTop="@dimen/vs_5"
                 android:orientation="vertical">
 
                 <TextView
@@ -166,7 +167,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/vs_10"
                     android:layout_gravity="bottom">
 
                     <TextView
