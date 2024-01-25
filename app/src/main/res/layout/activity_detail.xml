@@ -43,6 +43,7 @@
                     android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/vs_0"
                     android:layout_marginBottom="@dimen/vs_5"
                     android:ellipsize="end"
                     android:maxLines="1"
