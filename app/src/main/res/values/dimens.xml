@@ -71,7 +71,7 @@
     <dimen name="vs_270">270mm</dimen>
     <dimen name="vs_280">280mm</dimen>
     <dimen name="vs_300">300mm</dimen>
-	<dimen name="vs_300">305mm</dimen>
+	<dimen name="vs_305">305mm</dimen>
     <dimen name="vs_320">320mm</dimen>
     <dimen name="vs_340">340mm</dimen>
     <dimen name="vs_360">360mm</dimen>
