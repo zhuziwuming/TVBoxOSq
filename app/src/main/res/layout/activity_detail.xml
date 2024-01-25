@@ -35,8 +35,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/vs_305"
-				android:layout_marginTop="@dimen/vs_4_"
+                android:layout_height="@dimen/vs_310"
+				android:layout_marginTop="@dimen/vs_10_"
                 android:layout_marginLeft="@dimen/vs_50"
                 android:orientation="vertical">
 
