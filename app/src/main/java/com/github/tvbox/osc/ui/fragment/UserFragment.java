@@ -240,21 +240,21 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     }
                 }
             }
-            //String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
-            String doubanUrl = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
+            String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
+            //String doubanUrl = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
             OkGo.<String>get(doubanUrl)
                     .headers("User-Agent", UA.randomOne())
                     .execute(new AbsCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     String netJson = response.body();
-					String newJson = tojson(netJson);
+					//String newJson = tojson(netJson);
                     Hawk.put("home_hot_day", today);
-                    Hawk.put("home_hot", newJson);
+                    Hawk.put("home_hot", netJson);
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter.setNewData(loadHots(newJson));
+                            adapter.setNewData(loadHots(netJson));
                         }
                     });
                 }
