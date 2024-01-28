@@ -111,6 +111,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkTimedText;
 import xyz.doikki.videoplayer.player.AbstractPlayer;
 import xyz.doikki.videoplayer.player.ProgressManager;
+import com.squareup.picasso.Picasso;
 
 public class PlayFragment extends BaseLazyFragment {
     private MyVideoView mVideoView;
