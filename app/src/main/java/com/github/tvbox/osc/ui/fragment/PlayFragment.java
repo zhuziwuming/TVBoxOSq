@@ -602,7 +602,7 @@ public class PlayFragment extends BaseLazyFragment {
 							if(url.endsWith(".mp3")&& !playbg.isEmpty()){								
 							        Picasso.get()
                                     .load(DefaultConfig.checkReplaceProxy(playbg)) 
-                                    .centerCorp(true)
+                                    //.centerCorp(true)
                                     .placeholder(R.drawable.img_loading_placeholder)
                                     .error(R.drawable.img_loading_placeholder)
                                     .into(mPlayBg);
