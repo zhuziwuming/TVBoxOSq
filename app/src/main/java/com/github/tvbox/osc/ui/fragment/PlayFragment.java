@@ -116,6 +116,7 @@ public class PlayFragment extends BaseLazyFragment {
     private MyVideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
+	private ImageView mPlayBg;
     private ProgressBar mPlayLoading;
     private VodController mController;
     private SourceViewModel sourceViewModel;
@@ -177,6 +178,7 @@ public class PlayFragment extends BaseLazyFragment {
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
+		mPlayBg = findViewById(R.id.play_bg);
         mController = new VodController(requireContext());
         mController.setCanChangePosition(true);
         mController.setEnableInNormal(true);
@@ -594,6 +596,20 @@ public class PlayFragment extends BaseLazyFragment {
                             } else {
                                 mVideoView.setUrl(finalUrl);
                             }
+							String playbg = Hawk.get(HawkConfig.PLAY_BGurl, "");
+							if(url.endsWith(".mp3")&& !playbg.isEmpty()){								
+							        Picasso.get()
+                                    .load(DefaultConfig.checkReplaceProxy(playbg)) 
+                                    .centerCorp(true)
+                                    .placeholder(R.drawable.img_loading_placeholder)
+                                    .error(R.drawable.img_loading_placeholder)
+                                    .into(mPlayBg);
+								    mPlayBg.setVisibility(View.VISIBLE);
+							}else{
+								mPlayBg.setVisibility(View.GONE);
+							}
+							
+							
                             mVideoView.start();
                             mController.resetSpeed();
                         }
