@@ -891,7 +891,7 @@ public class PlayActivity extends BaseActivity {
             }
 
             @Override
-            public void list(Map<Integer, String> urlMap) {
+            public void list(String playList) {
             }
 
             @Override
