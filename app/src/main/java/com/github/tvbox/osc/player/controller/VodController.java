@@ -202,7 +202,7 @@ public class VodController extends BaseController {
 
         initSubtitleInfo();
 		
-		if (!Hawk.get(HawkConfig.MP3_BG, "").equals("mp3bg")) {
+		if(!Hawk.get(HawkConfig.MP3_BG, "").isEmpty()) {
 			Picasso.get()
                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
                 .transform(new RoundTransformation(MD5.string2MD5(mp3bg))
