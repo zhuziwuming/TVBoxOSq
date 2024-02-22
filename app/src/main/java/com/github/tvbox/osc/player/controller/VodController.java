@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
@@ -50,6 +49,7 @@ import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
 
 import static xyz.doikki.videoplayer.util.PlayerUtils.stringForTime;
+import com.squareup.picasso.Picasso;//加载图片
 
 public class VodController extends BaseController {
     public VodController(@NonNull @NotNull Context context) {
@@ -203,11 +203,16 @@ public class VodController extends BaseController {
         initSubtitleInfo();
 		
 		if (!Hawk.get(HawkConfig.MP3_BG, "").equals("mp3bg")) {
-            Glide.with(this)
-                    .load(Hawk.get(HawkConfig.MP3_BG, ""))
-                    .error(R.drawable.mp3bg)
-                    .override(1920, 1080) // 设置加载图片的大小
-                    .into(mp3bg);
+			Picasso.get()
+                .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
+                .transform(new RoundTransformation(MD5.string2MD5(mp3bg))
+                        .centerCrop(true)
+                        .override(AutoSizeUtils.mm2px(mContext, 1280), AutoSizeUtils.mm2px(mContext, 720))
+                        .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
+                .placeholder(R.drawable.img_loading_placeholder)
+                .error(R.drawable.img_loading_placeholder)
+                .into(mp3bg);
+
         }
 
         myHandle = new Handler();
