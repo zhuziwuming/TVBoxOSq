@@ -26,7 +26,6 @@ import com.github.tvbox.osc.subtitle.widget.SimpleSubtitleView;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
-import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
@@ -50,9 +49,6 @@ import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
 
 import static xyz.doikki.videoplayer.util.PlayerUtils.stringForTime;
-import com.squareup.picasso.Picasso;//加载图片
-import me.jessyan.autosize.utils.AutoSizeUtils;
-
 
 public class VodController extends BaseController {
     public VodController(@NonNull @NotNull Context context) {
@@ -140,8 +136,6 @@ public class VodController extends BaseController {
     int myHandleSeconds = 10000;//闲置多少毫秒秒关闭底栏  默认6秒
 
     int videoPlayState = 0;
-	
-	private ImageView mp3bg;
 
     private Runnable myRunnable2 = new Runnable() {
         @Override
@@ -200,19 +194,8 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
-		
-		mp3bg = findViewById(R.id.mp3bg);//MP3背景
 
         initSubtitleInfo();
-		
-		if(!Hawk.get(HawkConfig.MP3_BG, "").isEmpty()) {
-			Picasso.get()
-			.load(Hawk.get(HawkConfig.MP3_BG, ""))
-			.placeholder(R.drawable.img_loading_placeholder)
-			.error(R.drawable.img_loading_placeholder)
-			.into(mp3bg);
-
-        }
 
         myHandle = new Handler();
         myRunnable = new Runnable() {

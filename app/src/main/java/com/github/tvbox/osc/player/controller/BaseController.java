@@ -15,7 +15,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,9 +26,6 @@ import xyz.doikki.videoplayer.controller.IControlComponent;
 import xyz.doikki.videoplayer.controller.IGestureComponent;
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
-
-import com.orhanobut.hawk.Hawk;
-import com.github.tvbox.osc.util.HawkConfig;
 
 public abstract class BaseController extends BaseVideoController implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnTouchListener {
     private GestureDetector mGestureDetector;
@@ -46,8 +42,6 @@ public abstract class BaseController extends BaseVideoController implements Gest
     private boolean mEnableInNormal;
     private boolean mCanSlide;
     private int mCurPlayState;
-	
-	ImageView mp3bg;
 
     protected Handler mHandler;
 
@@ -111,7 +105,6 @@ public abstract class BaseController extends BaseVideoController implements Gest
         mLoading = findViewWithTag("vod_control_loading");
         mPauseRoot = findViewWithTag("vod_control_pause");
         mPauseTime = findViewWithTag("vod_control_pause_t");
-		mp3bg = findViewWithTag("mp3bg");
     }
 
     @Override
@@ -130,12 +123,6 @@ public abstract class BaseController extends BaseVideoController implements Gest
             case VideoView.STATE_PLAYING:
                 mPauseRoot.setVisibility(GONE);
                 mLoading.setVisibility(GONE);
-				
-				if(!Hawk.get(HawkConfig.MP3_BG, "").isEmpty()){
-					mp3bg.setVisibility(VISIBLE);//MP3背景有地址，显示
-				}else{
-					mp3bg.setVisibility(GONE);
-				}
                 break;
             case VideoView.STATE_PAUSED:
                 mPauseRoot.setVisibility(VISIBLE);
