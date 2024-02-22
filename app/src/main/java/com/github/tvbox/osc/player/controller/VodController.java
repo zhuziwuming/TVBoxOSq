@@ -207,14 +207,10 @@ public class VodController extends BaseController {
 		
 		if(!Hawk.get(HawkConfig.MP3_BG, "").isEmpty()) {
 			Picasso.get()
-                .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
-                .transform(new RoundTransformation(MD5.string2MD5(mp3bg))
-                        .centerCrop(true)
-                        .override(AutoSizeUtils.mm2px(mContext, 1280), AutoSizeUtils.mm2px(mContext, 720))
-                        .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
-                .placeholder(R.drawable.img_loading_placeholder)
-                .error(R.drawable.img_loading_placeholder)
-                .into(mp3bg);
+			.load(mVideo.pic)
+			.placeholder(R.drawable.img_loading_placeholder)
+			.error(R.drawable.img_loading_placeholder)
+			.into(mp3bg);
 
         }
 
