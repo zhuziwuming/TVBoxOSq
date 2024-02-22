@@ -207,7 +207,7 @@ public class VodController extends BaseController {
 		
 		if(!Hawk.get(HawkConfig.MP3_BG, "").isEmpty()) {
 			Picasso.get()
-			.load(mVideo.pic)
+			.load(Hawk.get(HawkConfig.MP3_BG, ""))
 			.placeholder(R.drawable.img_loading_placeholder)
 			.error(R.drawable.img_loading_placeholder)
 			.into(mp3bg);
