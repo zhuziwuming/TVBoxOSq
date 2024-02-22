@@ -626,10 +626,9 @@ public class DetailActivity extends BaseActivity {
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
                     }
+					Hawk.put(HawkConfig.MP3_BG, "");
 					if(vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url.endsWith(".mp3")){//保存设置mp3背景
 						Hawk.put(HawkConfig.MP3_BG, mVideo.pic);
-					}else{
-						Hawk.put(HawkConfig.MP3_BG, "");
 					}
 
                     if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
