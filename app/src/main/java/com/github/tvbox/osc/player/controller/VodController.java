@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
@@ -136,6 +137,8 @@ public class VodController extends BaseController {
     int myHandleSeconds = 10000;//闲置多少毫秒秒关闭底栏  默认6秒
 
     int videoPlayState = 0;
+	
+	private ImageView mp3bg;
 
     private Runnable myRunnable2 = new Runnable() {
         @Override
@@ -194,8 +197,18 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
+		
+		mp3bg = findViewById(R.id.mp3bg);//MP3背景
 
         initSubtitleInfo();
+		
+		if (!Hawk.get(HawkConfig.MP3_BG, "").equals("mp3bg")) {
+            Glide.with(this)
+                    .load(Hawk.get(HawkConfig.MP3_BG, ""))
+                    .error(R.drawable.mp3bg)
+                    .override(1920, 1080) // 设置加载图片的大小
+                    .into(mp3bg);
+        }
 
         myHandle = new Handler();
         myRunnable = new Runnable() {

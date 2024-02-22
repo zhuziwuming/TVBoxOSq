@@ -663,6 +663,10 @@ public class DetailActivity extends BaseActivity {
                             } else
                                 flag.selected = false;
                         }
+						if(vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url.endsWith(".mp3")){
+							Hawk.put(HawkConfig.MP3_BG, mVideo.pic);
+						}
+						
                         //设置播放地址
                         setTextShow(tvPlayUrl, "播放地址：", vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url);
                         seriesFlagAdapter.setNewData(vodInfo.seriesFlags);

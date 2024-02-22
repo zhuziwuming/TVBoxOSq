@@ -4,6 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+	
+	<ImageView
+        android:id="@+id/mp3bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:tag="mp3bg"
+        android:src="@drawable/mp3bg"/>
 
     <LinearLayout
             android:id="@+id/tv_top_l_container"
