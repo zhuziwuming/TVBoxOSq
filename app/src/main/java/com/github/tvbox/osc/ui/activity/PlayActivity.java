@@ -577,9 +577,11 @@ public class PlayActivity extends BaseActivity {
                         } else {
                             mVideoView.setUrl(finalUrl);
                         }
-						if(!finalUrl.endsWith(".mp3")){
-							artist_background.setVisibility(View.GONE);
-						}//隐藏背景
+						if (!finalUrl.endsWith(".mp3")) {  
+							artist_background.setVisibility(View.GONE);  
+						} else {  
+							artist_background.setVisibility(View.VISIBLE);  
+						}
                         mVideoView.start();
                         mController.resetSpeed();
                     }

@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"  
         android:layout_gravity="top"
         android:scaleType="centerCrop"
+		android:visibility="gone"
         android:src="@drawable/artist_background" />
 
     <ProgressBar
