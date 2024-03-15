@@ -113,7 +113,6 @@ public class PlayActivity extends BaseActivity {
     private MyVideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
-	private ImageView artist_background;
     private ProgressBar mPlayLoading;
     private VodController mController;
     private SourceViewModel sourceViewModel;
@@ -167,7 +166,6 @@ public class PlayActivity extends BaseActivity {
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
-		artist_background = findViewById(R.id.artist_background);
         mController = new VodController(this);
         mController.setCanChangePosition(true);
         mController.setEnableInNormal(true);
@@ -577,11 +575,6 @@ public class PlayActivity extends BaseActivity {
                         } else {
                             mVideoView.setUrl(finalUrl);
                         }
-						if (!finalUrl.endsWith(".mp3")) {  
-							artist_background.setVisibility(View.GONE);  
-						} else {  
-							artist_background.setVisibility(View.VISIBLE);  
-						}
                         mVideoView.start();
                         mController.resetSpeed();
                     }
