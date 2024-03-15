@@ -10,6 +10,14 @@
         android:id="@+id/mVideoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+		<!-- 艺术家背景 ImageView -->  
+    <ImageView  
+        android:id="@+id/artist_background"  
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        android:layout_gravity="top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/artist_background" />
 
     <ProgressBar
         android:id="@+id/play_loading"

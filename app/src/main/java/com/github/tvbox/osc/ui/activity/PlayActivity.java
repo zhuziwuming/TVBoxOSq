@@ -113,6 +113,7 @@ public class PlayActivity extends BaseActivity {
     private MyVideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
+	private ImageView artist_background;
     private ProgressBar mPlayLoading;
     private VodController mController;
     private SourceViewModel sourceViewModel;
@@ -166,6 +167,7 @@ public class PlayActivity extends BaseActivity {
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
+		artist_background = findViewById(R.id.artist_background);
         mController = new VodController(this);
         mController.setCanChangePosition(true);
         mController.setEnableInNormal(true);
