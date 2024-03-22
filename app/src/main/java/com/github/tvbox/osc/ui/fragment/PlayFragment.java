@@ -1108,29 +1108,30 @@ public class PlayFragment extends BaseLazyFragment {
                         @Override
                         public void onSuccess(Response<String> response) {
                             String json = response.body();
+							
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-								JSONObject jsonObject = new JSONObject(pb.getExt());
-								HashMap<String, String> headers = new HashMap<>();
-                                if (jsonObject.has("header")) {
-									
-                                    try {
-                                        JSONObject hds = jsonObject.optJSONObject("header");
-                                        Iterator<String> keys = hds.keys();
-                                        while (keys.hasNext()) {
-											String key = keys.next();
-                                            // 检查getString是否可能返回null，并做适当处理  
-											if (hds.has(key)) {  
-												String value = hds.getString(key);  
-												headers.put(key, value);  
-											}  
-                                        }
-										if(headers.size()>0)webHeaderMap = headers;
-                                    }catch (Throwable e) {
-										e.printStackTrace();
-										
-									}									
-                                }
+								if(pb.getExt()!=null){
+								    JSONObject jsonObject = new JSONObject(pb.getExt());								    
+                                    if (jsonObject.has("header")) {								    	
+                                        try {
+                                            JSONObject hds = jsonObject.optJSONObject("header");
+                                            Iterator<String> keys = hds.keys();
+                                            while (keys.hasNext()) {
+								    			String key = keys.next();
+                                                // 检查getString是否可能返回null，并做适当处理  
+								    			if (hds.has(key)) {  
+								    				String value = hds.getString(key);  
+								    				headers.put(key, value);  
+								    			}  
+                                            }
+								    		if(headers.size()>0)webHeaderMap = headers;
+                                        }catch (Throwable e) {
+								    		e.printStackTrace();
+								    		
+								    	}									
+                                    }
+							    }
                                 playUrl(rs.getString("url"), headers);
                             } catch (Throwable e) {
                                 e.printStackTrace();
