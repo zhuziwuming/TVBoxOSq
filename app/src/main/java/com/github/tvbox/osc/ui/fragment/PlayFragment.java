@@ -1120,7 +1120,7 @@ public class PlayFragment extends BaseLazyFragment {
 											String key = keys.next();
                                             // 检查getString是否可能返回null，并做适当处理  
 											if (hds.has(key)) {  
-												String value = hds.getString(key, "");  
+												String value = hds.getString(key);  
 												headers.put(key, value);  
 											}  
                                         }
