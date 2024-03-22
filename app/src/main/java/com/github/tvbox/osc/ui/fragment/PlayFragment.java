@@ -1125,10 +1125,7 @@ public class PlayFragment extends BaseLazyFragment {
 											//}  
                                         }
 										if(headers.size()>0)webHeaderMap = headers;
-                                    } catch (JSONException e) {  
-										// 记录异常信息或进行其他异常处理  
-										e.printStackTrace(); // 至少打印堆栈跟踪，以便调试  
-									} 
+                                    }
                                 }
                                 playUrl(rs.getString("url"), headers);
                             } catch (Throwable e) {
