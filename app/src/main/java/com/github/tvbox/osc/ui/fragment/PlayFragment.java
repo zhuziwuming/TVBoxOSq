@@ -1078,22 +1078,22 @@ public class PlayFragment extends BaseLazyFragment {
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
             // 解析ext
-            //HttpHeaders reqHeaders = new HttpHeaders();
+            HttpHeaders reqHeaders = new HttpHeaders();
 			HashMap<String, String> headers = null;
 			if(pb.getExt()!=null){
 				// 解析ext
 				try {
 					
 					JSONObject jsonObject = new JSONObject(pb.getExt());
-					if (jsonObject.has("header")) {
-						JSONObject headerJson = jsonObject.optJSONObject("header");
+					if (jsonObject.has("getheader")) {
+						JSONObject headerJson = jsonObject.optJSONObject("getheader");
 						Iterator<String> keys = headerJson.keys();
 						while (keys.hasNext()) {
 							String key = keys.next();
 							reqHeaders.put(key, headerJson.optString(key, ""));
 			
 						}
-						if(reqHeaders.size()>0)playHeaders = reqHeaders;
+						if(reqHeaders.size()>0)getHeaders = reqHeaders;
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
@@ -1101,7 +1101,7 @@ public class PlayFragment extends BaseLazyFragment {
 			}
             OkGo.<String>get(pb.getUrl() + encodeUrl(webUrl))
                     .tag("json_jx")
-                    //.headers(reqHeaders)
+                    .headers(getHeaders != null ? getHeaders : reqHeaders)
                     .execute(new AbsCallback<String>() {
                         @Override
                         public String convertResponse(okhttp3.Response response) throws Throwable {
