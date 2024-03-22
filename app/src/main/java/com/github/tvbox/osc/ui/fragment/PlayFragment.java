@@ -1078,7 +1078,7 @@ public class PlayFragment extends BaseLazyFragment {
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
             // 解析ext
-            //HttpHeaders reqHeaders = new HashMap<>();
+            //HttpHeaders reqHeaders = new HttpHeaders();
 			playHeaders = new HashMap<>();
 			if(pb.getExt()!=null){
 				// 解析ext
