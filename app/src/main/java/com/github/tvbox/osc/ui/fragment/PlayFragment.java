@@ -1094,7 +1094,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
             OkGo.<String>get(pb.getUrl() + encodeUrl(webUrl))
                     .tag("json_jx")
-                    .headers(reqHeaders)
+                    //.headers(reqHeaders)
                     .execute(new AbsCallback<String>() {
                         @Override
                         public String convertResponse(okhttp3.Response response) throws Throwable {
@@ -1110,16 +1110,14 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-                                HashMap<String, String> headers = null;
+                                
                                 if (rs.has("header")) {
+									
                                     try {
                                         JSONObject hds = rs.getJSONObject("header");
                                         Iterator<String> keys = hds.keys();
                                         while (keys.hasNext()) {
                                             String key = keys.next();
-                                            if (headers == null) {
-                                                headers = new HashMap<>();
-                                            }
                                             headers.put(key, hds.getString(key));
                                         }
                                     } catch (Throwable th) {
