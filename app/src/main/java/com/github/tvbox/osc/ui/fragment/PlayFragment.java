@@ -1013,15 +1013,10 @@ public class PlayFragment extends BaseLazyFragment {
         if (!url.startsWith("http")) {
             return null;
         }
-        JSONObject headers = new JSONObject();
-        String ua = jsonPlayData.optString("User-Agent", "");
-        if (ua.trim().length() > 0) {
-            headers.put("User-Agent", ua);
-        }
-        String referer = jsonPlayData.optString("Referer", "");
-        if (referer.trim().length() > 0) {
-            headers.put("Referer", referer);
-        }
+		if(jsonPlayData.has("header")){
+            JSONObject headers = new JSONObject(jsonPlayData.getJSONObject("header"));
+		}
+        
         JSONObject taskResult = new JSONObject();
         taskResult.put("header", headers);
         taskResult.put("url", url);
