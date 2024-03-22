@@ -1133,8 +1133,8 @@ public class PlayFragment extends BaseLazyFragment {
                                     }
 					            }
                                 String re = playHeaders.get("Referer");
-                                setTip("获取外部解析的RE"+re, false, true);								
-                                //playUrl(rs.getString("url"), playHeaders);
+                                //setTip("获取外部解析的RE"+re, false, true);								
+                                playUrl(rs.getString("url"), playHeaders);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 errorWithRetry("解析错误", false);
