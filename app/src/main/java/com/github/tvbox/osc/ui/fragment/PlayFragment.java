@@ -1117,8 +1117,11 @@ public class PlayFragment extends BaseLazyFragment {
                                         JSONObject hds = rs.getJSONObject("header");
                                         Iterator<String> keys = hds.keys();
                                         while (keys.hasNext()) {
-                                            String key = keys.next();
-                                            headers.put(key, hds.getString(key));
+                                            // 检查getString是否可能返回null，并做适当处理  
+											if (hds.has(key)) {  
+												String value = hds.getString(key);  
+												headers.put(key, value);  
+											}  
                                         }
                                     } catch (Throwable th) {
 
