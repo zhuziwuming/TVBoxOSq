@@ -1016,11 +1016,11 @@ public class PlayFragment extends BaseLazyFragment {
         JSONObject headers = new JSONObject();
         String ua = jsonPlayData.optString("User-Agent", "");
         if (ua.trim().length() > 0) {
-            headers.put("User-Agent", " " + ua);
+            headers.put("User-Agent", ua);
         }
         String referer = jsonPlayData.optString("Referer", "");
         if (referer.trim().length() > 0) {
-            headers.put("Referer", " " + referer);
+            headers.put("Referer", referer);
         }
         JSONObject taskResult = new JSONObject();
         taskResult.put("header", headers);
