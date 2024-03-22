@@ -1079,7 +1079,7 @@ public class PlayFragment extends BaseLazyFragment {
             setTip("正在解析播放地址", true, false);
             // 解析ext
             //HttpHeaders reqHeaders = new HashMap<>();
-			playHeaders = null;
+			playHeaders = new HashMap<>();
 			if(pb.getExt()!=null){
 				// 解析ext
 				try {					
@@ -1091,6 +1091,7 @@ public class PlayFragment extends BaseLazyFragment {
 							String key = keys.next();
 							playHeaders.put(key, headerJson.optString(key, ""));			
 						}
+						
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
