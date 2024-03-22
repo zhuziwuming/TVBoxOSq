@@ -1118,7 +1118,7 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-                                if(playHeaders == null){
+                                if(playHeaders.isEmpty()){
                                     if (rs.has("header")) {
                                         try {
                                             JSONObject hds = rs.getJSONObject("header");
@@ -1131,8 +1131,10 @@ public class PlayFragment extends BaseLazyFragment {
 					            
                                         }
                                     }
-					            }                                
-                                playUrl(rs.getString("url"), playHeaders);
+					            }
+                                String re = playHeaders.get("Referer");
+                                setTip("获取外部解析的RE"+re, false, true);								
+                                //playUrl(rs.getString("url"), playHeaders);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 errorWithRetry("解析错误", false);
@@ -1164,7 +1166,7 @@ public class PlayFragment extends BaseLazyFragment {
 //                        errorWithRetry("解析错误", false);
                         setTip("解析错误", false, true);
                     } else {
-						if(playHeaders == null){
+						if(playHeaders.isEmpty()){
                             if (rs.has("header")) {
                                 try {
                                     JSONObject hds = rs.getJSONObject("header");
@@ -1238,7 +1240,7 @@ public class PlayFragment extends BaseLazyFragment {
                                 }
                             });
                         } else {
-                            if(playHeaders == null){
+                            if(playHeaders.isEmpty()){
                                 if (rs.has("header")) {
                                     try {
                                         JSONObject hds = rs.getJSONObject("header");
