@@ -1013,8 +1013,9 @@ public class PlayFragment extends BaseLazyFragment {
         if (!url.startsWith("http")) {
             return null;
         }
+		JSONObject headers = new JSONObject();
 		if(jsonPlayData.has("header")){
-            JSONObject headers = new JSONObject(jsonPlayData.getJSONObject("header"));
+            headers = jsonPlayData.getJSONObject("header");
 		}
         
         JSONObject taskResult = new JSONObject();
@@ -1106,6 +1107,7 @@ public class PlayFragment extends BaseLazyFragment {
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
                                 HashMap<String, String> headers = null;
+								
                                 if (rs.has("header")) {
                                     try {
                                         JSONObject hds = rs.getJSONObject("header");
