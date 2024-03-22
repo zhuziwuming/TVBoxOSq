@@ -121,7 +121,7 @@ public class PlayFragment extends BaseLazyFragment {
     private SourceViewModel sourceViewModel;
     private Handler mHandler;
 	
-	private HashMap<String, String> playHeaders = null;
+	private HashMap<String, String> playHeaders;
 
     private long videoDuration = -1;
 
