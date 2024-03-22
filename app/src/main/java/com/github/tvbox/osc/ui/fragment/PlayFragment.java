@@ -1110,7 +1110,7 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-                                
+                                HttpHeaders headers = new HttpHeaders();
                                 if (rs.has("header")) {
 									
                                     try {
