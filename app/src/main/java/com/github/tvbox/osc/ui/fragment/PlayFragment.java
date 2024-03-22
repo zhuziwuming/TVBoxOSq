@@ -1049,6 +1049,7 @@ public class PlayFragment extends BaseLazyFragment {
         initParseLoadFound();
 		webHeaderMap = new HashMap<>(); // 初始化webHeaderMap  
         webUserAgent = null; // 初始化
+		playHeaders = new HashMap<>();// 初始化播放请求头
         if (pb.getType() == 0) {
             setTip("正在嗅探播放地址", true, false);
             mHandler.removeMessages(100);
@@ -1081,7 +1082,7 @@ public class PlayFragment extends BaseLazyFragment {
             setTip("正在解析播放地址", true, false);
             // 解析ext
             //HttpHeaders reqHeaders = new HttpHeaders();
-			playHeaders = new HashMap<>();
+			
 			if(pb.getExt()!=null){
 				// 解析ext
 				try {					
