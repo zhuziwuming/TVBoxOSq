@@ -1119,13 +1119,16 @@ public class PlayFragment extends BaseLazyFragment {
                                         while (keys.hasNext()) {
 											String key = keys.next();
                                             // 检查getString是否可能返回null，并做适当处理  
-											//if (hds.has(key)) {  
-												String value = hds.optString(key, "");  
+											if (hds.has(key)) {  
+												String value = hds.getString(key, "");  
 												headers.put(key, value);  
-											//}  
+											}  
                                         }
 										if(headers.size()>0)webHeaderMap = headers;
-                                    }
+                                    }catch (Throwable e) {
+										e.printStackTrace();
+										
+									}									
                                 }
                                 playUrl(rs.getString("url"), headers);
                             } catch (Throwable e) {
