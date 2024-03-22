@@ -1114,16 +1114,17 @@ public class PlayFragment extends BaseLazyFragment {
                                 if (rs.has("header")) {
 									
                                     try {
-                                        JSONObject hds = rs.getJSONObject("header");
+                                        JSONObject hds = rs.optJSONObject("header");
                                         Iterator<String> keys = hds.keys();
                                         while (keys.hasNext()) {
 											String key = keys.next();
                                             // 检查getString是否可能返回null，并做适当处理  
 											if (hds.has(key)) {  
-												String value = hds.getString(key);  
+												String value = hds.optString(key, "");  
 												headers.put(key, value);  
 											}  
                                         }
+										if(headers.size()>0)webHeaderMap = headers;
                                     } catch (JSONException e) {  
 										// 记录异常信息或进行其他异常处理  
 										e.printStackTrace(); // 至少打印堆栈跟踪，以便调试  
