@@ -1110,11 +1110,12 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
+								JSONObject jsonObject = new JSONObject(pb.getExt());
 								HashMap<String, String> headers = new HashMap<>();
-                                if (rs.has("header")) {
+                                if (jsonObject.has("header")) {
 									
                                     try {
-                                        JSONObject hds = rs.optJSONObject("header");
+                                        JSONObject hds = jsonObject.optJSONObject("header");
                                         Iterator<String> keys = hds.keys();
                                         while (keys.hasNext()) {
 											String key = keys.next();
