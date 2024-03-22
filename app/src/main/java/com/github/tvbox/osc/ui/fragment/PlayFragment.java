@@ -1126,7 +1126,7 @@ public class PlayFragment extends BaseLazyFragment {
 
                                     }
                                 }
-                                playUrl(rs.getString("url"), headers);
+                                playUrl(rs.getString("url"), reqHeaders);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 errorWithRetry("解析错误", false);
