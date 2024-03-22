@@ -120,6 +120,8 @@ public class PlayFragment extends BaseLazyFragment {
     private VodController mController;
     private SourceViewModel sourceViewModel;
     private Handler mHandler;
+	
+	private HashMap<String, String> playHeaders = null;
 
     private long videoDuration = -1;
 
@@ -1016,6 +1018,8 @@ public class PlayFragment extends BaseLazyFragment {
 		JSONObject headers = new JSONObject();
 		if(jsonPlayData.has("header")){
             headers = jsonPlayData.getJSONObject("header");
+		}else{
+			headers = null;
 		}
         
         JSONObject taskResult = new JSONObject();
@@ -1074,12 +1078,12 @@ public class PlayFragment extends BaseLazyFragment {
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
             // 解析ext
-            HttpHeaders reqHeaders = new HttpHeaders();
+            //HttpHeaders reqHeaders = new HttpHeaders();
 			HashMap<String, String> headers = null;
 			if(pb.getExt()!=null){
 				// 解析ext
 				try {
-					HashMap<String, String> reqHeaders = new HashMap<>();
+					
 					JSONObject jsonObject = new JSONObject(pb.getExt());
 					if (jsonObject.has("header")) {
 						JSONObject headerJson = jsonObject.optJSONObject("header");
@@ -1089,7 +1093,7 @@ public class PlayFragment extends BaseLazyFragment {
 							reqHeaders.put(key, headerJson.optString(key, ""));
 			
 						}
-						if(reqHeaders.size()>0)headers = reqHeaders;
+						if(reqHeaders.size()>0)playHeaders = reqHeaders;
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
@@ -1113,24 +1117,21 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-                                if(headers == null){
+                                if(playHeaders == null){
                                     if (rs.has("header")) {
                                         try {
                                             JSONObject hds = rs.getJSONObject("header");
                                             Iterator<String> keys = hds.keys();
                                             while (keys.hasNext()) {
                                                 String key = keys.next();
-                                                if (headers == null) {
-                                                    headers = new HashMap<>();
-                                                }
-                                                headers.put(key, hds.getString(key));
+                                                playHeaders.put(key, hds.getString(key));
                                             }
                                         } catch (Throwable th) {
 					            
                                         }
                                     }
 					            }                                
-                                playUrl(rs.getString("url"), headers);
+                                playUrl(rs.getString("url"), playHeaders);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 errorWithRetry("解析错误", false);
@@ -1162,17 +1163,14 @@ public class PlayFragment extends BaseLazyFragment {
 //                        errorWithRetry("解析错误", false);
                         setTip("解析错误", false, true);
                     } else {
-						if(headers == null){
+						if(playHeaders == null){
                             if (rs.has("header")) {
                                 try {
                                     JSONObject hds = rs.getJSONObject("header");
                                     Iterator<String> keys = hds.keys();
                                     while (keys.hasNext()) {
                                         String key = keys.next();
-                                        if (headers == null) {
-                                            headers = new HashMap<>();
-                                        }
-                                        headers.put(key, hds.getString(key));
+                                        playHeaders.put(key, hds.getString(key));
                                     }
                                 } catch (Throwable th) {
 					    
@@ -1192,7 +1190,7 @@ public class PlayFragment extends BaseLazyFragment {
                             String wvUrl = DefaultConfig.checkReplaceProxy(rs.optString("url", ""));
                             loadUrl(wvUrl);
                         } else {
-                            playUrl(rs.optString("url", ""), headers);
+                            playUrl(rs.optString("url", ""), playHeaders);
                         }
                     }
                 }
@@ -1237,17 +1235,14 @@ public class PlayFragment extends BaseLazyFragment {
                                 }
                             });
                         } else {
-                            if(headers == null){
+                            if(playHeaders == null){
                                 if (rs.has("header")) {
                                     try {
                                         JSONObject hds = rs.getJSONObject("header");
                                         Iterator<String> keys = hds.keys();
                                         while (keys.hasNext()) {
                                             String key = keys.next();
-                                            if (headers == null) {
-                                                headers = new HashMap<>();
-                                            }
-                                            headers.put(key, hds.getString(key));
+                                            playHeaders.put(key, hds.getString(key));
                                         }
                                     } catch (Throwable th) {
 					        
@@ -1262,7 +1257,7 @@ public class PlayFragment extends BaseLazyFragment {
                                     }
                                 });
                             }
-                            playUrl(rs.optString("url", ""), headers);
+                            playUrl(rs.optString("url", ""), playHeaders);
                         }
                     }
                 }
