@@ -1078,7 +1078,7 @@ public class PlayFragment extends BaseLazyFragment {
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
             // 解析ext
-            HttpHeaders reqHeaders = new HashMap<>();
+            //HttpHeaders reqHeaders = new HashMap<>();
 			playHeaders = null;
 			if(pb.getExt()!=null){
 				// 解析ext
@@ -1089,10 +1089,8 @@ public class PlayFragment extends BaseLazyFragment {
 						Iterator<String> keys = headerJson.keys();
 						while (keys.hasNext()) {
 							String key = keys.next();
-							reqHeaders.put(key, headerJson.optString(key, ""));
-			
+							playHeaders.put(key, headerJson.optString(key, ""));			
 						}
-						if(reqHeaders.size()>0)playHeaders = reqHeaders;
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
