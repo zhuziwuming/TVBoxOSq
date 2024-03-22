@@ -1110,9 +1110,8 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-                                HttpHeaders headers = new HttpHeaders();
                                 if (rs.has("header")) {
-									
+									headers = new HashMap<>();
                                     try {
                                         JSONObject hds = rs.getJSONObject("header");
                                         Iterator<String> keys = hds.keys();
@@ -1123,9 +1122,10 @@ public class PlayFragment extends BaseLazyFragment {
 												headers.put(key, value);  
 											}  
                                         }
-                                    } catch (Throwable th) {
-
-                                    }
+                                    } catch (JSONException e) {  
+										// 记录异常信息或进行其他异常处理  
+										e.printStackTrace(); // 至少打印堆栈跟踪，以便调试  
+									} 
                                 }
                                 playUrl(rs.getString("url"), headers);
                             } catch (Throwable e) {
