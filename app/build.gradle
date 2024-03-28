@@ -25,6 +25,16 @@ android {
         exclude 'META-INF/DEPENDENCIES'
     }
 	
+	android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (output.outputFileName != null && output.outputFileName.endsWith('.apk')) {
+                def fileName
+                fileName = "TVBOX-q${variant.versionName}.apk"
+                output.outputFileName = fileName
+            }
+        }
+    }
+	
 	signingConfigs {
         config {
             keyAlias 'zhuzige'
