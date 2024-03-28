@@ -1047,8 +1047,8 @@ public class PlayFragment extends BaseLazyFragment {
     private void doParse(ParseBean pb) {
         stopParse();
         initParseLoadFound();
-		webHeaderMap = new HashMap<>(); // 初始化webHeaderMap  
-        webUserAgent = null; // 初始化
+		//webHeaderMap = new HashMap<>(); // 初始化webHeaderMap  
+        //webUserAgent = null; // 初始化
 		playHeaders = new HashMap<>();// 初始化播放请求头
         if (pb.getType() == 0) {
             setTip("正在嗅探播放地址", true, false);
