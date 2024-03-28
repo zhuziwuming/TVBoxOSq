@@ -29,7 +29,7 @@ android {
         variant.outputs.each { output ->
             if (output.outputFileName != null && output.outputFileName.endsWith('.apk')) {
                 def fileName
-                fileName = "TVBOX-q${variant.versionName}.apk"
+                fileName = "TVBOX-竹子${variant.versionName}.apk"
                 output.outputFileName = fileName
             }
         }
