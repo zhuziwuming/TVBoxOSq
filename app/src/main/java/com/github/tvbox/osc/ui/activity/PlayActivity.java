@@ -527,16 +527,14 @@ public class PlayActivity extends BaseActivity {
         LOG.i("playUrl:" + url);
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
-        }else{
-	        if(!Hawk.get(HawkConfig.TOPURIEY, false)){			
-	            String adblockUrl = ApiConfig.get().adblockUrl;
-				List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
-				if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
-					if (adblockUrl != null) {
-						setTip("正在净化视频", true, false);
-						adblock(adblockUrl,url);
-					}	
-				}
+        }else{		
+	        String adblockUrl = ApiConfig.get().adblockUrl;
+			List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
+			if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
+				if (adblockUrl != null) {
+					setTip("正在净化视频", true, false);
+					adblock(adblockUrl,url);
+				}	
 			}
         String finalUrl = url;
         runOnUiThread(new Runnable() {
