@@ -71,6 +71,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvFastSearchText;
     private TextView tvRecStyleText;
     private TextView tvIjkCachePlay;
+	private TextView ToPurieyText;
 
     public static ModelSettingFragment newInstance() {
         return new ModelSettingFragment().setArguments();
@@ -568,6 +569,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 dialog.show();
             }
         });
+		
         findViewById(R.id.showFastSearch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
