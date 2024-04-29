@@ -29,7 +29,7 @@ public class XWalkUtils {
     }
 
     public static String downUrl() {
-        return String.format("https://download.01.org/crosswalk/releases/crosswalk/android/maven2/org/xwalk/xwalk_shared_library/23.53.589.4/xwalk_shared_library-23.53.589.4.pom", getRuntimeAbi(), getRuntimeAbi());
+        return String.format("https://download.01.org/crosswalk/releases/crosswalk/android/maven2/org/xwalk/xwalk_core_library/12.41.296.9/xwalk_core_library-12.41.296.9.pom", getRuntimeAbi(), getRuntimeAbi());
         //return String.format("http://home.jundie.top:81/xwalk/maven2/crosswalk-apks-23.53.589.4-%s.zip", getRuntimeAbi());
     }
 
