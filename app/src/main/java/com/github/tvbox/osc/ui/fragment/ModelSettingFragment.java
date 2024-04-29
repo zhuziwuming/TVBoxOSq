@@ -584,7 +584,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
                 Hawk.put(HawkConfig.TOPURIEY, !Hawk.get(HawkConfig.TOPURIEY, false));
-                tvFastSearchText.setText(Hawk.get(HawkConfig.TOPURIEY, false) ? "内置" : "外部");
+                ToPurieyText.setText(Hawk.get(HawkConfig.TOPURIEY, false) ? "内置" : "外部");
             }
         });
 		
