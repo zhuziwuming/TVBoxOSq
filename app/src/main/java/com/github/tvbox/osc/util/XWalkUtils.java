@@ -29,12 +29,12 @@ public class XWalkUtils {
     }
 
     public static String downUrl() {
-        return String.format("https://download.01.org/crosswalk/releases/crosswalk/android/maven2/org/xwalk/xwalk_core_library/12.41.296.9/xwalk_core_library-12.41.296.9.pom", getRuntimeAbi(), getRuntimeAbi());
-        //return String.format("http://home.jundie.top:81/xwalk/maven2/crosswalk-apks-23.53.589.4-%s.zip", getRuntimeAbi());
+//        return String.format("https://download.01.org/crosswalk/releases/crosswalk/android/stable/23.53.589.4/%s/crosswalk-apks-23.53.589.4-%s.zip", getRuntimeAbi(), getRuntimeAbi());
+        return String.format("http://home.jundie.top:81/xwalk/maven2/crosswalk-apks-23.53.589.4-%s.zip", getRuntimeAbi());
     }
 
     public static String saveZipFile() {
-        return String.format("crosswalk-apks-12.41.296.9.zip", getRuntimeAbi());
+        return String.format("crosswalk-apks-23.53.589.4-%s.zip", getRuntimeAbi());
     }
 
     public static boolean xWalkLibExist(Context context) {
