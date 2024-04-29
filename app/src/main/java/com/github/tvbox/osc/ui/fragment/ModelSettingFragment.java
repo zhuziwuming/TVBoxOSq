@@ -89,6 +89,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
     protected void init() {
         tvFastSearchText = findViewById(R.id.showFastSearchText);
         tvFastSearchText.setText(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) ? "已开启" : "已关闭");
+		ToPurieyText = findViewById(R.id.ToPurieyText);//净化广告
+		ToPurieyText.setText(Hawk.get(HawkConfig.TOPURIEY, false) ? "内置" : "外部");
         tvRecStyleText = findViewById(R.id.showRecStyleText);
         tvRecStyleText.setText(Hawk.get(HawkConfig.HOME_REC_STYLE, false) ? "是" : "否");
         tvShowPreviewText = findViewById(R.id.showPreviewText);
@@ -574,6 +576,16 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 tvFastSearchText.setText(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) ? "已开启" : "已关闭");
             }
         });
+		
+		findViewById(R.id.ToPuriey).setOnClickListener(new View.OnClickListener() {//净化广告
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                Hawk.put(HawkConfig.TOPURIEY, !Hawk.get(HawkConfig.TOPURIEY, false));
+                tvFastSearchText.setText(Hawk.get(HawkConfig.TOPURIEY, false) ? "内置" : "外部");
+            }
+        });
+		
         findViewById(R.id.llHomeRecStyle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

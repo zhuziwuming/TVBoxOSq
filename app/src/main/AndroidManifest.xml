@@ -100,13 +100,6 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="720" />
-
-        <meta-data
-            android:name="xwalk_enable_download_mode"
-            android:value="enable" />
-        <meta-data
-            android:name="xwalk_verify"
-            android:value="disable" />
     </application>
 
 </manifest>
