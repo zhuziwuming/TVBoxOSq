@@ -55,6 +55,9 @@ import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.player.TrackInfo;
 import com.github.tvbox.osc.player.TrackInfoBean;
 import com.github.tvbox.osc.player.controller.VodController;
+
+import com.github.tvbox.osc.server.RemoteServer;
+
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
 import com.github.tvbox.osc.ui.dialog.SearchSubtitleDialog;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
@@ -67,7 +70,7 @@ import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.VideoParseRuler;
 
-import com.github.tvbox.osc.server.RemoteServer;
+import org.apache.commons.lang3.StringUtils;
 import com.github.tvbox.osc.util.thunder.Jianpian;
 import com.github.tvbox.osc.util.thunder.Thunder;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
@@ -78,7 +81,7 @@ import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.Response;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 import com.orhanobut.hawk.Hawk;
-import org.apache.commons.lang3.StringUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -523,8 +526,8 @@ public class PlayActivity extends BaseActivity {
             }
             return false;
         }
-
-    private String removeMinorityUrl(String tsUrlPre, String m3u8content) {
+		
+	private String removeMinorityUrl(String tsUrlPre, String m3u8content) {
         if (!m3u8content.startsWith("#EXTM3U")) return null;
         String linesplit = "\n";
         if (m3u8content.contains("\r\n"))
@@ -597,15 +600,10 @@ public class PlayActivity extends BaseActivity {
     }	
 		
     void playUrl(String url, HashMap<String, String> headers) {
-		Toast.makeText(getContext(), "调试广告开关：" + Hawk.get(HawkConfig.TOPURIEY, false), Toast.LENGTH_SHORT).show();
-		
-
         if (!Hawk.get(HawkConfig.TOPURIEY, false)) {
-			Toast.makeText(getContext(), "外部去广开始", Toast.LENGTH_SHORT).show();
             startPlayUrl(url, headers);
             return;
         }
-		Toast.makeText(getContext(), "内置去广开始", Toast.LENGTH_SHORT).show();
         if (!url.contains("://127.0.0.1/") && !url.contains(".m3u8")) {
             startPlayUrl(url, headers);
             return;
@@ -715,16 +713,14 @@ public class PlayActivity extends BaseActivity {
                         startPlayUrl(url, headers);
                     }
                 });
-    }
-	
+    }	
+
     void startPlayUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
         }else{
-			
-			Toast.makeText(getContext(), "调试广告开关：" + Hawk.get(HawkConfig.TOPURIEY, false), Toast.LENGTH_SHORT).show();
-			if(!Hawk.get(HawkConfig.TOPURIEY, false)){			
+	        if(!Hawk.get(HawkConfig.TOPURIEY, false)){			
 	            String adblockUrl = ApiConfig.get().adblockUrl;
 				List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
 				if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
@@ -734,55 +730,45 @@ public class PlayActivity extends BaseActivity {
 					}	
 				}
 			}
-                String finalUrl = url;
-                if (mActivity == null) return;
-            requireActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    stopParse();
-                    if (mVideoView != null) {
-                        mVideoView.release();
-	    
-                        if (finalUrl != null) {
-							String url = finalUrl;
-                            try {
-                                int playerType = mVodPlayerCfg.getInt("pl");
-                                if (playerType >= 10) {
-                                    VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
-                                    String playTitle = mVodInfo.name + " " + vs.name;
-                                    setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
-                                    boolean callResult = false;
-                                    long progress = getSavedProgress(progressKey);
-                                    callResult = PlayerHelper.runExternalPlayer(playerType, requireActivity(), finalUrl, playTitle, playSubtitle, headers, progress);
-                                    setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
-                                    return;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+        String finalUrl = url;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                stopParse();
+                if (mVideoView != null) {
+                    mVideoView.release();
+
+                    if (finalUrl != null) {
+                        try {
+                            int playerType = mVodPlayerCfg.getInt("pl");
+                            if (playerType >= 10) {
+                                VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                                String playTitle = mVodInfo.name + " " + vs.name;
+                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
+                                boolean callResult = false;
+                                long progress = getSavedProgress(progressKey);
+                                callResult = PlayerHelper.runExternalPlayer(playerType, PlayActivity.this, finalUrl, playTitle, playSubtitle, headers, progress);
+                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
+                                return;
                             }
-                            hideTip();
-	    					if (url.startsWith("data:application/dash+xml;base64,")) {
-                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
-                                App.getInstance().setDashData(url.split("base64,")[1]);
-                                url = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
-                            } else if (url.contains(".mpd") || url.contains("type=mpd")) {
-                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
-                            } else {
-                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
-                            }
-                            mVideoView.setProgressKey(progressKey);
-                            if (headers != null) {
-                                mVideoView.setUrl(finalUrl, headers);
-                            } else {
-                                mVideoView.setUrl(finalUrl);
-                            }
-                            mVideoView.start();
-                            mController.resetSpeed();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                        hideTip();
+                        PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
+                        mVideoView.setProgressKey(progressKey);
+                        if (headers != null) {
+                            mVideoView.setUrl(finalUrl, headers);
+                        } else {
+                            mVideoView.setUrl(finalUrl);
+                        }
+                        mVideoView.start();
+                        mController.resetSpeed();
                     }
                 }
-            });
-	    }	
+            }
+        });
+    }
     }
 
     private void initSubtitleView() {
