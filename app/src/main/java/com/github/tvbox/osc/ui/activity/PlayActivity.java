@@ -507,7 +507,7 @@ public class PlayActivity extends BaseActivity {
                         playUrl(url, headers);
                     }
                     if (jurl != null && !jurl.isEmpty()) {
-                        playUrl(jurl, null);
+                        playUrl(jurl, headers);
                         Toast.makeText(mContext, "净化成功!观影愉快", Toast.LENGTH_SHORT).show();
                     }
                 }
