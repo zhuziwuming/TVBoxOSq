@@ -34,7 +34,7 @@ public class XWalkUtils {
     }
 
     public static String saveZipFile() {
-        return String.format("crosswalk-apks-23.53.589.4.zip", getRuntimeAbi());
+        return String.format("crosswalk-apks-12.41.296.9.zip", getRuntimeAbi());
     }
 
     public static boolean xWalkLibExist(Context context) {
