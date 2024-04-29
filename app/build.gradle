@@ -82,6 +82,11 @@ android {
         additionalParameters += '--minimal-main-dex'
     }
 }
+repositories {
+    maven {
+        url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2'
+    }
+}
 
 dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
