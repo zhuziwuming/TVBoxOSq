@@ -1287,7 +1287,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
-    void initWebView(boolean useSystemWebView) {
+    void initWebView() {
         mSysWebView = new MyWebView(mContext);
         configWebViewSys(mSysWebView);
     }
