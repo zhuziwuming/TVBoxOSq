@@ -115,9 +115,6 @@ dependencies {
     implementation project(":player")
     implementation project(":quickjs")
 
-    implementation('org.xwalk:xwalk_shared_library:23.53.589.4') {
-        exclude group: 'com.android.support'
-    }
     implementation 'com.lzy.net:okgo:3.0.4'
     // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.owen:tv-recyclerview:3.0.0'
