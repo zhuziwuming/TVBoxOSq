@@ -534,9 +534,81 @@ public class PlayFragment extends BaseLazyFragment {
             return false;
         }
 		
+	private String removeMinorityUrl(String tsUrlPre, String m3u8content) {
+        if (!m3u8content.startsWith("#EXTM3U")) return null;
+        String linesplit = "\n";
+        if (m3u8content.contains("\r\n"))
+            linesplit = "\r\n";
+        String[] lines = m3u8content.split(linesplit);
+
+        HashMap<String, Integer> preUrlMap = new HashMap<>();
+        for (String line : lines) {
+            if (line.length() == 0 || line.charAt(0) == '#') {
+                continue;
+            }
+            int ilast = line.lastIndexOf('.');
+            if (ilast <= 4) {
+                continue;
+            }
+            String preUrl = line.substring(0, ilast - 4);
+            Integer cnt = preUrlMap.get(preUrl);
+            if (cnt != null) {
+                preUrlMap.put(preUrl, cnt + 1);
+            } else {
+                preUrlMap.put(preUrl, 1);
+            }
+        }
+        if (preUrlMap.size() <= 1) return null;
+        if (preUrlMap.size() > 5) return null;//too many different url, can not identify ads url
+        int maxTimes = 0;
+        String maxTimesPreUrl = "";
+        for (Map.Entry<String, Integer> entry : preUrlMap.entrySet()) {
+            if (entry.getValue() > maxTimes) {
+                maxTimesPreUrl = entry.getKey();
+                maxTimes = entry.getValue();
+            }
+        }
+        if (maxTimes == 0) return null;
+
+        boolean dealedExtXKey = false;
+        for (int i = 0; i < lines.length; ++i) {
+            if (!dealedExtXKey && lines[i].startsWith("#EXT-X-KEY")) {
+                String keyUrl = StringUtils.substringBetween(lines[i], "URI=\"", "\"");
+                if (keyUrl != null && !keyUrl.startsWith("http://") && !keyUrl.startsWith("https://")) {
+                    String newKeyUrl;
+                    if (keyUrl.charAt(0) == '/') {
+                        int ifirst = tsUrlPre.indexOf('/', 9);//skip https://, http://
+                        newKeyUrl = tsUrlPre.substring(0, ifirst) + keyUrl;
+                    } else
+                        newKeyUrl = tsUrlPre + keyUrl;
+                    lines[i] = lines[i].replace("URI=\"" + keyUrl + "\"", "URI=\"" + newKeyUrl + "\"");
+                }
+                dealedExtXKey = true;
+            }
+            if (lines[i].length() == 0 || lines[i].charAt(0) == '#') {
+                continue;
+            }
+            if (lines[i].startsWith(maxTimesPreUrl)) {
+                if (!lines[i].startsWith("http://") && !lines[i].startsWith("https://")) {
+                    if (lines[i].charAt(0) == '/') {
+                        int ifirst = tsUrlPre.indexOf('/', 9);//skip https://, http://
+                        lines[i] = tsUrlPre.substring(0, ifirst) + lines[i];
+                    } else
+                        lines[i] = tsUrlPre + lines[i];
+                }
+            } else {
+                if (i > 0 && lines[i - 1].length() > 0 && lines[i - 1].charAt(0) == '#') {
+                    lines[i - 1] = "";
+                }
+                lines[i] = "";
+            }
+        }
+        return StringUtils.join(lines, linesplit);
+    }	
+		
     void ToPuriey(String url, HashMap<String, String> headers) {//内置去广告
         if (!url.contains("://127.0.0.1/") && !url.contains(".m3u8")) {
-            PlayUrl(url, headers);
+            playUrl(url, headers);
             return;
         }
         OkGo.getInstance().cancelTag("m3u8-1");
@@ -558,7 +630,7 @@ public class PlayFragment extends BaseLazyFragment {
                     public void onSuccess(com.lzy.okgo.model.Response<String> response) {
                         String content = response.body();
                         if (!content.startsWith("#EXTM3U")) {
-                            PlayUrl(url, headers);
+                            playUrl(url, headers);
                             return;
                         }
 
@@ -595,9 +667,9 @@ public class PlayFragment extends BaseLazyFragment {
 
                             RemoteServer.m3u8Content = removeMinorityUrl(url.substring(0, ilast + 1), content);
                             if (RemoteServer.m3u8Content == null)
-                                PlayUrl(url, headers);
+                                playUrl(url, headers);
                             else {
-                                PlayUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
+                                playUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
                                 //Toast.makeText(getContext(), "已移除视频广告", Toast.LENGTH_SHORT).show();
                             }
                             return;
@@ -614,9 +686,9 @@ public class PlayFragment extends BaseLazyFragment {
                                         RemoteServer.m3u8Content = removeMinorityUrl(finalforwardurl.substring(0, ilast + 1), content);
 
                                         if (RemoteServer.m3u8Content == null)
-                                            PlayUrl(finalforwardurl, headers);
+                                            playUrl(finalforwardurl, headers);
                                         else {
-                                            PlayUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
+                                            playUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
                                             //Toast.makeText(getContext(), "已移除视频广告", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -629,7 +701,7 @@ public class PlayFragment extends BaseLazyFragment {
                                     @Override
                                     public void onError(com.lzy.okgo.model.Response<String> response) {
                                         super.onError(response);
-                                        PlayUrl(url, headers);
+                                        playUrl(url, headers);
                                     }
                                 });
                     }
@@ -642,7 +714,7 @@ public class PlayFragment extends BaseLazyFragment {
                     @Override
                     public void onError(com.lzy.okgo.model.Response<String> response) {
                         super.onError(response);
-                        PlayUrl(url, headers);
+                        playUrl(url, headers);
                     }
                 });
     }
