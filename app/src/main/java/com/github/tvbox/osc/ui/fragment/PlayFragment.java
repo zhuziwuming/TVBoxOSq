@@ -728,7 +728,7 @@ public class PlayFragment extends BaseLazyFragment {
         }else{
 			
 			Toast.makeText(getContext(), "调试广告开关：" + Hawk.get(HawkConfig.TOPURIEY, false), Toast.LENGTH_SHORT).show();
-			if(Hawk.get(HawkConfig.TOPURIEY, false) == true){//内置
+			if(Hawk.get(HawkConfig.TOPURIEY, false)){//内置
 				//setTip("内置去广", true, false);
 				Toast.makeText(getContext(), "内置去广开始", Toast.LENGTH_SHORT).show();
 				ToPuriey(url, headers);
