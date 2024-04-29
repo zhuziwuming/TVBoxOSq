@@ -726,6 +726,8 @@ public class PlayFragment extends BaseLazyFragment {
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
         }else{
+			
+			Toast.makeText(getContext(), "调试广告开关：" + Hawk.get(HawkConfig.TOPURIEY, false), Toast.LENGTH_SHORT).show();
 			if(Hawk.get(HawkConfig.TOPURIEY, false) == true){//内置
 				//setTip("内置去广", true, false);
 				Toast.makeText(getContext(), "内置去广开始", Toast.LENGTH_SHORT).show();
