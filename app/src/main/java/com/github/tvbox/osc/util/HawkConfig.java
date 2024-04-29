@@ -39,6 +39,5 @@ public class HawkConfig {
     public static final String REMOTE_TVBOX = "remote_tvbox_host";
     public static final String IJK_CACHE_PLAY = "ijk_cache_play";
 	public static final String JIEXI_BG = "";
-	public static final String TOPURIEY = "topuriey";//true 内置 flase 外部
 	
 }
