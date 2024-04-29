@@ -521,8 +521,8 @@ public class PlayFragment extends BaseLazyFragment {
                             // url属性不存在
                             jurl = "";
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    } catch (JSONException e) {//去广告异常
+                        playUrl(jurl, null);
                     }
                     if (jurl != null && !jurl.isEmpty()) {
                         playUrl(jurl, null);
@@ -533,27 +533,140 @@ public class PlayFragment extends BaseLazyFragment {
 	}
 	
 	private boolean checkAdFlags(String url, List<String> list) {//检查是否带有广告标签
-            for (String tag : list) {
-                if (url.contains(tag)) {
-                    return true;
-                }
+        for (String tag : list) {
+            if (url.contains(tag)) {
+                return true;
             }
-            return false;
         }
+        return false;
+    }
+	
+	void ToPuriey(String url, HashMap<String, String> headers) {//内置去广告
+        if (!url.contains("://127.0.0.1/") && !url.contains(".m3u8")) {
+            PlayUrl(url, headers);
+            return;
+        }
+        OkGo.getInstance().cancelTag("m3u8-1");
+        OkGo.getInstance().cancelTag("m3u8-2");
+        //remove ads in m3u8
+        HttpHeaders hheaders = new HttpHeaders();
+        if (headers != null) {
+            for (Map.Entry<String, String> s : headers.entrySet()) {
+                hheaders.put(s.getKey(), s.getValue());
+            }
+        }
+
+
+        OkGo.<String>get(url)
+                .tag("m3u8-1")
+                .headers(hheaders)
+                .execute(new AbsCallback<String>() {
+                    @Override
+                    public void onSuccess(com.lzy.okgo.model.Response<String> response) {
+                        String content = response.body();
+                        if (!content.startsWith("#EXTM3U")) {
+                            PlayUrl(url, headers);
+                            return;
+                        }
+
+                        String[] lines = null;
+                        if (content.contains("\r\n"))
+                            lines = content.split("\r\n", 10);
+                        else
+                            lines = content.split("\n", 10);
+                        String forwardurl = "";
+                        boolean dealedFirst = false;
+                        for (String line : lines) {
+                            if (!"".equals(line) && line.charAt(0) != '#') {
+                                if (dealedFirst) {
+                                    //跳转行后还有内容，说明不需要跳转
+                                    forwardurl = "";
+                                    break;
+                                }
+                                if (line.endsWith(".m3u8") || line.contains(".m3u8?")) {
+                                    if (line.startsWith("http://") || line.startsWith("https://")) {
+                                        forwardurl = line;
+                                    } else if (line.charAt(0) == '/') {
+                                        int ifirst = url.indexOf('/', 9);//skip https://, http://
+                                        forwardurl = url.substring(0, ifirst) + line;
+                                    } else {
+                                        int ilast = url.lastIndexOf('/');
+                                        forwardurl = url.substring(0, ilast + 1) + line;
+                                    }
+                                }
+                                dealedFirst = true;
+                            }
+                        }
+                        if ("".equals(forwardurl)) {
+                            int ilast = url.lastIndexOf('/');
+
+                            RemoteServer.m3u8Content = removeMinorityUrl(url.substring(0, ilast + 1), content);
+                            if (RemoteServer.m3u8Content == null)
+                                PlayUrl(url, headers);
+                            else {
+                                PlayUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
+                                //Toast.makeText(getContext(), "已移除视频广告", Toast.LENGTH_SHORT).show();
+                            }
+                            return;
+                        }
+                        final String finalforwardurl = forwardurl;
+                        OkGo.<String>get(forwardurl)
+                                .tag("m3u8-2")
+                                .headers(hheaders)
+                                .execute(new AbsCallback<String>() {
+                                    @Override
+                                    public void onSuccess(com.lzy.okgo.model.Response<String> response) {
+                                        String content = response.body();
+                                        int ilast = finalforwardurl.lastIndexOf('/');
+                                        RemoteServer.m3u8Content = removeMinorityUrl(finalforwardurl.substring(0, ilast + 1), content);
+
+                                        if (RemoteServer.m3u8Content == null)
+                                            PlayUrl(finalforwardurl, headers);
+                                        else {
+                                            PlayUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
+                                            //Toast.makeText(getContext(), "已移除视频广告", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                                        return response.body().string();
+                                    }
+
+                                    @Override
+                                    public void onError(com.lzy.okgo.model.Response<String> response) {
+                                        super.onError(response);
+                                        PlayUrl(url, headers);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                        return response.body().string();
+                    }
+
+                    @Override
+                    public void onError(com.lzy.okgo.model.Response<String> response) {
+                        super.onError(response);
+                        PlayUrl(url, headers);
+                    }
+                });
+    }
     
     void playUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
             }else{
-	        String adblockUrl = ApiConfig.get().adblockUrl;
-	        List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
-                if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
-	    	    if (adblockUrl != null) {
-	    		setTip("正在净化视频", true, false);
-	    	        adblock(adblockUrl,url);
-	    	    }	
-	        }
+				String adblockUrl = ApiConfig.get().adblockUrl;
+				List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
+				if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
+					if (adblockUrl != null) {
+					setTip("正在净化视频", true, false);
+						adblock(adblockUrl,url);
+					}	
+				}
                 String finalUrl = url;
                 if (mActivity == null) return;
             requireActivity().runOnUiThread(new Runnable() {
