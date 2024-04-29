@@ -488,7 +488,7 @@ public class PlayActivity extends BaseActivity {
         }
     }
 
-    private void adblock(String adblockUrl,String url){//增加接口去广告
+    private void adblock(String adblockUrl,String url,HashMap<String, String> headers){//增加接口去广告
 		OkGo. < String > get(adblockUrl + url)
             .tag("adblock")
             .execute(new StringCallback() {
@@ -504,7 +504,7 @@ public class PlayActivity extends BaseActivity {
                             jurl = "";
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        playUrl(url, headers);
                     }
                     if (jurl != null && !jurl.isEmpty()) {
                         playUrl(jurl, null);
@@ -533,7 +533,7 @@ public class PlayActivity extends BaseActivity {
 			if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
 				if (adblockUrl != null) {
 					setTip("正在净化视频", true, false);
-					adblock(adblockUrl,url);
+					adblock(adblockUrl,url,headers);
 				}	
 			}
         String finalUrl = url;

@@ -500,7 +500,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
-    private void adblock(String adblockUrl,String url){//增加接口去广告
+    private void adblock(String adblockUrl,String url,HashMap<String, String> headers){//增加接口去广告
 		OkGo. < String > get(adblockUrl + url)
             .tag("adblock")
             .execute(new StringCallback() {
@@ -516,10 +516,10 @@ public class PlayFragment extends BaseLazyFragment {
                             jurl = "";
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        playUrl(url, headers);
                     }
                     if (jurl != null && !jurl.isEmpty()) {
-                        playUrl(jurl, null);
+                        playUrl(jurl, headers);
                         Toast.makeText(mContext, "净化成功!观影愉快", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -545,7 +545,7 @@ public class PlayFragment extends BaseLazyFragment {
 			if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
 				if (adblockUrl != null) {
 					setTip("正在净化视频", true, false);
-					adblock(adblockUrl,url);
+					adblock(adblockUrl,url,headers);
 				}	
 			}
                 String finalUrl = url;
