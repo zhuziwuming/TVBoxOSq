@@ -608,21 +608,29 @@ public class PlayFragment extends BaseLazyFragment {
         return StringUtils.join(lines, linesplit);
     }	
 		
-    void ToPuriey(String url, HashMap<String, String> headers) {//内置去广告
+    void playUrl(String url, HashMap<String, String> headers) {
+		Toast.makeText(getContext(), "调试广告开关：" + Hawk.get(HawkConfig.TOPURIEY, false), Toast.LENGTH_SHORT).show();
+		
+
+        if (!Hawk.get(HawkConfig.TOPURIEY, false)) {
+			Toast.makeText(getContext(), "外部去广开始", Toast.LENGTH_SHORT).show();
+            startPlayUrl(url, headers);
+            return;
+        }
+		Toast.makeText(getContext(), "内置去广开始", Toast.LENGTH_SHORT).show();
         if (!url.contains("://127.0.0.1/") && !url.contains(".m3u8")) {
-            playUrl(url, headers);
+            startPlayUrl(url, headers);
             return;
         }
         OkGo.getInstance().cancelTag("m3u8-1");
         OkGo.getInstance().cancelTag("m3u8-2");
         //remove ads in m3u8
         HttpHeaders hheaders = new HttpHeaders();
-        if (headers != null) {
+        if(headers != null){
             for (Map.Entry<String, String> s : headers.entrySet()) {
                 hheaders.put(s.getKey(), s.getValue());
             }
         }
-
 
         OkGo.<String>get(url)
                 .tag("m3u8-1")
@@ -632,7 +640,7 @@ public class PlayFragment extends BaseLazyFragment {
                     public void onSuccess(com.lzy.okgo.model.Response<String> response) {
                         String content = response.body();
                         if (!content.startsWith("#EXTM3U")) {
-                            playUrl(url, headers);
+                            startPlayUrl(url, headers);
                             return;
                         }
 
@@ -653,7 +661,7 @@ public class PlayFragment extends BaseLazyFragment {
                                 if (line.endsWith(".m3u8") || line.contains(".m3u8?")) {
                                     if (line.startsWith("http://") || line.startsWith("https://")) {
                                         forwardurl = line;
-                                    } else if (line.charAt(0) == '/') {
+                                    } else if (line.charAt(0)=='/' ) {
                                         int ifirst = url.indexOf('/', 9);//skip https://, http://
                                         forwardurl = url.substring(0, ifirst) + line;
                                     } else {
@@ -669,9 +677,9 @@ public class PlayFragment extends BaseLazyFragment {
 
                             RemoteServer.m3u8Content = removeMinorityUrl(url.substring(0, ilast + 1), content);
                             if (RemoteServer.m3u8Content == null)
-                                playUrl(url, headers);
+                                startPlayUrl(url, headers);
                             else {
-                                playUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
+                                startPlayUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
                                 //Toast.makeText(getContext(), "已移除视频广告", Toast.LENGTH_SHORT).show();
                             }
                             return;
@@ -688,9 +696,9 @@ public class PlayFragment extends BaseLazyFragment {
                                         RemoteServer.m3u8Content = removeMinorityUrl(finalforwardurl.substring(0, ilast + 1), content);
 
                                         if (RemoteServer.m3u8Content == null)
-                                            playUrl(finalforwardurl, headers);
+                                            startPlayUrl(finalforwardurl, headers);
                                         else {
-                                            playUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
+                                            startPlayUrl("http://127.0.0.1:" + RemoteServer.serverPort + "/m3u8", headers);
                                             //Toast.makeText(getContext(), "已移除视频广告", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -703,7 +711,7 @@ public class PlayFragment extends BaseLazyFragment {
                                     @Override
                                     public void onError(com.lzy.okgo.model.Response<String> response) {
                                         super.onError(response);
-                                        playUrl(url, headers);
+                                        startPlayUrl(url, headers);
                                     }
                                 });
                     }
@@ -716,23 +724,19 @@ public class PlayFragment extends BaseLazyFragment {
                     @Override
                     public void onError(com.lzy.okgo.model.Response<String> response) {
                         super.onError(response);
-                        playUrl(url, headers);
+                        startPlayUrl(url, headers);
                     }
                 });
     }
 	
-    void playUrl(String url, HashMap<String, String> headers) {
+    void startPlayUrl(String url, HashMap<String, String> headers) {
         LOG.i("playUrl:" + url);
         if(autoRetryCount > 1){
             errorWithRetry("播放地址错误", false);
         }else{
 			
 			Toast.makeText(getContext(), "调试广告开关：" + Hawk.get(HawkConfig.TOPURIEY, false), Toast.LENGTH_SHORT).show();
-			if(Hawk.get(HawkConfig.TOPURIEY, false)){//内置
-				//setTip("内置去广", true, false);
-				Toast.makeText(getContext(), "内置去广开始", Toast.LENGTH_SHORT).show();
-				ToPuriey(url, headers);
-			}else{			
+			if(!Hawk.get(HawkConfig.TOPURIEY, false)){			
 	            String adblockUrl = ApiConfig.get().adblockUrl;
 				List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
 				if(checkAdFlags(url,adblockFlags) == true){//检查播放地址是否去广告标签
