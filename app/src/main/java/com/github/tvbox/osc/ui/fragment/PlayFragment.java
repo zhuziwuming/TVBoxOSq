@@ -598,11 +598,11 @@ public class PlayFragment extends BaseLazyFragment {
                             }
                             mVideoView.start();
                             mController.resetSpeed();
-							// if(finalUrl.endsWith(".mp3")){
-								// radioBg.setVisibility(View.VISIBLE);//显示mp3图片
-							// } else {
-								// radioBg.setVisibility(View.GONE);
-							// }
+							if(finalUrl.endsWith(".mp3")){
+								radioBg.setVisibility(View.VISIBLE);//显示mp3图片
+							} else {
+								radioBg.setVisibility(View.GONE);
+							}
 
                         }
                     }

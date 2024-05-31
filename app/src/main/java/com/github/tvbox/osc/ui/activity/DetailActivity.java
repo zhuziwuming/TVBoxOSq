@@ -627,10 +627,10 @@ public class DetailActivity extends BaseActivity {
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
                                 .into(ivThumb);
-						Picasso.get()  
-								.load(picUrl) 
-								.transform(new RoundTransformation(transformationKey))  
-								.into(radioBg); // 假设这是第二个ImageView 		
+						// Picasso.get()  
+								// .load(picUrl) 
+								// .transform(new RoundTransformation(transformationKey))  
+								// .into(radioBg); // 假设这是第二个ImageView 		
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
 						radioBg.setImageResource(R.drawable.radio);
