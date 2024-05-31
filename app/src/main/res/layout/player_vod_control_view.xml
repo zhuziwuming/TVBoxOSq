@@ -6,10 +6,12 @@
     android:layout_height="match_parent">
 	
 	<ImageView  
-        android:id="@+id/backgroundImageView"  
+        android:id="@+id/mp3ImageView"  
         android:layout_width="match_parent"  
         android:layout_height="match_parent"  
-        android:scaleType="centerCrop"  
+        android:scaleType="centerCrop"
+		android:tag="mp3Image"
+		android:visibility="gone"		
         android:src="@drawable/radio" /> 
 
     <LinearLayout

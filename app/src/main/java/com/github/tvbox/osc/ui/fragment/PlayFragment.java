@@ -110,6 +110,9 @@ public class PlayFragment extends BaseLazyFragment {
     private MyVideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
+	
+	private ImageView radioBg;
+	
     private ProgressBar mPlayLoading;
     private VodController mController;
     private SourceViewModel sourceViewModel;
@@ -169,6 +172,9 @@ public class PlayFragment extends BaseLazyFragment {
                 return false;
             }
         });
+		
+		radioBg = findViewById(R.id.mp3ImageView);//mp3背景
+		
         mVideoView = findViewById(R.id.mVideoView);
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
@@ -592,6 +598,12 @@ public class PlayFragment extends BaseLazyFragment {
                             }
                             mVideoView.start();
                             mController.resetSpeed();
+							if(checkVideoFormat(finalUrl)){
+								radioBg.setVisibility(View.GONE);
+							} else {
+								radioBg.setVisibility(View.VISIBLE);//显示mp3图片
+							}
+
                         }
                     }
                 }

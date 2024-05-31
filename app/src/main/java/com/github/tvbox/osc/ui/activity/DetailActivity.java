@@ -100,6 +100,7 @@ public class DetailActivity extends BaseActivity {
     private View llPlayerPlace;
     private PlayFragment playFragment = null;
     private ImageView ivThumb;
+	private ImageView radioBg;//MP3背景
     private TextView tvName;
     private TextView tvYear;
     private TextView tvSite;
@@ -156,6 +157,7 @@ public class DetailActivity extends BaseActivity {
         llPlayerFragmentContainer = findViewById(R.id.previewPlayer);
         llPlayerFragmentContainerBlock = findViewById(R.id.previewPlayerBlock);
         ivThumb = findViewById(R.id.ivThumb);
+		radioBg = findViewById(R.id.mp3ImageView);//mp3背景
         llPlayerPlace.setVisibility(showPreview ? View.VISIBLE : View.GONE);
         ivThumb.setVisibility(!showPreview ? View.VISIBLE : View.GONE);
         tvName = findViewById(R.id.tvName);
@@ -614,17 +616,24 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDirector, "导演：", mVideo.director);
                     setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
+						String picUrl = DefaultConfig.checkReplaceProxy(mVideo.pic);  
+						String transformationKey = MD5.string2MD5(mVideo.pic + mVideo.name); // 确保这个key是唯一的，用于缓存 
                         Picasso.get()
-                                .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
-                                .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
+                                .load(picUrl)
+                                .transform(new RoundTransformation(transformationKey)
                                         .centerCorp(true)
                                         .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
                                         .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
                                 .into(ivThumb);
+						Picasso.get()  
+								.load(picUrl) 
+								.transform(new RoundTransformation(transformationKey))  
+								.into(radioBg;); // 假设这是第二个ImageView 		
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
+						radioBg.setImageResource(R.drawable.radio);
                     }
 
                     if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
