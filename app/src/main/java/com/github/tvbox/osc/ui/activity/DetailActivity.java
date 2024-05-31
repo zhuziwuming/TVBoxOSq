@@ -675,7 +675,7 @@ public class DetailActivity extends BaseActivity {
                         }
 						
 						if(vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url.endsWith(".mp3")){//保存设置mp3背景
-							radioBg..setVisibility(View.VISIBLE);//显示mp3图片
+							radioBg.setVisibility(View.VISIBLE);//显示mp3图片
 						}else{
 							radioBg.setVisibility(View.GONE);//隐藏mp3图片
 						}
