@@ -619,17 +619,17 @@ public class DetailActivity extends BaseActivity {
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
                                 .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
-                                        .centerCorp(true)
+                                        .centerCrop(true)
                                         .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
                                         .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
                                 .into(ivThumb);
-							Picasso.get()
-								.load(DefaultConfig.checkReplaceProxy(mVideo.pic))
-								.placeholder(R.drawable.img_loading_placeholder)
-								.error(R.drawable.img_loading_placeholder)
-								.into(radioBg);
+							// Picasso.get()
+								// .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
+								// .placeholder(R.drawable.img_loading_placeholder)
+								// .error(R.drawable.img_loading_placeholder)
+								// .into(radioBg);
 								
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
