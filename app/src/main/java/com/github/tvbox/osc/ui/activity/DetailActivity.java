@@ -625,14 +625,17 @@ public class DetailActivity extends BaseActivity {
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
                                 .into(ivThumb);
-						// Picasso.get()  
-								// .load(picUrl) 
-								// .transform(new RoundTransformation(transformationKey))  
-								// .into(radioBg); // 假设这是第二个ImageView 		
+							Picasso.get()
+								.load(DefaultConfig.checkReplaceProxy(mVideo.pic))
+								.placeholder(R.drawable.img_loading_placeholder)
+								.error(R.drawable.img_loading_placeholder)
+								.into(radioBg);
+								
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
-						//radioBg.setImageResource(R.drawable.img_loading_placeholder);
+						//radioBg.setImageResource(R.drawable.radio);
                     }
+					
 
                     if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
                         mGridViewFlag.setVisibility(View.VISIBLE);
@@ -670,6 +673,14 @@ public class DetailActivity extends BaseActivity {
                             } else
                                 flag.selected = false;
                         }
+						
+						if(vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url.endsWith(".mp3")){//保存设置mp3背景
+							radioBg..setVisibility(View.VISIBLE);//显示mp3图片
+						}else{
+							radioBg.setVisibility(View.GONE);//隐藏mp3图片
+						}
+						
+						
                         //设置播放地址
                         setTextShow(tvPlayUrl, "播放地址：", vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url);
                         seriesFlagAdapter.setNewData(vodInfo.seriesFlags);
