@@ -100,7 +100,7 @@ public class DetailActivity extends BaseActivity {
     private View llPlayerPlace;
     private PlayFragment playFragment = null;
     private ImageView ivThumb;
-	private ImageView radioBg;//MP3背景
+
     private TextView tvName;
     private TextView tvYear;
     private TextView tvSite;
@@ -157,7 +157,6 @@ public class DetailActivity extends BaseActivity {
         llPlayerFragmentContainer = findViewById(R.id.previewPlayer);
         llPlayerFragmentContainerBlock = findViewById(R.id.previewPlayerBlock);
         ivThumb = findViewById(R.id.ivThumb);
-		radioBg = findViewById(R.id.mp3ImageView);//mp3背景
         llPlayerPlace.setVisibility(showPreview ? View.VISIBLE : View.GONE);
         ivThumb.setVisibility(!showPreview ? View.VISIBLE : View.GONE);
         tvName = findViewById(R.id.tvName);
