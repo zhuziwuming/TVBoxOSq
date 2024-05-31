@@ -630,7 +630,7 @@ public class DetailActivity extends BaseActivity {
 						Picasso.get()  
 								.load(picUrl) 
 								.transform(new RoundTransformation(transformationKey))  
-								.into(radioBg;); // 假设这是第二个ImageView 		
+								.into(radioBg); // 假设这是第二个ImageView 		
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
 						radioBg.setImageResource(R.drawable.radio);
