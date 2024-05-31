@@ -616,11 +616,9 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDirector, "导演：", mVideo.director);
                     setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
-						String picUrl = DefaultConfig.checkReplaceProxy(mVideo.pic);  
-						String transformationKey = MD5.string2MD5(mVideo.pic + mVideo.name); // 确保这个key是唯一的，用于缓存 
                         Picasso.get()
-                                .load(picUrl)
-                                .transform(new RoundTransformation(transformationKey)
+                                .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
+                                .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
                                         .centerCorp(true)
                                         .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
                                         .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
