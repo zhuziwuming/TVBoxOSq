@@ -111,8 +111,6 @@ public class PlayFragment extends BaseLazyFragment {
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
 	
-	private ImageView radioBg;
-	
     private ProgressBar mPlayLoading;
     private VodController mController;
     private SourceViewModel sourceViewModel;
@@ -172,8 +170,6 @@ public class PlayFragment extends BaseLazyFragment {
                 return false;
             }
         });
-		
-		radioBg = findViewById(R.id.mp3ImageView);//mp3背景
 		
         mVideoView = findViewById(R.id.mVideoView);
         mPlayLoadTip = findViewById(R.id.play_load_tip);
