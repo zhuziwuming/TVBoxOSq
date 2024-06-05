@@ -35,7 +35,6 @@ import com.github.tvbox.osc.util.ScreenUtils;
 import com.github.tvbox.osc.util.SubtitleHelper;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.event.RefreshEvent;//广播监听
-import com.github.tvbox.osc.picasso.RoundTransformation;//图片加载
 
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
@@ -729,6 +728,7 @@ public class VodController extends BaseController {
         if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
 
             String imageUrl = event.videoPicUrl;
+			Toast.makeText(getContext(), "图片地址：" +imageUrl, Toast.LENGTH_SHORT).show();
             if (!TextUtils.isEmpty(imageUrl)) {
                 Picasso.get()
                     .load(DefaultConfig.checkReplaceProxy(imageUrl))
@@ -1018,6 +1018,11 @@ public class VodController extends BaseController {
             hideBottom();
         }
         return true;
+    }
+	
+	// 注销当前音频图片的广播实例
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);  
     }
 
     @Override
