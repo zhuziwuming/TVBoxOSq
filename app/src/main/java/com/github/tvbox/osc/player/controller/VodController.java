@@ -730,7 +730,7 @@ public class VodController extends BaseController {
             String imageUrl = event.videoPicUrl;			
             if (!TextUtils.isEmpty(imageUrl)) {
                 Picasso.get()
-                    .load(DefaultConfig.checkReplaceProxy(imageUrl))
+                    .load(imageUrl)
                     .centerCrop()
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
