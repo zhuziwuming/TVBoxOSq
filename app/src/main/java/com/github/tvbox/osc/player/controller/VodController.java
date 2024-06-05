@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.TextUtils;//音频图片显示
+import com.squareup.picasso.Picasso;//加载图片
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -103,6 +105,7 @@ public class VodController extends BaseController {
     LinearLayout mProgressRoot;
     TextView mProgressText;
     ImageView mProgressIcon;
+	ImageView mp3ImageView;
     LinearLayout mBottomRoot;
     LinearLayout mTopRoot1;
     LinearLayout mTopRoot2;
@@ -170,6 +173,7 @@ public class VodController extends BaseController {
         mProgressRoot = findViewById(R.id.tv_progress_container);
         mProgressIcon = findViewById(R.id.tv_progress_icon);
         mProgressText = findViewById(R.id.tv_progress_text);
+		mp3ImageView = findViewById(R.id.mp3image);
         mBottomRoot = findViewById(R.id.bottom_container);
         mTopRoot1 = findViewById(R.id.tv_top_l_container);
         mTopRoot2 = findViewById(R.id.tv_top_r_container);
@@ -710,6 +714,28 @@ public class VodController extends BaseController {
         mHandler.removeMessages(1004);
         mHandler.sendEmptyMessageDelayed(1004, 100);
     }
+	
+	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    protected void onRefreshEvent(RefreshEvent event) {
+        if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
+
+            String imageUrl = event.videoPicUrl;
+            if (!TextUtils.isEmpty(imageUrl)) {
+                Picasso.get()
+                    .load(DefaultConfig.checkReplaceProxy(imageUrl))
+                    .transform(new RoundTransformation(MD5.string2MD5(imageUrl))
+                            .centerCorp(true)
+                    .placeholder(R.drawable.img_loading_placeholder)
+                    .error(R.drawable.img_loading_placeholder)
+                    .into(mp3ImageView);
+            } 
+			// else {
+                // mp3ImageView.setImageResource(R.drawable.radio);
+            // }
+
+        }
+    }
 
     public interface VodControlListener {
         void playNext(boolean rmProgress);
@@ -844,6 +870,23 @@ public class VodController extends BaseController {
                 mPlayLoadNetSpeed.setVisibility(GONE);
                 hideLiveAboutBtn();
                 listener.prepared();
+                // takagen99 : Add Video Resolution
+                if (mControlWrapper.getVideoSize().length >= 2) {
+                    int width = mControlWrapper.getVideoSize()[0];
+                    int height = mControlWrapper.getVideoSize()[1];
+                    if (width == 0 || height == 0) {
+                        // 如果分辨率为0，显示图片
+                        mp3ImageView.setVisibility(View.VISIBLE);
+                    } else {
+                        // 如果有分辨率，隐藏图片
+                        mp3ImageView.setVisibility(View.GONE);
+                    }
+                    initLandscapePortraitBtnInfo();
+                    mPlayerResolution.setText(width + " x " + height);
+                }else {
+                    // 没有获取到有效的分辨率信息
+                    mp3ImageView.setVisibility(View.VISIBLE);
+                }
                 break;
             case VideoView.STATE_BUFFERED:
                 mPlayLoadNetSpeed.setVisibility(GONE);
