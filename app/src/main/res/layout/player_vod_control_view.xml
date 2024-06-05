@@ -9,7 +9,7 @@
         android:id="@+id/mp3image"  
         android:layout_width="match_parent"  
         android:layout_height="match_parent"  
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
 		android:tag="mp3Image"
 		android:visibility="gone"		
         android:src="@drawable/radio" /> 
