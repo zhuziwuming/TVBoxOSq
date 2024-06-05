@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.text.TextUtils;//音频图片显示
 import com.squareup.picasso.Picasso;//加载图片
+import com.github.tvbox.osc.util.MD5;//图片缓存md5
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -725,7 +726,7 @@ public class VodController extends BaseController {
                 Picasso.get()
                     .load(DefaultConfig.checkReplaceProxy(imageUrl))
                     .transform(new RoundTransformation(MD5.string2MD5(imageUrl))
-                            .centerCorp(true)
+                    .centerCorp(true)
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
                     .into(mp3ImageView);
