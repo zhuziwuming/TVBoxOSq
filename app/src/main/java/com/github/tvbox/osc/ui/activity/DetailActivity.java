@@ -154,7 +154,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initView() {
-		mp3View = 
+		mp3View = findViewWithTag("mp3Image");
         llLayout = findViewById(R.id.llLayout);
         llPlayerPlace = findViewById(R.id.previewPlayerPlace);
         llPlayerFragmentContainer = findViewById(R.id.previewPlayer);
