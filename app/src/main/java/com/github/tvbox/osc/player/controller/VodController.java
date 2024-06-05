@@ -171,6 +171,7 @@ public class VodController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
+		EventBus.getDefault().register(this);//音频图片显示，注册广播开始
         mCurrentTime = findViewById(R.id.curr_time);
         mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
@@ -725,20 +726,16 @@ public class VodController extends BaseController {
 	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
     @Subscribe(threadMode = ThreadMode.MAIN)
     protected void onRefreshEvent(RefreshEvent event) {
-		Toast.makeText(getContext(), "测试广播接受", Toast.LENGTH_SHORT).show();
         if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
-
-            String imageUrl = event.videoPicUrl;
-			
+            String imageUrl = event.videoPicUrl;			
             if (!TextUtils.isEmpty(imageUrl)) {
-				Toast.makeText(getContext(), "图片地址：" +imageUrl, Toast.LENGTH_SHORT).show();
                 Picasso.get()
                     .load(DefaultConfig.checkReplaceProxy(imageUrl))
                     .centerCrop()
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
                     .into(mp3ImageView);
-            } else{ Toast.makeText(getContext(), "没有获取图片地址", Toast.LENGTH_SHORT).show();} 
+            }
 			// else {
                 // mp3ImageView.setImageResource(R.drawable.radio);
             // }
