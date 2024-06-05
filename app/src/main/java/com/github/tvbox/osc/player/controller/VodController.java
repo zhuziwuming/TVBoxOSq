@@ -728,15 +728,16 @@ public class VodController extends BaseController {
         if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
 
             String imageUrl = event.videoPicUrl;
-			Toast.makeText(getContext(), "图片地址：" +imageUrl, Toast.LENGTH_SHORT).show();
+			
             if (!TextUtils.isEmpty(imageUrl)) {
+				Toast.makeText(getContext(), "图片地址：" +imageUrl, Toast.LENGTH_SHORT).show();
                 Picasso.get()
                     .load(DefaultConfig.checkReplaceProxy(imageUrl))
                     .centerCrop()
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
                     .into(mp3ImageView);
-            } 
+            } else{ Toast.makeText(getContext(), "没有获取图片地址", Toast.LENGTH_SHORT).show();} 
 			// else {
                 // mp3ImageView.setImageResource(R.drawable.radio);
             // }
