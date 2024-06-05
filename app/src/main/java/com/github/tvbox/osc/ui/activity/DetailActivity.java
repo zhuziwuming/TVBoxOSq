@@ -616,6 +616,7 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
 						EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
+						
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
                                 .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
@@ -625,6 +626,12 @@ public class DetailActivity extends BaseActivity {
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
                                 .into(ivThumb);
+						Picasso.get()
+                                .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
+                                .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
+                                .placeholder(R.drawable.img_loading_placeholder)
+                                .error(R.drawable.img_loading_placeholder)
+                                .into(findViewWithTag("mp3Image"));//根据标签寻找音频背景		
 								
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
