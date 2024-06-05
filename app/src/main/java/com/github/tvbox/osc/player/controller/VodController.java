@@ -727,7 +727,7 @@ public class VodController extends BaseController {
     @Subscribe(threadMode = ThreadMode.MAIN)
     protected void onRefreshEvent(RefreshEvent event) {
 		Picasso.get()
-                    .load(imageUrl)
+                    .load(event.videoPicUrl)
                     .centerCrop()
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
