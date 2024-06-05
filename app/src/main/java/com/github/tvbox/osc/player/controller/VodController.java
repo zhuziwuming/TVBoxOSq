@@ -34,6 +34,7 @@ import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.ScreenUtils;
 import com.github.tvbox.osc.util.SubtitleHelper;
+import com.github.tvbox.osc.picasso.RoundTransformation;//图片加载
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
@@ -725,8 +726,7 @@ public class VodController extends BaseController {
             if (!TextUtils.isEmpty(imageUrl)) {
                 Picasso.get()
                     .load(DefaultConfig.checkReplaceProxy(imageUrl))
-                    .transform(new RoundTransformation(MD5.string2MD5(imageUrl))
-                    .centerCorp(true)
+                    .fitCenter()
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
                     .into(mp3ImageView);
