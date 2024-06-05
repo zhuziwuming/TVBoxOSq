@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.text.TextUtils;//音频图片显示
 import com.squareup.picasso.Picasso;//加载图片
-import com.github.tvbox.osc.util.MD5;//图片缓存md5
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -34,6 +33,7 @@ import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.ScreenUtils;
 import com.github.tvbox.osc.util.SubtitleHelper;
+import com.github.tvbox.osc.event.RefreshEvent;//广播监听
 import com.github.tvbox.osc.picasso.RoundTransformation;//图片加载
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
