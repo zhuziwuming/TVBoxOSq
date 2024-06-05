@@ -726,9 +726,10 @@ public class VodController extends BaseController {
 	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
     @Subscribe(threadMode = ThreadMode.MAIN)
     protected void onRefreshEvent(RefreshEvent event) {
-		Toast.makeText(getContext(), "图片地址：" + event.videoPicUrl, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getContext(), "type：" + event.type, Toast.LENGTH_SHORT).show();
         if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
-            String imageUrl = event.videoPicUrl;			
+            String imageUrl = event.videoPicUrl;
+            Toast.makeText(getContext(), "图片地址：" + imageUrl, Toast.LENGTH_SHORT).show();			
             if (!TextUtils.isEmpty(imageUrl)) {
                 Picasso.get()
                     .load(imageUrl)
@@ -740,7 +741,9 @@ public class VodController extends BaseController {
                  mp3ImageView.setImageResource(R.drawable.radio);
             }
 
-        }
+        }else{
+		   Toast.makeText(getContext(), "不相等", Toast.LENGTH_SHORT).show();	 	
+		}
     }
 
     public interface VodControlListener {
