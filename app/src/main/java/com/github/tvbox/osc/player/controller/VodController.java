@@ -1035,4 +1035,10 @@ public class VodController extends BaseController {
         }
         return false;
     }
+    // protected void onStart(){//注册广播
+		// EventBus.getDefault().register(this);
+	// }
+    // protected void onStop(){
+	    // EventBus.getDefault().unregister(this);
+	// }
 }
