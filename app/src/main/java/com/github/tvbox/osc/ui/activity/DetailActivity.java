@@ -100,6 +100,8 @@ public class DetailActivity extends BaseActivity {
     private View llPlayerPlace;
     private PlayFragment playFragment = null;
     private ImageView ivThumb;
+	
+	private ImageView mp3View;
 
     private TextView tvName;
     private TextView tvYear;
@@ -152,6 +154,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initView() {
+		mp3View = 
         llLayout = findViewById(R.id.llLayout);
         llPlayerPlace = findViewById(R.id.previewPlayerPlace);
         llPlayerFragmentContainer = findViewById(R.id.previewPlayer);
@@ -630,7 +633,7 @@ public class DetailActivity extends BaseActivity {
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
-                                .into(findViewWithTag("mp3Image"));//根据标签寻找音频背景		
+                                .into(mp3View);//根据标签寻找音频背景		
 								
                     } else {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
