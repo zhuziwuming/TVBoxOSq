@@ -628,7 +628,6 @@ public class DetailActivity extends BaseActivity {
                                 .into(ivThumb);
 						Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
-                                .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
                                 .placeholder(R.drawable.img_loading_placeholder)
                                 .error(R.drawable.img_loading_placeholder)
                                 .into(findViewWithTag("mp3Image"));//根据标签寻找音频背景		
