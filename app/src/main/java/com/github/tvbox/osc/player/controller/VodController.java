@@ -736,10 +736,9 @@ public class VodController extends BaseController {
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
                     .into(mp3ImageView);
+            }else {
+                 mp3ImageView.setImageResource(R.drawable.radio);
             }
-			// else {
-                // mp3ImageView.setImageResource(R.drawable.radio);
-            // }
 
         }
     }
