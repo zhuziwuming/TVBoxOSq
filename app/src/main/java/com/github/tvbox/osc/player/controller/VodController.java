@@ -732,7 +732,7 @@ public class VodController extends BaseController {
             if (!TextUtils.isEmpty(imageUrl)) {
                 Picasso.get()
                     .load(DefaultConfig.checkReplaceProxy(imageUrl))
-                    .fitCenter()
+                    .centerCrop()
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.img_loading_placeholder)
                     .into(mp3ImageView);
