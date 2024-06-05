@@ -731,7 +731,7 @@ public class VodController extends BaseController {
                 Picasso.get()
                     .load(event.videoPicUrl)
                     .placeholder(R.drawable.img_loading_placeholder)
-                    .error(R.drawable.img_loading_placeholder)
+                    .error(R.drawable.radio)
                     .into(mp3ImageView);
             }else {
                  mp3ImageView.setImageResource(R.drawable.radio);
