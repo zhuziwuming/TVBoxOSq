@@ -725,6 +725,7 @@ public class VodController extends BaseController {
 	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
     @Subscribe(threadMode = ThreadMode.MAIN)
     protected void onRefreshEvent(RefreshEvent event) {
+		Toast.makeText(getContext(), "测试广播接受", Toast.LENGTH_SHORT).show();
         if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
 
             String imageUrl = event.videoPicUrl;
