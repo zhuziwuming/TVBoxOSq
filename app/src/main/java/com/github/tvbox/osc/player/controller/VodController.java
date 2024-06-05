@@ -728,8 +728,9 @@ public class VodController extends BaseController {
     protected void onRefreshEvent(RefreshEvent event) {
         if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
             String imageUrl = event.videoPicUrl;
-            Toast.makeText(getContext(), "图片地址：" + imageUrl, Toast.LENGTH_SHORT).show();			
+            			
             if (!TextUtils.isEmpty(event.videoPicUrl)) {
+				Toast.makeText(getContext(), "开始加载图片地址：" + imageUrl, Toast.LENGTH_SHORT).show();
                 Picasso.get()
                     .load(event.videoPicUrl)
                     .placeholder(R.drawable.img_loading_placeholder)
