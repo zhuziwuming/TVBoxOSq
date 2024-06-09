@@ -594,6 +594,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initViewModel() {
+		Hawk.put(HawkConfig.PIC_URL,"");
         sourceViewModel = new ViewModelProvider(this).get(SourceViewModel.class);
         sourceViewModel.detailResult.observe(this, new Observer<AbsXml>() {
             @Override
@@ -616,6 +617,7 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
 						//EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
+						
 						Hawk.put(HawkConfig.PIC_URL,mVideo.pic);
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
