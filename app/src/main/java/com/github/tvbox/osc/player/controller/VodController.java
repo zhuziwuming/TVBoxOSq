@@ -890,7 +890,7 @@ public class VodController extends BaseController {
                     int height = mControlWrapper.getVideoSize()[1];
                     if (width == 0 || height == 0) {
                         // 如果分辨率为0，显示图片
-
+						loadMP3img();
                         mp3ImageView.setVisibility(View.VISIBLE);
                     } else {
                         // 如果有分辨率，隐藏图片
