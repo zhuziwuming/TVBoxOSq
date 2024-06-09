@@ -39,5 +39,6 @@ public class HawkConfig {
     public static final String REMOTE_TVBOX = "remote_tvbox_host";
     public static final String IJK_CACHE_PLAY = "ijk_cache_play";
 	public static final String JIEXI_BG = "";
+	public static final String PIC_URL = "pic_url";
 	
 }
