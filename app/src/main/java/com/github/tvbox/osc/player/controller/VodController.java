@@ -208,7 +208,6 @@ public class VodController extends BaseController {
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
 
         initSubtitleInfo();
-		loadMP3img();
 
         myHandle = new Handler();
         myRunnable = new Runnable() {
