@@ -171,7 +171,7 @@ public class VodController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
-		//EventBus.getDefault().register(this);//音频图片显示，注册广播开始
+		EventBus.getDefault().register(this);//音频图片显示，注册广播开始
         mCurrentTime = findViewById(R.id.curr_time);
         mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
