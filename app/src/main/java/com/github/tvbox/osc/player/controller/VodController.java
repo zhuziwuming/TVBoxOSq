@@ -171,7 +171,7 @@ public class VodController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
-		EventBus.getDefault().register(this);//音频图片显示，注册广播开始
+		//EventBus.getDefault().register(this);//音频图片显示，注册广播开始
         mCurrentTime = findViewById(R.id.curr_time);
         mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
@@ -208,6 +208,7 @@ public class VodController extends BaseController {
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
 
         initSubtitleInfo();
+		loadMP3img();
 
         myHandle = new Handler();
         myRunnable = new Runnable() {
@@ -890,7 +891,6 @@ public class VodController extends BaseController {
                     int height = mControlWrapper.getVideoSize()[1];
                     if (width == 0 || height == 0) {
                         // 如果分辨率为0，显示图片
-						loadMP3img();
                         mp3ImageView.setVisibility(View.VISIBLE);
                     } else {
                         // 如果有分辨率，隐藏图片

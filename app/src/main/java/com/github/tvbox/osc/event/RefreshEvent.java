@@ -21,11 +21,8 @@ public class RefreshEvent {
     public static final int TYPE_SUBTITLE_SIZE_CHANGE = 12;
     public static final int TYPE_FILTER_CHANGE = 13;
 	
-	//public static final int TYPE_YINPIN_EVENT = 20;
-	
     public int type;
     public Object obj;
-	//public String videoPicUrl; // mVideo.pic 的地址
 
     public RefreshEvent(int type) {
         this.type = type;
@@ -35,10 +32,4 @@ public class RefreshEvent {
         this.type = type;
         this.obj = obj;
     }
-	
-	// //音频图片显示
-    // public RefreshEvent(int type, String videoPicUrl) {
-        // this.type = type;
-        // this.videoPicUrl = videoPicUrl;
-    // } 
 }
