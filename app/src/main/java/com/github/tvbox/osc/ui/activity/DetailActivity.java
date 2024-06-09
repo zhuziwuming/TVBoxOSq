@@ -36,6 +36,7 @@ import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.RoomDataManger;
 import com.github.tvbox.osc.event.RefreshEvent;
+import com.github.tvbox.osc.event.AudioEvent;
 import com.github.tvbox.osc.picasso.RoundTransformation;
 import com.github.tvbox.osc.ui.adapter.SeriesAdapter;
 import com.github.tvbox.osc.ui.adapter.SeriesFlagAdapter;
@@ -594,7 +595,6 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-		Hawk.put(HawkConfig.PIC_URL,"");
         sourceViewModel = new ViewModelProvider(this).get(SourceViewModel.class);
         sourceViewModel.detailResult.observe(this, new Observer<AbsXml>() {
             @Override
@@ -616,9 +616,7 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDirector, "导演：", mVideo.director);
                     setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
-						//EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
-						
-						Hawk.put(HawkConfig.PIC_URL,mVideo.pic);
+						EventBus.getDefault().post(new AudioEvent(AudioEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
                                 .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
