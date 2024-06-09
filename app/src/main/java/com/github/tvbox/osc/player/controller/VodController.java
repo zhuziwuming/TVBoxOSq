@@ -726,14 +726,14 @@ public class VodController extends BaseController {
 	public void loadMP3img() {
 		String videoPicUrl = Hawk.get(HawkConfig.PIC_URL, "");
 		if (!TextUtils.isEmpty(videoPicUrl)) {
-                Picasso.get()
-                    .load(videoPicUrl)
-                    .placeholder(R.drawable.img_loading_placeholder)
-                    .error(R.drawable.radio)
-                    .into(mp3ImageView);
-            }else {
-                 mp3ImageView.setImageResource(R.drawable.radio);
-            }
+            Picasso.get()
+                .load(videoPicUrl)
+                .placeholder(R.drawable.img_loading_placeholder)
+                .error(R.drawable.radio)
+                .into(mp3ImageView);
+        }else {
+             mp3ImageView.setImageResource(R.drawable.radio);
+        }
 	}
 	// // 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
     // @Subscribe(threadMode = ThreadMode.MAIN)
