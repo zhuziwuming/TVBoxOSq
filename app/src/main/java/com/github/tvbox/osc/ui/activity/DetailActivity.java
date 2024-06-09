@@ -615,7 +615,8 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDirector, "导演：", mVideo.director);
                     setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
-						EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
+						//EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
+						Hawk.put(HawkConfig.PIC_URL,mVideo.pic);
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
                                 .transform(new RoundTransformation(MD5.string2MD5(mVideo.pic + mVideo.name))
@@ -941,7 +942,7 @@ public class DetailActivity extends BaseActivity {
 
     // preview
     VodInfo previewVodInfo = null;
-    boolean showPreview = Hawk.get(HawkConfig.SHOW_PREVIEW, true);; // true 开启 false 关闭
+    boolean showPreview = Hawk.get(HawkConfig.SHOW_PREVIEW, true); // true 开启 false 关闭
     boolean fullWindows = false;
     ViewGroup.LayoutParams windowsPreview = null;
     ViewGroup.LayoutParams windowsFull = null;

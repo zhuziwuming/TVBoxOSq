@@ -723,21 +723,33 @@ public class VodController extends BaseController {
         mHandler.sendEmptyMessageDelayed(1004, 100);
     }
 	
-	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    protected void onRefreshEvent(RefreshEvent event) {
-        if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) { 			
-            if (!TextUtils.isEmpty(event.videoPicUrl)) {
+	public void loadMP3img() {
+		String videoPicUrl = Hawk.get(HawkConfig.PIC_URL, "");
+		if (!TextUtils.isEmpty(videoPicUrl)) {
                 Picasso.get()
-                    .load(event.videoPicUrl)
+                    .load(videoPicUrl)
                     .placeholder(R.drawable.img_loading_placeholder)
                     .error(R.drawable.radio)
                     .into(mp3ImageView);
             }else {
                  mp3ImageView.setImageResource(R.drawable.radio);
             }
-        }
-    }
+	}
+	// // 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
+    // @Subscribe(threadMode = ThreadMode.MAIN)
+    // protected void onRefreshEvent(RefreshEvent event) {
+        // if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) { 			
+            // if (!TextUtils.isEmpty(event.videoPicUrl)) {
+                // Picasso.get()
+                    // .load(event.videoPicUrl)
+                    // .placeholder(R.drawable.img_loading_placeholder)
+                    // .error(R.drawable.radio)
+                    // .into(mp3ImageView);
+            // }else {
+                 // mp3ImageView.setImageResource(R.drawable.radio);
+            // }
+        // }
+    // }
 
     public interface VodControlListener {
         void playNext(boolean rmProgress);
@@ -878,6 +890,7 @@ public class VodController extends BaseController {
                     int height = mControlWrapper.getVideoSize()[1];
                     if (width == 0 || height == 0) {
                         // 如果分辨率为0，显示图片
+
                         mp3ImageView.setVisibility(View.VISIBLE);
                     } else {
                         // 如果有分辨率，隐藏图片
