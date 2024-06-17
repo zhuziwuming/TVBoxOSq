@@ -882,7 +882,6 @@ public class VodController extends BaseController {
                         mp3ImageView.setVisibility(View.GONE);
                     }
                     initLandscapePortraitBtnInfo();
-                    //mPlayerResolution.setText(width + " x " + height);
                 }else {
                     // 没有获取到有效的分辨率信息
                     mp3ImageView.setVisibility(View.VISIBLE);

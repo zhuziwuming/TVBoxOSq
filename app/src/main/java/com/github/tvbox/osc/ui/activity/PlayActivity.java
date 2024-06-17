@@ -536,45 +536,55 @@ public class PlayActivity extends BaseActivity {
 					adblock(adblockUrl,url,headers);
 				}	
 			}
-        String finalUrl = url;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                stopParse();
-                if (mVideoView != null) {
-                    mVideoView.release();
-
-                    if (finalUrl != null) {
-                        try {
-                            int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 10) {
-                                VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
-                                String playTitle = mVodInfo.name + " " + vs.name;
-                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
-                                boolean callResult = false;
-                                long progress = getSavedProgress(progressKey);
-                                callResult = PlayerHelper.runExternalPlayer(playerType, PlayActivity.this, finalUrl, playTitle, playSubtitle, headers, progress);
-                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
-                                return;
+                
+                if (mActivity == null) return;
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    stopParse();
+                    if (mVideoView != null) {
+                        mVideoView.release();
+	    
+                        if (url != null) {
+							String finalUrl = url;
+                            try {
+                                int playerType = mVodPlayerCfg.getInt("pl");
+                                if (playerType >= 10) {
+                                    VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                                    String playTitle = mVodInfo.name + " " + vs.name;
+                                    setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
+                                    boolean callResult = false;
+                                    long progress = getSavedProgress(progressKey);
+                                    callResult = PlayerHelper.runExternalPlayer(playerType, requireActivity(), finalUrl, playTitle, playSubtitle, headers, progress);
+                                    setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
+                                    return;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            hideTip();
+	    					if (finalUrl.startsWith("data:application/dash+xml;base64,")) {
+                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
+                                App.getInstance().setDashData(finalUrl.split("base64,")[1]);
+                                finalUrl = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
+                            } else if (finalUrl.contains(".mpd") || finalUrl.contains("type=mpd")) {
+                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
+                            } else {
+                                PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
+                            }
+                            mVideoView.setProgressKey(progressKey);
+                            if (headers != null) {
+                                mVideoView.setUrl(finalUrl, headers);
+                            } else {
+                                mVideoView.setUrl(finalUrl);
+                            }
+                            mVideoView.start();
+                            mController.resetSpeed();
                         }
-                        hideTip();
-                        PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
-                        mVideoView.setProgressKey(progressKey);
-                        if (headers != null) {
-                            mVideoView.setUrl(finalUrl, headers);
-                        } else {
-                            mVideoView.setUrl(finalUrl);
-                        }
-                        mVideoView.start();
-                        mController.resetSpeed();
                     }
                 }
-            }
-        });
-    }
+            });
+	    }	
     }
 
     private void initSubtitleView() {
