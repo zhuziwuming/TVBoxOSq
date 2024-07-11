@@ -463,8 +463,8 @@ public class DetailActivity extends BaseActivity {
             //保存历史
             insertVod(sourceKey, vodInfo);
             bundle.putString("sourceKey", sourceKey);  
-            bundle.putSerializable("VodInfo", vodInfo);
-            //App.getInstance().setVodInfo(vodInfo);
+//            bundle.putSerializable("VodInfo", vodInfo);
+            App.getInstance().setVodInfo(vodInfo);
             if (showPreview) {
                 if (previewVodInfo == null) {
                     try {
@@ -484,8 +484,8 @@ public class DetailActivity extends BaseActivity {
                     previewVodInfo.playFlag = vodInfo.playFlag;
                     previewVodInfo.playIndex = vodInfo.playIndex;
                     previewVodInfo.seriesMap = vodInfo.seriesMap;
-                    bundle.putSerializable("VodInfo", previewVodInfo);
-                    //App.getInstance().setVodInfo(previewVodInfo);
+//                    bundle.putSerializable("VodInfo", previewVodInfo);
+                    App.getInstance().setVodInfo(previewVodInfo);
                 }
                 playFragment.setData(bundle);
             } else {
