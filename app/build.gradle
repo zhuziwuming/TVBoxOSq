@@ -117,7 +117,7 @@ dependencies {
     implementation project(":quickjs")
 
     //implementation 'com.lzy.net:okgo:3.0.4'//240721
-	implementation 'com.github.jeasonlzy.okhttp-OkGo：okgo：v3.0.4'
+	implementation 'com.github.jeasonlzy.okhttp-OkGo:okgo:v3.0.4'
     // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     //implementation 'com.owen:tv-recyclerview:3.0.0'//240721
 	implementation 'com.github.shixuebingfeng:TvRecyclerView:V2.1.1'
