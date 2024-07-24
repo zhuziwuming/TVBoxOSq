@@ -121,7 +121,7 @@ dependencies {
 	implementation 'com.github.jeasonlzy.okhttp-OkGo:okgo:v3.0.4'
     // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     //implementation 'com.owen:tv-recyclerview:3.0.0'//240724
-	implementation 'net.butterflytv.utils:rtmp-client:3.1.0'
+	compile 'net.butterflytv.utils:rtmp-client:3.1.0'
 
     implementation 'com.github.getActivity:XXPermissions:18.5'
     implementation 'org.jsoup:jsoup:1.14.1'
