@@ -116,7 +116,7 @@ dependencies {
 
     implementation project(":player")
     implementation project(":quickjs")
-	implementation project(":rtmp-client")
+	implementation project(":rtmp")
 	implementation group: 'io.antmedia', name: 'rtmp-client', version: '3.2.0'
     //implementation 'com.lzy.net:okgo:3.0.4'//240724
 	implementation 'com.github.jeasonlzy.okhttp-OkGo:okgo:v3.0.4'
