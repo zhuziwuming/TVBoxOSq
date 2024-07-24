@@ -38,7 +38,7 @@ dependencies {
     api "com.google.android.exoplayer:exoplayer-dash:2.15.1"
     api "com.google.android.exoplayer:exoplayer-hls:2.15.1"
     api "com.google.android.exoplayer:exoplayer-rtsp:2.15.1"
-    api "com.google.android.exoplayer:extension-rtmp:2.15.1"
+    //api "com.google.android.exoplayer:extension-rtmp:2.15.1"
     api "com.google.android.exoplayer:extension-okhttp:2.15.1"
     api 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.5'
 }
