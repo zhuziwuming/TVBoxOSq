@@ -4,11 +4,11 @@ def static buildTime() {
  }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName '2.0.'.concat(buildTime())//3.0.20230907_2146.apk
@@ -107,7 +107,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.squareup.picasso:picasso:2.71828'
     //implementation 'me.jessyan:autosize:1.2.1'//240724
-	implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
+	implementation 'com.github.jackmoore:autosize:5.0.0'
     implementation('com.thoughtworks.xstream:xstream:1.4.15') {
         exclude group: 'xmlpull', module: 'xmlpull'
     }
@@ -116,10 +116,12 @@ dependencies {
 
     implementation project(":player")
     implementation project(":quickjs")
+
     //implementation 'com.lzy.net:okgo:3.0.4'//240724
 	implementation 'com.github.jeasonlzy.okhttp-OkGo:okgo:v3.0.4'
     // implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    implementation 'com.owen:tv-recyclerview:3.0.0'//240724
+    //implementation 'com.owen:tv-recyclerview:3.0.0'//240724
+	
 
     implementation 'com.github.getActivity:XXPermissions:18.5'
     implementation 'org.jsoup:jsoup:1.14.1'
