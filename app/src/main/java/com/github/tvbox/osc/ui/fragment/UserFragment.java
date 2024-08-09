@@ -241,7 +241,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 }
             }
             //String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
-            String doubanUrl = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
+            String doubanUrl = "https://m.maoyan.com/ajax/movieOnInfoList?token=";
             OkGo.<String>get(doubanUrl)
                     .headers("User-Agent", UA.randomOne())
                     .execute(new AbsCallback<String>() {
@@ -271,7 +271,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
 	
 	private String tojson(String jsonStr){
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);  
-        JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
+        JsonArray array = infoJson.getAsJsonArray("movieList");  
         JsonObject newObj = new JsonObject(); // 新建总对象  
         JsonArray newArray = new JsonArray(); // 新建数组  
           
