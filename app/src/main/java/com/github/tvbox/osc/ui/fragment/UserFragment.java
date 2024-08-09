@@ -280,7 +280,13 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             JsonObject newObj2 = new JsonObject(); // 为每部电影新建一个对象  
             String title = movieObj.get("nm").getAsString();  
             String cover = movieObj.get("img").getAsString();  
-            String rate = movieObj.get("sc").getAsString();  
+            //String rate = movieObj.get("sc").getAsString();
+			double score = movieObj.get("sc").getAsDouble(); // 直接获取为 double 类型  
+  
+            // 如果分数为 0，则更改为 8.0  
+            if (score == 0) {  
+                score = 8.0;  
+            } 
             newObj2.addProperty("title", title);  
             newObj2.addProperty("cover", cover);  
             newObj2.addProperty("rate", rate);  
