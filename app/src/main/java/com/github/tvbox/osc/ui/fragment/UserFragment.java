@@ -281,11 +281,11 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             String title = movieObj.get("nm").getAsString();  
             String cover = movieObj.get("img").getAsString();  
             //String rate = movieObj.get("sc").getAsString();
-			double score = movieObj.get("sc").getAsDouble(); // 直接获取为 double 类型  
+			double rate = movieObj.get("sc").getAsDouble(); // 直接获取为 double 类型  
   
             // 如果分数为 0，则更改为 8.0  
-            if (score == 0) {  
-                score = 8.0;  
+            if (rate == 0) {  
+                rate = 8.0;  
             } 
             newObj2.addProperty("title", title);  
             newObj2.addProperty("cover", cover);  
