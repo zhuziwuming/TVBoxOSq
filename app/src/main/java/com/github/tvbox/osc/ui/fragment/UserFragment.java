@@ -285,7 +285,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
   
             // 如果分数为 0，则更改为 8.0  
             if (rate == 0) {  
-                rate = 8.0;  
+                rate = 8.8;  
             } 
             newObj2.addProperty("title", title);  
             newObj2.addProperty("cover", cover);  
