@@ -685,7 +685,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
         } else if (type == 2) {
             return "观看历史";
         } else {
-            return "院线速递";
+            return "豆瓣热播";
         }
     }
 
