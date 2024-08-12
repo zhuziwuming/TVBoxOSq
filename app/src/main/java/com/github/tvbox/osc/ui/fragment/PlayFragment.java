@@ -1047,6 +1047,7 @@ public class PlayFragment extends BaseLazyFragment {
         //webUserAgent = null; // 初始化
 		playHeaders = new HashMap<>();// 初始化播放请求头
         if (pb.getType() == 0) {
+			Toast.makeText(mContext, "TYPE=0", Toast.LENGTH_SHORT).show();
             setTip("正在嗅探播放地址", true, false);
             mHandler.removeMessages(100);
             mHandler.sendEmptyMessageDelayed(100, 20 * 1000);
@@ -1227,6 +1228,7 @@ public class PlayFragment extends BaseLazyFragment {
                                 public void run() {
                                     String mixParseUrl = DefaultConfig.checkReplaceProxy(rs.optString("url", ""));
                                     stopParse();
+									Toast.makeText(mContext, "TYPE=3内部", Toast.LENGTH_SHORT).show();
                                     setTip("正在嗅探播放地址", true, false);
                                     mHandler.removeMessages(100);
                                     mHandler.sendEmptyMessageDelayed(100, 20 * 1000);
