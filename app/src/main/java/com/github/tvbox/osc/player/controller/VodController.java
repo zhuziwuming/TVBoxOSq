@@ -161,7 +161,10 @@ public class VodController extends BaseController {
 			int height = mVideoSizes[1];
 	
 			if (width != 0 || height != 0) {
+				mVideoSize.setVisibility(View.VISIBLE); // 确保控件可见
 				mVideoSize.setText("[ " + width + " X " + height + " ]");
+			}else{
+				mVideoSize.setVisibility(View.GONE);
 			} 
 
             mHandler.postDelayed(this, 1000);
