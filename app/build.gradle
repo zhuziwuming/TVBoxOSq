@@ -91,7 +91,7 @@ android {
 
 dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
-
+	classpath 'com.android.tools.build:gradle:7.4.2'  # 支持Java 8的最后一个AGP版本
 
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation 'com.google.zxing:core:3.4.1'
