@@ -22,8 +22,9 @@ jobs:
           java -version
           javac -version
       - name: Clean Gradle Cache
-        chmod +x gradlew
-        run: ./gradlew cleanBuildCache --quiet
+        run: |
+          chmod +x gradlew
+          ./gradlew cleanBuildCache --quiet
         
       - uses: actions/checkout@v4
         with:
