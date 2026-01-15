@@ -156,9 +156,13 @@ public class VodController extends BaseController {
             String speed = PlayerHelper.getDisplaySpeed(mControlWrapper.getTcpSpeed());
             mPlayLoadNetSpeedRightTop.setText(speed);
             mPlayLoadNetSpeed.setText(speed);
-            String width = Integer.toString(mControlWrapper.getVideoSize()[0]);
-            String height = Integer.toString(mControlWrapper.getVideoSize()[1]);
-            mVideoSize.setText("[ " + width + " X " + height +" ]");
+			int[] mVideoSizes = mControlWrapper.getVideoSize();
+            int width = mVideoSizes[0];
+			int height = mVideoSizes[1];
+	
+			if (width != 0 || height != 0) {
+				mVideoSize.setText("[ " + width + " X " + height + " ]");
+			} 
 
             mHandler.postDelayed(this, 1000);
         }
