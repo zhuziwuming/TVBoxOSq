@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8) // 强制Java 8
+    }
+}
+
 def buildTime() { 
     return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00")) 
 }
