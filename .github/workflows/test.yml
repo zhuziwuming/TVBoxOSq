@@ -7,58 +7,85 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 1. 检出代码
       - uses: actions/checkout@v4
       
+      # 2. 设置 JDK 8
       - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
           java-version: '8'
           distribution: 'temurin'
           
+      # 3. 验证 Java 版本
       - name: Verify Java Version
         run: |
           java -version
           javac -version
 
-      # 【新增步骤】修复 Android SDK 中损坏的元数据文件
+      # 4. 【核心修复】修复 Android SDK 中损坏的元数据文件
       # 解决 java.lang.NumberFormatException: Not a number: 34x 问题
       - name: Fix Corrupted SDK Metadata
         run: |
           echo "Searching for corrupted SDK metadata files containing '34x'..."
-          # 查找并替换所有 source.properties 和 package.xml 中的非法版本号 "34x" 为 "34"
-          find /usr/local/lib/android/sdk -type f $ -name "source.properties" -o -name "package.xml" $ -exec sed -i 's/34x/34/g' {} +
+          
+          # 确定 SDK 目录：优先使用 ANDROID_HOME，否则尝试常见路径
+          if [ -n "$ANDROID_HOME" ]; then
+            SDK_DIR="$ANDROID_HOME"
+          elif [ -d "/usr/local/lib/android/sdk" ]; then
+            SDK_DIR="/usr/local/lib/android/sdk"
+          else
+            # 如果以上都不是，尝试通过 sdkmanager 查找或报错
+            SDK_DIR=$(dirname $(which sdkmanager 2>/dev/null) 2>/dev/null || echo "")
+            if [ -z "$SDK_DIR" ]; then
+              echo "Warning: Could not determine SDK directory automatically."
+              exit 0
+            fi
+          fi
+          
+          echo "Using SDK directory: $SDK_DIR"
+
+          # 正确的 find 语法：使用 $ $ 进行逻辑分组
+          # 查找所有 source.properties 和 package.xml，如果包含 "34x" 则替换为 "34"
+          find "$SDK_DIR" -type f $ -name "source.properties" -o -name "package.xml" $ -print0 | xargs -0 grep -l "34x" 2>/dev/null | while IFS= read -r file; do
+            echo "Fixing illegal version string in: $file"
+            sed -i 's/34x/34/g' "$file"
+          done
+          
           echo "Verification: Checking if any '34x' remains..."
-          if grep -r "34x" /usr/local/lib/android/sdk/; then
+          if grep -r "34x" "$SDK_DIR/" 2>/dev/null; then
             echo "Error: Still found '34x' in SDK files!"
             exit 1
           else
             echo "Success: All SDK metadata files are fixed."
           fi
+        shell: bash
 
+      # 5. 清理 Gradle 缓存
       - name: Clean Gradle Cache
         run: |
           chmod +x gradlew
           ./gradlew cleanBuildCache --quiet
         
-      # 注意：这里重复 checkout 通常是不必要的，除非你有特殊需求
-      # 如果不需要重新拉取代码，可以注释掉下面这个 steps
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+      # 6. 执行 Gradle 构建
       - name: Build With Gradle
         run: |
           chmod +x gradlew
           ./gradlew assemblerelease --build-cache --parallel --daemon --warning-mode all
 
+      # 7. 准备 APK 文件
       - name: Prepare App
         run: |
           mkdir -p ${{ github.workspace }}/apk/
-          # 更精准的查找方式，避免查找系统其他无关目录
-          find . -name "*.apk" -path "*/build/*" -exec cp {} ${{ github.workspace }}/apk/ \; || true
+          # 查找 build 目录下的 apk 并复制
+          find . -path "*/build/*" -name "*.apk" -exec cp {} ${{ github.workspace }}/apk/ \; 2>/dev/null || true
+          # 列出找到的文件以便调试
+          ls -lh ${{ github.workspace }}/apk/ || echo "No APKs found in workspace/apk/"
 
+      # 8. 上传构建产物
       - name: Upload App To Artifact
         uses: actions/upload-artifact@v4
         with:
           name: com.github.tvbox.osc
           path: ${{ github.workspace }}/apk/*
+          if-no-files-found: warn
