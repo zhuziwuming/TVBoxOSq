@@ -21,36 +21,6 @@ jobs:
         run: |
           java -version
           javac -version
-      - name: Fix Corrupted SDK Metadata
-        run: |
-          echo "Searching for corrupted SDK metadata files containing '34x'..."
-          
-          # 确定 SDK 目录
-          if [ -n "$ANDROID_HOME" ]; then
-            SDK_DIR="$ANDROID_HOME"
-          elif [ -d "/usr/local/lib/android/sdk" ]; then
-            SDK_DIR="/usr/local/lib/android/sdk"
-          else
-            echo "Warning: Could not determine SDK directory."
-            exit 0
-          fi
-          
-          echo "Using SDK directory: $SDK_DIR"
-
-          # 【零语法坑写法】拆分两次find，完全不用括号分组，100%不会报错
-          (find "$SDK_DIR" -type f -name "source.properties" -print0; find "$SDK_DIR" -type f -name "package.xml" -print0) | xargs -0 grep -l "34x" 2>/dev/null | while IFS= read -r file; do
-            echo "Fixing illegal version string in: $file"
-            sed -i 's/34x/34/g' "$file"
-          done
-          
-          echo "Verification: Checking if any '34x' remains..."
-          if grep -r "34x" "$SDK_DIR/" 2>/dev/null; then
-            echo "Error: Still found '34x' in SDK files!"
-            exit 1
-          else
-            echo "Success: All SDK metadata files are fixed."
-          fi
-        shell: bash    
           
       - name: Clean Gradle Cache
         run: |
