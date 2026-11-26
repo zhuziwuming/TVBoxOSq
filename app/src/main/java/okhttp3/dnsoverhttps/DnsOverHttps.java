@@ -60,7 +60,11 @@ import okio.ByteString;
  * Until then, expect API and behavior changes when you update your OkHttp dependency.</strong>
  */
 public class DnsOverHttps implements Dns {
-    public static final MediaType DNS_MESSAGE = MediaType.Companion.get("application/dns-message");
+    //public static final MediaType DNS_MESSAGE = MediaType.Companion.get("application/dns-message");
+	// OkHttp 3.x 使用 MediaType.parse()
+	public static final MediaType DNS_MESSAGE = MediaType.parse("application/dns-message");
+
+
     public static final int MAX_RESPONSE_SIZE = 64 * 1024;
     private final OkHttpClient client;
     private HttpUrl url;
