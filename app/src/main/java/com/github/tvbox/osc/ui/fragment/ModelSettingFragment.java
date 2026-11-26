@@ -233,7 +233,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                         tvDns.setText(OkGoHelper.dnsHttpsList.get(pos));
                         Hawk.put(HawkConfig.DOH_URL, pos);
                         String url = OkGoHelper.getDohUrl(pos);
-                        OkGoHelper.dnsOverHttps.setUrl(url.isEmpty() ? null : HttpUrl.get(url));
+                        OkGoHelper.dnsOverHttps.setUrl(url.isEmpty() ? null : HttpUrl.Companion.get(url));
                         IjkMediaPlayer.toggleDotPort(pos > 0);
                     }
 

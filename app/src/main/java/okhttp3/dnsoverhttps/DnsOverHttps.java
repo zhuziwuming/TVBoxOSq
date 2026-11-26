@@ -60,7 +60,7 @@ import okio.ByteString;
  * Until then, expect API and behavior changes when you update your OkHttp dependency.</strong>
  */
 public class DnsOverHttps implements Dns {
-    public static final MediaType DNS_MESSAGE = MediaType.get("application/dns-message");
+    public static final MediaType DNS_MESSAGE = MediaType.Companion.get("application/dns-message");
     public static final int MAX_RESPONSE_SIZE = 64 * 1024;
     private final OkHttpClient client;
     private HttpUrl url;
@@ -257,7 +257,8 @@ public class DnsOverHttps implements Dns {
         unknownHostException.initCause(failure);
 
         for (int i = 1; i < failures.size(); i++) {
-            Util.addSuppressedIfPossible(unknownHostException, failures.get(i));
+            //Util.addSuppressedIfPossible(unknownHostException, failures.get(i));
+			unknownHostException.addSuppressed(failures.get(i));
         }
 
         throw unknownHostException;
