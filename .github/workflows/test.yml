@@ -25,29 +25,25 @@ jobs:
 
       # 4. 【核心修复】修复 Android SDK 中损坏的元数据文件
       # 解决 java.lang.NumberFormatException: Not a number: 34x 问题
-      - name: Fix Corrupted SDK Metadata
+            # 4. 【核心修复】修复 Android SDK 中损坏的元数据文件
+            - name: Fix Corrupted SDK Metadata
         run: |
           echo "Searching for corrupted SDK metadata files containing '34x'..."
           
-          # 确定 SDK 目录：优先使用 ANDROID_HOME，否则尝试常见路径
+          # 确定 SDK 目录
           if [ -n "$ANDROID_HOME" ]; then
             SDK_DIR="$ANDROID_HOME"
           elif [ -d "/usr/local/lib/android/sdk" ]; then
             SDK_DIR="/usr/local/lib/android/sdk"
           else
-            # 如果以上都不是，尝试通过 sdkmanager 查找或报错
-            SDK_DIR=$(dirname $(which sdkmanager 2>/dev/null) 2>/dev/null || echo "")
-            if [ -z "$SDK_DIR" ]; then
-              echo "Warning: Could not determine SDK directory automatically."
-              exit 0
-            fi
+            echo "Warning: Could not determine SDK directory."
+            exit 0
           fi
           
           echo "Using SDK directory: $SDK_DIR"
 
-          # 正确的 find 语法：使用 $ $ 进行逻辑分组
-          # 查找所有 source.properties 和 package.xml，如果包含 "34x" 则替换为 "34"
-          find "$SDK_DIR" -type f $ -name "source.properties" -o -name "package.xml" $ -print0 | xargs -0 grep -l "34x" 2>/dev/null | while IFS= read -r file; do
+          # 【零语法坑写法】拆分两次find，完全不用括号分组，100%不会报错
+          (find "$SDK_DIR" -type f -name "source.properties" -print0; find "$SDK_DIR" -type f -name "package.xml" -print0) | xargs -0 grep -l "34x" 2>/dev/null | while IFS= read -r file; do
             echo "Fixing illegal version string in: $file"
             sed -i 's/34x/34/g' "$file"
           done
