@@ -12,7 +12,7 @@ def buildTime() {
 android {
     //compileSdkVersion 30
 	compileSdk 34  // 使用最新稳定版
-    namespace 'com.github.tvbox.osc' // AGP 7.0+ 要求显式声明 namespace
+    //namespace 'com.github.tvbox.osc' // AGP 7.0+ 要求显式声明 namespace
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
