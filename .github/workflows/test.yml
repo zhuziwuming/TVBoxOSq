@@ -23,10 +23,23 @@ jobs:
         run: |
           java -version
           javac -version
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: "platform-tools platforms;android-34 build-tools;34.0.0"
+      # 彻底移除 setup-android@v3，直接使用 runner 预装的低版本 sdkmanager
+      - name: 配置 Android SDK（兼容JDK11无冲突）
+        run: |
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          # 自动过滤掉强制要求JDK17的16.0版本sdkmanager
+          SDKM=$(ls -d $ANDROID_HOME/cmdline-tools/*/bin/sdkmanager 2>/dev/null | grep -v 16.0 | head -n1)
+          if [ -z "$SDKM" ]; then SDKM=$(find $ANDROID_HOME -name sdkmanager | grep -v 16.0 | head -n1); fi
+          echo "当前使用的sdkmanager路径：$SDKM"
+          yes | "$SDKM" --licenses >/dev/null 2>&1 || true
+          "$SDKM" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+        env:
+          SKIP_JDK_VERSION_CHECK: 'true'
+
+      - name: 修复AAPT2系统依赖缺失
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lib32gcc1 lib32stdc++6 libgcc-s1
           
       - name: Clean Gradle Cache
         run: |
