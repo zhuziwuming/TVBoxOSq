@@ -23,6 +23,16 @@ jobs:
         run: |
           java -version
           javac -version
+      # 3. 设置 Android SDK (关键步骤：防止 SDK 污染和版本解析错误)
+      # 使用官方推荐的 action，明确指定需要的组件，避免自动安装损坏或命名错误的预览版
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 
+            'platforms;android-34'
+            'build-tools;34.0.0'
+            'platform-tools'
+            'cmdline-tools;latest'   
           
       - name: Clean Gradle Cache
         run: |
