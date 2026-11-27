@@ -27,6 +27,10 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+		// 2. 修正 NDK 架构，支持 64位
+		ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
     }
 
     packagingOptions {
@@ -69,7 +73,7 @@ android {
             minifyEnabled true
 
             ndk {
-                abiFilters 'armeabi-v7a'
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
             }
         }
     }
