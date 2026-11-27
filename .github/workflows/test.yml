@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
@@ -25,11 +27,7 @@ jobs:
       - name: Clean Gradle Cache
         run: |
           chmod +x gradlew
-          ./gradlew cleanBuildCache --quiet
-        
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+          ./gradlew cleanBuildCache --quiet 
       - name: Build With Gradle
         run: |
           chmod +x gradlew
