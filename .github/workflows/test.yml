@@ -23,23 +23,21 @@ jobs:
         run: |
           java -version
           javac -version
-      # 彻底移除 setup-android@v3，直接使用 runner 预装的低版本 sdkmanager
-      - name: 配置 Android SDK（兼容JDK11无冲突）
+      - name: 配置 Android SDK（100%兼容JDK11）
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
-          # 自动过滤掉强制要求JDK17的16.0版本sdkmanager
-          SDKM=$(ls -d $ANDROID_HOME/cmdline-tools/*/bin/sdkmanager 2>/dev/null | grep -v 16.0 | head -n1)
-          if [ -z "$SDKM" ]; then SDKM=$(find $ANDROID_HOME -name sdkmanager | grep -v 16.0 | head -n1); fi
-          echo "当前使用的sdkmanager路径：$SDKM"
-          yes | "$SDKM" --licenses >/dev/null 2>&1 || true
-          "$SDKM" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-        env:
-          SKIP_JDK_VERSION_CHECK: 'true'
+          # 手动下载官方兼容JDK11的cmdline-tools 11.0版本
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          wget -O cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip -q cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools-11.0
+          # 把工具路径加入环境变量
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools-11.0/cmdline-tools/bin" >> $GITHUB_PATH
+          # 执行许可证授权和组件安装
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+            env:
+            JAVA_HOME: /usr/lib/jvm/temurin-11-jdk-amd64
 
-      - name: 修复AAPT2系统依赖缺失
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lib32gcc1 lib32stdc++6 libgcc-s1
           
       - name: Clean Gradle Cache
         run: |
