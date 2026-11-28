@@ -128,6 +128,10 @@ dependencies {
 	//implementation 'com.github.jackmoore:autosize:5.0.0'
     implementation('com.thoughtworks.xstream:xstream:1.4.15') {
         exclude group: 'xmlpull', module: 'xmlpull'
+        exclude group: 'xpp3',    module: 'xpp3'
+        exclude group: 'xpp3',    module: 'xpp3_min'
+        exclude group: 'kxml2',   module: 'kxml2'
+        exclude group: 'net.sf.kxml', module: 'kxml2'		
     }
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'com.orhanobut:hawk:2.0.1'
