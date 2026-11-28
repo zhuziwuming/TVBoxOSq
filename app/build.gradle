@@ -8,10 +8,10 @@ apply plugin: 'com.android.application'
 def buildTime() { 
     return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00")) 
 }
-
 configurations.all {
     resolutionStrategy {
-        force "com.squareup.okio:okio:1.17.5"
+        force "com.squareup.okio:okio:2.10.0"
+		exclude group: 'com.squareup.okio', module: 'okio-jvm'
     }
 }
 
@@ -145,5 +145,4 @@ dependencies {
     implementation 'com.github.hedzr:android-file-chooser:v1.2.0-final'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
-	implementation 'org.jetbrains:annotations:24.0.1'
 }
