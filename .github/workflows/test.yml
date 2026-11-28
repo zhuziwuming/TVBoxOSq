@@ -22,23 +22,7 @@ jobs:
       - name: Verify Java Version
         run: |
           java -version
-          javac -version
-      - name: 配置 Android SDK（100%兼容JDK11）
-        run: |
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          # 手动下载官方兼容JDK11的cmdline-tools 11.0版本
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          wget -O cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip -q cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools-11.0
-          # 把工具路径加入环境变量
-          echo "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools-11.0/cmdline-tools/bin" >> $GITHUB_PATH
-          # 执行许可证授权和组件安装
-          yes | sdkmanager --licenses >/dev/null 2>&1 || true
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-            env:
-            JAVA_HOME: /usr/lib/jvm/temurin-11-jdk-amd64
-
-          
+          javac -version          
       - name: Clean Gradle Cache
         run: |
           chmod +x gradlew
