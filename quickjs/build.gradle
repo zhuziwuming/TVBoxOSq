@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.github.tvbox.osc.quickjs'
+    namespace 'com.github.tvbox.quickjs'
 //    ndkPath = "D:\\Android\\NDK\\android-ndk-r23b\\"
     compileSdkVersion 30
 
