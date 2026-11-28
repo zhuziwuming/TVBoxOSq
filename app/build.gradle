@@ -9,6 +9,12 @@ def buildTime() {
     return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00")) 
 }
 
+configurations.all {
+    resolutionStrategy {
+        force "com.squareup.okio:okio:1.17.5"
+    }
+}
+
 android {
     //compileSdkVersion 30
 	compileSdk 34  // 使用最新稳定版
