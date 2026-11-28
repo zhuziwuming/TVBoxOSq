@@ -29,7 +29,7 @@ jobs:
           rm -rf ~/.gradle/caches/transforms-3/
           rm -rf ~/.gradle/caches/
           rm -rf .gradle/
-          rm -rf app/build/outputs/apk/
+          rm -rf app/build/
           ./gradlew clean --quiet
       - name: Build With Gradle
         run: |
