@@ -26,7 +26,9 @@ jobs:
       - name: Clean Gradle Cache
         run: |
           chmod +x gradlew
-          ./gradlew cleanBuildCache --quiet 
+          rm -rf ~/.gradle/caches/
+          rm -rf .gradle/
+          ./gradlew clean --quiet
       - name: Build With Gradle
         run: |
           chmod +x gradlew
