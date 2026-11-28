@@ -23,11 +23,12 @@ jobs:
         run: |
           java -version
           javac -version          
-      - name: Clean Gradle Cache
+      - name: Clean Gradle Cache & Old Builds
         run: |
           chmod +x gradlew
           rm -rf ~/.gradle/caches/
           rm -rf .gradle/
+          rm -rf app/build/outputs/apk/
           ./gradlew clean --quiet
       - name: Build With Gradle
         run: |
@@ -38,7 +39,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/apk/
           for file in `find ~ -name "*.apk" -print`; do
             mv "$file" ${{ github.workspace }}/apk/
-          done
+          done        
       - name: Upload App To Artifact
         uses: actions/upload-artifact@v4
         with:
