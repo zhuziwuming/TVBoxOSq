@@ -26,6 +26,7 @@ jobs:
       - name: Clean Gradle Cache & Old Builds
         run: |
           chmod +x gradlew
+          rm -rf ~/.gradle/caches/transforms-3/
           rm -rf ~/.gradle/caches/
           rm -rf .gradle/
           rm -rf app/build/outputs/apk/
@@ -39,8 +40,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/apk/
           #for file in `find ~ -name "*.apk" -print`; do
           #  mv "$file" ${{ github.workspace }}/apk/
-          #done 
-          # 修改点：只从 release 输出目录查找，避免误搬移 debug 包或系统其他文件
+          #done
           for file in $(find app/build/outputs/apk/release -name "*.apk" -print); do
             mv "$file" ${{ github.workspace }}/apk/
           done          
