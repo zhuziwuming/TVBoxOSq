@@ -12,6 +12,8 @@ configurations.all {
     resolutionStrategy {
         force "com.squareup.okio:okio:2.10.0"
 		exclude group: 'com.squareup.okio', module: 'okio-jvm'
+		exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'pull-parser', module: 'pull-parser'
     }
 }
 
