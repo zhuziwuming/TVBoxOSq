@@ -35,7 +35,7 @@ jobs:
       - name: Clean Gradle Cache & Old Builds
         run: |
           chmod +x gradlew
-          rm -rf ~/.gradle/caches/
+          #rm -rf ~/.gradle/caches/
           rm -rf .gradle/
           rm -rf app/build/
           ./gradlew clean --quiet
