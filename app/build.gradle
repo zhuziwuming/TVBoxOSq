@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8) // 强制Java 8
-    }
-}
+//java {
+//   toolchain {
+//        languageVersion = JavaLanguageVersion.of(8) // 强制Java 8
+//    }
+//}
 
 def buildTime() { 
     return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00")) 
@@ -79,7 +79,7 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
