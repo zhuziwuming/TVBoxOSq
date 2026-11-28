@@ -82,10 +82,10 @@ android {
         }
         release {
 		    // 【关键修改】直接关闭代码压缩和混淆，彻底跳过 R8
-            minifyEnabled false
+            //minifyEnabled false
             
             // 建议同时关闭资源压缩，避免潜在的资源引用检查报错
-            shrinkResources false
+            //shrinkResources false
 		    signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true

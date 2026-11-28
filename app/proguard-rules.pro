@@ -203,3 +203,27 @@
 -keep class com.github.tvbox.quickjs.** {*;}
 # 支持影视的ali相关的jar
 -keep class com.google.gson.**{*;}
+
+
+# 忽略XStream依赖的所有Android环境不存在的桌面/第三方类
+-dontwarn com.bea.xml.stream.**
+-dontwarn com.ctc.wstx.stax.**
+-dontwarn java.awt.**
+-dontwarn java.beans.**
+-dontwarn javax.activation.**
+-dontwarn javax.swing.plaf.**
+-dontwarn javax.xml.bind.**
+-dontwarn javax.xml.stream.**
+-dontwarn net.sf.cglib.proxy.**
+-dontwarn nu.xom.**
+-dontwarn org.codehaus.jettison.**
+-dontwarn org.dom4j.**
+-dontwarn org.jdom.**
+-dontwarn org.jdom2.**
+-dontwarn org.joda.time.**
+-dontwarn org.kxml2.io.**
+-dontwarn org.xmlpull.mxp1.**
+
+# 保留XStream核心类不被混淆，避免序列化运行时异常
+-keep class com.thoughtworks.xstream.** { *; }
+-keep interface com.thoughtworks.xstream.** { *; }
