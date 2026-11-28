@@ -37,9 +37,6 @@ jobs:
       - name: Prepare App
         run: |
           mkdir -p ${{ github.workspace }}/apk/
-          #for file in `find ~ -name "*.apk" -print`; do
-          #  mv "$file" ${{ github.workspace }}/apk/
-          #done
           for file in $(find app/build/outputs/apk/release -name "*.apk" -print); do
             mv "$file" ${{ github.workspace }}/apk/
           done          
