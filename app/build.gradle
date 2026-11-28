@@ -13,7 +13,11 @@ configurations.all {
         force "com.squareup.okio:okio:2.10.0"
 		exclude group: 'com.squareup.okio', module: 'okio-jvm'
 		exclude group: 'xpp3', module: 'xpp3'
-        exclude group: 'pull-parser', module: 'pull-parser'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'woodstox', module: 'wstx-asl'
+        exclude group: 'dom4j', module: 'dom4j'
+        exclude group: 'cglib', module: 'cglib'
+        exclude group: 'joda-time', module: 'joda-time'
     }
 }
 
