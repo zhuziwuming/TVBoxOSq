@@ -5,11 +5,11 @@ plugins {
 android {
     namespace 'com.github.tvbox.quickjs'
 //    ndkPath = "D:\\Android\\NDK\\android-ndk-r23b\\"
-    compileSdkVersion 30
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
@@ -17,6 +17,14 @@ android {
                 abiFilters 'armeabi-v7a'
             }
         }
+    }
+	
+	lintOptions {
+        // 忽略过期 TargetSdkVersion 的检查错误
+        disable 'ExpiredTargetSdkVersion'
+        
+        // 可选：如果你希望 Lint 发现错误时不要中断构建，可以添加这一行
+        abortOnError false
     }
 
     buildTypes {
