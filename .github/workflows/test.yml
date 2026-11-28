@@ -37,7 +37,7 @@ jobs:
       - name: Prepare App
         run: |
           mkdir -p ${{ github.workspace }}/apk/
-          for file in $(find app/build/outputs/apk/release -name "*.apk" -print); do
+          for file in $(find app/build/outputs/ -name "*.apk" -print); do
             mv "$file" ${{ github.workspace }}/apk/
           done          
       - name: Upload App To Artifact
